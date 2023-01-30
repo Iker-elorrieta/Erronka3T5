@@ -5,7 +5,15 @@ public class Aretoa {
 	private String izenAret;
 	private int id_zinema;
 	
-	//Getters
+	// Constructor
+	public Aretoa(int id_aretoa, String izenAret, int id_zinema){
+		this.id_areto = id_aretoa;
+		this.izenAret = izenAret;
+		this.id_zinema = id_zinema;
+	}
+	
+	
+	// Getters
 	public int getId_areto() {
 		return id_areto;
 	}

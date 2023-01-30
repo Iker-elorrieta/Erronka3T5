@@ -6,6 +6,13 @@ public class Filma {
 	private String genero;
 	private int iraupena;
 	
+	public Filma(int id_filma, String izenburu, String genero, int iraupena){
+		this.id_filma = id_filma;
+		this.izenburu = izenburu;
+		this.genero = genero;
+		this.iraupena = iraupena;
+	}
+	
 	//Getters
 	public int getId_filma() {
 		return id_filma;

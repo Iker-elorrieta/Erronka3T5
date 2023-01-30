@@ -5,6 +5,13 @@ public class Erosketa {
 	private String id_bezero;
 	private int id_sarrera;
 	
+	// Constructor
+	public Erosketa(int id_erosketa, String id_bezero, int id_sarrera){
+		this.id_erosketa = id_erosketa;
+		this.id_bezero = id_bezero;
+		this.id_sarrera = id_sarrera;
+	}
+	
 	//Setters
 	public void setId_erosketa(int id_erosketa) {
 		this.id_erosketa = id_erosketa;

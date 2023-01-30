@@ -7,7 +7,16 @@ public class Bezero {
 	private String nan;
 	private String pasahitza;
 	
-	//Setters
+	// Constructor
+	public Bezero(String id_bezero, String izenBez, String abizen, String nan, String pasahitza){
+		this.id_bezero = id_bezero;
+		this.izenBez = izenBez;
+		this.abizen = abizen;
+		this.nan = nan;
+		this.pasahitza = pasahitza;
+	}
+	
+	// Setters
 	public void setId_bezero(String id_bezero) {
 		this.id_bezero = id_bezero;
 	}
@@ -24,7 +33,7 @@ public class Bezero {
 		this.pasahitza = pasahitza;
 	}
 	
-	//Getters
+	// Getters
 	public String getId_bezero() {
 		return id_bezero;
 	}
