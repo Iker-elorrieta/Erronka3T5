@@ -6,6 +6,7 @@ public class Filma {
 	private String genero;
 	private int iraupena;
 	
+	//Constructor
 	public Filma(int id_filma, String izenburu, String genero, int iraupena){
 		this.id_filma = id_filma;
 		this.izenburu = izenburu;

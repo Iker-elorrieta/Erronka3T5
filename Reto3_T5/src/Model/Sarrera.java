@@ -6,10 +6,18 @@ public class Sarrera {
 	private String id_bezero;
 	private int id_saioa;
 	
+	//Constructor
+	public Sarrera(int id_sarrera, float prezioa, String id_bezero, int id_saioa) {
+		this.id_sarrera = id_sarrera;
+		this.prezioa = prezioa;
+		this.id_bezero = id_bezero;
+		this.id_saioa = id_saioa;
+	}
+	
 	//Setters
 	public void setId_sarrera(int id_sarrera) {
 		this.id_sarrera = id_sarrera;
-	}
+	}	
 	public void setPrezioa(float prezioa) {
 		this.prezioa = prezioa;
 	}
