@@ -4,6 +4,7 @@ public class Zinema {
 	private int id_zinema;
 	private String IzenZin;
 	private String Kokalekua;
+	private Aretoa[] areto;
 	
 	
 	//Constructor
