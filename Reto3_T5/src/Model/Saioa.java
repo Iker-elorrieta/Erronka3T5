@@ -22,4 +22,18 @@ public class Saioa {
 	public Sarrera[] getSarrera() {
 		return sarrera;
 	}
+
+	public void setId_saioa(int id_saioa) {
+		this.id_saioa = id_saioa;
+	}
+
+	public void setOrdua(Hora ordua) {
+		this.ordua = ordua;
+	}
+
+	public void setSarrera(Sarrera[] sarrera) {
+		this.sarrera = sarrera;
+	}
+	
+	
 }

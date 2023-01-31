@@ -8,10 +8,25 @@ public class Zinema {
 	
 	
 	//Constructor
-	public Zinema(int id_zinema, String izenZin, String kokalekua) {
+	public Zinema(int id_zinema, String izenZin, String kokalekua, Aretoa[] aretoa) {
 		this.id_zinema = id_zinema;
+		this.IzenZin = izenZin;
+		this.Kokalekua = kokalekua;
+		this.areto = aretoa;
+	}
+	
+	//Setters
+	public void setId_zinema(int id_zinema) {
+		this.id_zinema = id_zinema;
+	}
+	public void setIzenZin(String izenZin) {
 		IzenZin = izenZin;
+	}
+	public void setKokalekua(String kokalekua) {
 		Kokalekua = kokalekua;
+	}
+	public void setAreto(Aretoa[] areto) {
+		this.areto = areto;
 	}
 	
 	//Getters
@@ -24,4 +39,7 @@ public class Zinema {
 	public String getKokalekua() {
 		return Kokalekua;
 	}
+	public Aretoa[] getAretoa() {
+		return areto;
+	}	
 }
