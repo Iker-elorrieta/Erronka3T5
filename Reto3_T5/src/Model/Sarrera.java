@@ -1,5 +1,7 @@
 package Model;
 
+import java.util.Objects;
+
 public class Sarrera {
 	private int id_sarrera;
 	private float prezioa;
@@ -24,5 +26,29 @@ public class Sarrera {
 	}
 	public float getPrezioa() {
 		return prezioa;
+	}
+	
+	// ToString
+	@Override
+	public String toString() {
+		return "Sarrera [id_sarrera=" + id_sarrera + ", prezioa=" + prezioa + "]";
+	}
+	
+	// Equals
+	@Override
+	public int hashCode() {
+		return Objects.hash(id_sarrera, prezioa);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Sarrera other = (Sarrera) obj;
+		return id_sarrera == other.id_sarrera && Float.floatToIntBits(prezioa) == Float.floatToIntBits(other.prezioa);
 	}
 }

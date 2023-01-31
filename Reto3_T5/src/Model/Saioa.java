@@ -1,5 +1,8 @@
 package Model;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 public class Saioa {
 	private int id_saioa;
 	private Hora ordua;
@@ -33,6 +36,35 @@ public class Saioa {
 
 	public void setSarrera(Sarrera[] sarrera) {
 		this.sarrera = sarrera;
+	}
+	
+	// ToString
+	@Override
+	public String toString() {
+		return "Saioa [id_saioa=" + id_saioa + ", ordua=" + ordua + ", sarrera=" + Arrays.toString(sarrera) + "]";
+	}
+	
+	// Equals
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Arrays.hashCode(sarrera);
+		result = prime * result + Objects.hash(id_saioa, ordua);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Saioa other = (Saioa) obj;
+		return id_saioa == other.id_saioa && Objects.equals(ordua, other.ordua)
+				&& Arrays.equals(sarrera, other.sarrera);
 	}
 	
 	

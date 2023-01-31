@@ -1,5 +1,7 @@
 package Model;
 
+import java.util.Objects;
+
 public class Bezero {
 	private String id_bezero;
 	private String izenBez;
@@ -48,5 +50,33 @@ public class Bezero {
 	}
 	public String getPasahitza() {
 		return pasahitza;
-	}	
+	}
+	
+	// ToString
+	@Override
+	public String toString() {
+		return "Bezero [id_bezero=" + id_bezero + ", izenBez=" + izenBez + ", abizen=" + abizen + ", nan=" + nan
+				+ ", pasahitza=" + pasahitza + "]";
+	}
+	
+	// Equals
+	@Override
+	public int hashCode() {
+		return Objects.hash(abizen, id_bezero, izenBez, nan, pasahitza);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Bezero other = (Bezero) obj;
+		return Objects.equals(abizen, other.abizen) && Objects.equals(id_bezero, other.id_bezero)
+				&& Objects.equals(izenBez, other.izenBez) && Objects.equals(nan, other.nan)
+				&& Objects.equals(pasahitza, other.pasahitza);
+	}
+	
 }
