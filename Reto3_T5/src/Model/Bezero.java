@@ -74,9 +74,7 @@ public class Bezero {
 		if (getClass() != obj.getClass())
 			return false;
 		Bezero other = (Bezero) obj;
-		return Objects.equals(abizen, other.abizen) && Objects.equals(id_bezero, other.id_bezero)
-				&& Objects.equals(izenBez, other.izenBez) && Objects.equals(nan, other.nan)
-				&& Objects.equals(pasahitza, other.pasahitza);
+		return Objects.equals(id_bezero, other.id_bezero);
 	}
 	
 }

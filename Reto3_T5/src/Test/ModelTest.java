@@ -132,10 +132,11 @@ public class ModelTest {
 		// Getters
 		assertEquals(1, a1.getId_areto());
 		assertEquals("areto 1", a1.getIzenAret());
-		assertEquals(3, saioak[0].getId_saioa());
-		assertEquals(10, saioak[0].getOrdua().getHoras());
-		assertEquals(25, saioak[0].getOrdua().getMinutos());
-		assertEquals(6, saioak[0].getSarrera()[0].getId_sarrera());
+		Saioa[] s3 = a1.getSaioa();
+		assertEquals(3, s3[0].getId_saioa());
+		assertEquals(10, s3[0].getOrdua().getHoras());
+		assertEquals(25, s3[0].getOrdua().getMinutos());
+		assertEquals(6, s3[0].getSarrera()[0].getId_sarrera());
 		assertEquals(2.2, saioak[0].getSarrera()[0].getPrezioa(), 0.01);
 		
 		//ToString
@@ -163,8 +164,14 @@ public class ModelTest {
 		Aretoa a1 = new Aretoa(1,"areto 1", saioak);
 		aretoak[0] = a1;
 		
-		Zinema z1 = new Zinema(7, "Golem zinema", "Arriqu�bar Plaza, 4, 48001 Bilbo, Bizkaia", aretoak);
+		Zinema z1 = new Zinema(2, "Zubi Cinesa Zinema", "Leizaola Lehendakariaren Kalea, 2, 48009 Bilbo, Bizkaia", aretoak);
 		Zinema z2 = new Zinema(7, "Golem zinema", "Arriqu�bar Plaza, 4, 48001 Bilbo, Bizkaia", aretoak);
+		
+		// Setters
+		z1.setId_zinema(7);
+		z1.setIzenZin("Golem zinema");
+		z1.setKokalekua("Arriqu�bar Plaza, 4, 48001 Bilbo, Bizkaia");
+		//z1.setAreto(aretoak[0].setId_areto(1));
 		
 		// Getters
 		assertEquals(7, z1.getId_zinema());
