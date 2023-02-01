@@ -15,6 +15,10 @@ public class Saioa {
 		this.sarrera = sarrera;
 	}
 	
+	public Saioa(){
+		
+	}
+	
 	//Getters
 	public int getId_saioa() {
 		return id_saioa;
@@ -25,7 +29,8 @@ public class Saioa {
 	public Sarrera[] getSarrera() {
 		return sarrera;
 	}
-
+	
+	// Setters
 	public void setId_saioa(int id_saioa) {
 		this.id_saioa = id_saioa;
 	}
@@ -45,26 +50,21 @@ public class Saioa {
 	}
 	
 	// Equals
-	@Override
+	/*@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + Arrays.hashCode(sarrera);
 		result = prime * result + Objects.hash(id_saioa, ordua);
 		return result;
-	}
+	}*/
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
 		Saioa other = (Saioa) obj;
-		return id_saioa == other.id_saioa && Objects.equals(ordua, other.ordua)
-				&& Arrays.equals(sarrera, other.sarrera);
+		return Objects.equals(id_saioa, other.id_saioa);
 	}
 	
 	

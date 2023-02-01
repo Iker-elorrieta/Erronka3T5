@@ -15,6 +15,10 @@ public class Erosketa {
 		this.sarrera = sarrera;
 	}
 	
+	public Erosketa(){
+		
+	}
+	
 	//Setters
 	public void setId_erosketa(int id_erosketa) {
 		this.id_erosketa = id_erosketa;
@@ -46,7 +50,7 @@ public class Erosketa {
 	}
 
 	// Equals
-	@Override
+	/*@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -54,18 +58,13 @@ public class Erosketa {
 		result = prime * result + Arrays.hashCode(sarrera);
 		result = prime * result + Objects.hash(id_erosketa);
 		return result;
-	}
+	}*/
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
 		Erosketa other = (Erosketa) obj;
-		return Arrays.equals(bezeroa, other.bezeroa) && id_erosketa == other.id_erosketa
-				&& Arrays.equals(sarrera, other.sarrera);
+		return Objects.equals(id_erosketa, other.id_erosketa);
 	}
 }

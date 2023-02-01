@@ -18,6 +18,10 @@ public class Zinema {
 		this.areto = aretoa;
 	}
 	
+	public Zinema(){
+		
+	}
+	
 	//Setters
 	public void setId_zinema(int id_zinema) {
 		this.id_zinema = id_zinema;
@@ -54,25 +58,20 @@ public class Zinema {
 	}
 
 	// Equals
-	@Override
+	/*@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + Arrays.hashCode(areto);
 		result = prime * result + Objects.hash(IzenZin, Kokalekua, id_zinema);
 		return result;
-	}
+	}*/
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
 		Zinema other = (Zinema) obj;
-		return Objects.equals(IzenZin, other.IzenZin) && Objects.equals(Kokalekua, other.Kokalekua)
-				&& Arrays.equals(areto, other.areto) && id_zinema == other.id_zinema;
+		return Objects.equals(id_zinema, other.id_zinema);
 	}
 }

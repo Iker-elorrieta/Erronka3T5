@@ -16,6 +16,9 @@ public class Filma {
 		this.iraupena = iraupena;
 	}
 	
+	public Filma(){
+	}
+	
 	//Getters
 	public int getId_filma() {
 		return id_filma;
@@ -38,21 +41,16 @@ public class Filma {
 	}
 	
 	// Equals
-	@Override
+	/*@Override
 	public int hashCode() {
 		return Objects.hash(genero, id_filma, iraupena, izenburu);
-	}
+	}*/
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
 		Filma other = (Filma) obj;
-		return Objects.equals(genero, other.genero) && id_filma == other.id_filma && iraupena == other.iraupena
-				&& Objects.equals(izenburu, other.izenburu);
+		return Objects.equals(id_filma, other.id_filma);
 	}
 }

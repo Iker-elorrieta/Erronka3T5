@@ -12,6 +12,9 @@ public class Sarrera {
 		this.prezioa = prezioa;
 	}
 	
+	public Sarrera() {
+	}
+	
 	//Setters
 	public void setId_sarrera(int id_sarrera) {
 		this.id_sarrera = id_sarrera;
@@ -35,20 +38,16 @@ public class Sarrera {
 	}
 	
 	// Equals
-	@Override
+	/*@Override
 	public int hashCode() {
 		return Objects.hash(id_sarrera, prezioa);
-	}
+	}*/
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
 		Sarrera other = (Sarrera) obj;
-		return id_sarrera == other.id_sarrera && Float.floatToIntBits(prezioa) == Float.floatToIntBits(other.prezioa);
+		return Objects.equals(id_sarrera, other.id_sarrera);
 	}
 }

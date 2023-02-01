@@ -15,6 +15,10 @@ public class Aretoa {
 		this.saioa = saioa;
 	}
 	
+	public Aretoa(){
+		
+	}
+	
 	//Setters
 	public void setId_areto(int id_areto) {
 		this.id_areto = id_areto;
@@ -44,26 +48,21 @@ public class Aretoa {
 	}
 
 	// Equals
-	@Override
+	/*@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + Arrays.hashCode(saioa);
 		result = prime * result + Objects.hash(id_areto, izenAret);
 		return result;
-	}
+	}*/
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
 		Aretoa other = (Aretoa) obj;
-		return id_areto == other.id_areto && Objects.equals(izenAret, other.izenAret)
-				&& Arrays.equals(saioa, other.saioa);
+		return Objects.equals(id_areto, other.id_areto);
 	}
 	
 }

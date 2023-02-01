@@ -18,6 +18,9 @@ public class Bezero {
 		this.pasahitza = pasahitza;
 	}
 	
+	public Bezero(){
+	}
+	
 	// Setters
 	public void setId_bezero(String id_bezero) {
 		this.id_bezero = id_bezero;
@@ -60,18 +63,14 @@ public class Bezero {
 	}
 	
 	// Equals
-	@Override
+	/*@Override
 	public int hashCode() {
 		return Objects.hash(abizen, id_bezero, izenBez, nan, pasahitza);
-	}
+	}*/
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
 		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
 			return false;
 		Bezero other = (Bezero) obj;
 		return Objects.equals(id_bezero, other.id_bezero);
