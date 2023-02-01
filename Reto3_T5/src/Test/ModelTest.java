@@ -135,7 +135,8 @@ public class ModelTest {
 		assertEquals(3, saioak[0].getId_saioa());
 		assertEquals(10, saioak[0].getOrdua().getHoras());
 		assertEquals(25, saioak[0].getOrdua().getMinutos());
-		//assertEquals(3, saioak[0].getSarrera()); // Mirar Sarrerak
+		assertEquals(6, saioak[0].getSarrera()[0].getId_sarrera());
+		assertEquals(2.2, saioak[0].getSarrera()[0].getPrezioa(), 0.01);
 		
 		//ToString
 		assertEquals(a1.toString(), "Aretoa [id_areto=" + a1.getId_areto() + ", izenAret=" + a1.getIzenAret() + ", saioa=" + Arrays.toString(saioak) + "]");
@@ -162,14 +163,20 @@ public class ModelTest {
 		Aretoa a1 = new Aretoa(1,"areto 1", saioak);
 		aretoak[0] = a1;
 		
-		Zinema z1 = new Zinema(7, "Golem zinema", "Arriquíbar Plaza, 4, 48001 Bilbo, Bizkaia", aretoak);
-		Zinema z2 = new Zinema(7, "Golem zinema", "Arriquíbar Plaza, 4, 48001 Bilbo, Bizkaia", aretoak);
+		Zinema z1 = new Zinema(7, "Golem zinema", "Arriquï¿½bar Plaza, 4, 48001 Bilbo, Bizkaia", aretoak);
+		Zinema z2 = new Zinema(7, "Golem zinema", "Arriquï¿½bar Plaza, 4, 48001 Bilbo, Bizkaia", aretoak);
 		
 		// Getters
 		assertEquals(7, z1.getId_zinema());
 		assertEquals("Golem zinema", z1.getIzenZin());
-		assertEquals("Arriquíbar Plaza, 4, 48001 Bilbo, Bizkaia", z1.getKokalekua());
-		//assertEquals(); // Falta saioak
+		assertEquals("Arriquï¿½bar Plaza, 4, 48001 Bilbo, Bizkaia", z1.getKokalekua());
+		assertEquals(1, z1.getAretoa()[0].getId_areto());
+		assertEquals("areto 1", z1.getAretoa()[0].getIzenAret());
+		assertEquals(3, z1.getAretoa()[0].getSaioa()[0].getId_saioa());
+		assertEquals(10, z1.getAretoa()[0].getSaioa()[0].getOrdua().getHoras());
+		assertEquals(25, z1.getAretoa()[0].getSaioa()[0].getOrdua().getMinutos());
+		assertEquals(6, z1.getAretoa()[0].getSaioa()[0].getSarrera()[0].getId_sarrera());
+		assertEquals(2.2, z1.getAretoa()[0].getSaioa()[0].getSarrera()[0].getPrezioa(), 0.01);
 		
 		// ToString
 		assertEquals(z1.toString(),"Zinema [id_zinema=" + z1.getId_zinema() + ", IzenZin=" + z1.getIzenZin() + ", Kokalekua=" + z1.getKokalekua() + ", areto="
@@ -208,8 +215,13 @@ public class ModelTest {
 				
 		// Getters
 		assertEquals(15, e1.getId_erosketa());
-		//assertEquals(15, e1.getId_erosketa());
-		//assertEquals(15, e1.getId_erosketa());
+		assertEquals("admin123", e1.getBezero()[0].getId_bezero());
+		assertEquals("admin", e1.getBezero()[0].getIzenBez());
+		assertEquals("Perez", e1.getBezero()[0].getAbizen());
+		assertEquals("12345678B", e1.getBezero()[0].getNan());
+		assertEquals("54321", e1.getBezero()[0].getPasahitza());
+		assertEquals(9, e1.getSarrera()[0].getId_sarrera());
+		assertEquals(8.2, e1.getSarrera()[0].getPrezioa(), 0.01);
 		
 		// ToString
 		assertEquals(e1.toString(), "Erosketa [id_erosketa=" + e1.getId_erosketa() + ", bezeroa=" + Arrays.toString(bezeroak2) + ", sarrera="
