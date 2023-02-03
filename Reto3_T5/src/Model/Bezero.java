@@ -6,14 +6,18 @@ public class Bezero {
 	private String id_bezero;
 	private String izenBez;
 	private String abizen;
+	private String sexua;
+	private int adina;
 	private String nan;
 	private String pasahitza;
 	
 	// Constructor
-	public Bezero(String id_bezero, String izenBez, String abizen, String nan, String pasahitza){
+	public Bezero(String id_bezero, String izenBez, String abizen, String sexua, int adina,String nan, String pasahitza){
 		this.id_bezero = id_bezero;
 		this.izenBez = izenBez;
 		this.abizen = abizen;
+		this.sexua = sexua;
+		this.adina = adina;
 		this.nan = nan;
 		this.pasahitza = pasahitza;
 	}
@@ -30,6 +34,12 @@ public class Bezero {
 	}
 	public void setAbizen(String abizen) {
 		this.abizen = abizen;
+	}
+	public void setSexua(String sexua){
+		this.sexua = sexua;
+	}
+	public void setAdina(int adina){
+		this.adina = adina;
 	}
 	public void setNan(String nan) {
 		this.nan = nan;
@@ -48,6 +58,12 @@ public class Bezero {
 	public String getAbizen() {
 		return abizen;
 	}
+	public String getSexua() {
+		return sexua;
+	}
+	public int getAdina() {
+		return adina;
+	}
 	public String getNan() {
 		return nan;
 	}
@@ -58,8 +74,7 @@ public class Bezero {
 	// ToString
 	@Override
 	public String toString() {
-		return "Bezero [id_bezero=" + id_bezero + ", izenBez=" + izenBez + ", abizen=" + abizen + ", nan=" + nan
-				+ ", pasahitza=" + pasahitza + "]";
+		return "Bezero [id_bezero=" + id_bezero + ", izenBez=" + izenBez + ", abizen=" + abizen + ", sexua=" + sexua + ", adina=" + adina + ", nan=" + nan + ", pasahitza=" + pasahitza + "]";
 	}
 	
 	// Equals

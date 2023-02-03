@@ -1,8 +1,8 @@
 package Test;
 
 import static org.junit.Assert.*;
-
 import java.util.Arrays;
+import java.util.Calendar;
 
 import org.junit.Test;
 
@@ -10,7 +10,6 @@ import Model.Aretoa;
 import Model.Bezero;
 import Model.Erosketa;
 import Model.Filma;
-import Model.Hora;
 import Model.Saioa;
 import Model.Sarrera;
 import Model.Zinema;
@@ -21,12 +20,14 @@ public class ModelTest {
 	@Test
 	public void testBezeroaConsGet() {
 		// Constructor
-		Bezero b1 = new Bezero("admin123","admin", "Perez", "12345678B", "54321");
+		Bezero b1 = new Bezero("admin123","admin", "Perez","gizon", 25, "12345678B", "54321");
 		
 		// Getters
 		assertEquals("admin123", b1.getId_bezero());
 		assertEquals("admin", b1.getIzenBez());
 		assertEquals("Perez", b1.getAbizen());
+		assertEquals("gizon",b1.getSexua());
+		assertEquals(25,b1.getAdina());
 		assertEquals("12345678B", b1.getNan());
 		assertEquals("54321", b1.getPasahitza());		
 	}
@@ -34,31 +35,41 @@ public class ModelTest {
 	@Test
 	public void testBezeroaSetters() {
 		// Constructor
-		Bezero b1 = new Bezero("user123","User", "Diez", "12345678A", "12345");
+		Bezero b1 = new Bezero("user123","User", "Diez", "gizon", 25, "12345678A", "12345");
 		
 		// Setters
 		b1.setId_bezero("admin123");
 		b1.setIzenBez("admin");
 		b1.setAbizen("Perez");
+		b1.setSexua("emakume");
+		b1.setAdina(30);
 		b1.setNan("12345678B");
 		b1.setPasahitza("54321");
+		
+		
+		assertEquals("admin123", b1.getId_bezero());
+		assertEquals("admin", b1.getIzenBez());
+		assertEquals("Perez", b1.getAbizen());
+		assertEquals("emakume",b1.getSexua());
+		assertEquals(30, b1.getAdina());
+		assertEquals("12345678B", b1.getNan());
+		assertEquals("54321", b1.getPasahitza());
 	}
 	
 	@Test
 	public void testBezeroaToString() {
 		// Constructor
-		Bezero b1 = new Bezero("user123","User", "Diez", "12345678A", "12345");
+		Bezero b1 = new Bezero("user123","User", "Diez", "gizon", 25, "12345678A", "12345");
 
 		// ToString
-		assertEquals(b1.toString(), "Bezero [id_bezero=" + b1.getId_bezero() + ", izenBez=" + b1.getIzenBez() + ", abizen=" + b1.getAbizen() + ", nan=" + b1.getNan()
-		+ ", pasahitza=" + b1.getPasahitza() + "]");	
+		assertEquals(b1.toString(), "Bezero [id_bezero=" + b1.getId_bezero() + ", izenBez=" + b1.getIzenBez() + ", abizen=" + b1.getAbizen() + ", sexua=" + b1.getSexua() + ", adina=" + b1.getAdina() + ", nan=" + b1.getNan() + ", pasahitza=" + b1.getPasahitza() + "]");	
 	}
 	
 	@Test
 	public void testBezeroaEquals() {
 		// Constructor
-		Bezero b1 = new Bezero("user123","User", "Diez", "12345678A", "12345");
-		Bezero b2 = new Bezero("user123","User", "Diez", "12345678A", "12345");
+		Bezero b1 = new Bezero("user123","User", "Diez", "gizon", 25, "12345678A", "12345");
+		Bezero b2 = new Bezero("user123","User", "Diez", "gizon", 25, "12345678A", "12345");
 		Bezero b3 = new Bezero();
 		
 		// Equals
@@ -69,34 +80,47 @@ public class ModelTest {
 	// Sarrera
 	@Test
 	public void testSarreraConsGet() {
-		Sarrera sa1 = new Sarrera(3, 2.2f);
+		Sarrera sa1 = new Sarrera(3, 2, 2.2f, 6, 8);
 		
 		// Getters
 		assertEquals(3, sa1.getId_sarrera());
+		assertEquals(2, sa1.getId_filma());
 		assertEquals(2.2, sa1.getPrezioa(),0.01);
+		assertEquals(6, sa1.getId_saioa());
+		assertEquals(8, sa1.getId_erosketa());
 	}
 	
 	@Test
 	public void testSarreraSetters() {
-		Sarrera sa1 = new Sarrera(3, 2.2f);
+		Sarrera sa1 = new Sarrera(3, 2, 2.2f, 6, 8);
 		
 		// Setters
 		sa1.setId_sarrera(4);
+		sa1.setId_filma(5);
 		sa1.setPrezioa(5.5f);
+		sa1.setId_saioa(7);;
+		sa1.setId_erosketa(9);;
+		
+		assertEquals(4, sa1.getId_sarrera());
+		assertEquals(5, sa1.getId_filma());
+		assertEquals(5.5, sa1.getPrezioa(),0.01);
+		assertEquals(7, sa1.getId_saioa());
+		assertEquals(9, sa1.getId_erosketa());
 	}
 	
 	@Test
 	public void testSarreraToString() {
-		Sarrera sa1 = new Sarrera(3, 2.2f);
+		Sarrera sa1 = new Sarrera(3, 2, 2.2f, 6, 8);
 		
 		//ToString
-		assertEquals(sa1.toString(),"Sarrera [id_sarrera=" + sa1.getId_sarrera() + ", prezioa=" + sa1.getPrezioa() + "]");
+		assertEquals(sa1.toString(),"Sarrera [id_sarrera=" + sa1.getId_sarrera() + ", id_filma=" + sa1.getId_filma() + ", prezioa=" + sa1.getPrezioa() + ", id_saioa="
+				+ sa1.getId_saioa() + ", id_erosketa=" + sa1.getId_erosketa() + "]");
 	}
 	
 	@Test
 	public void testSarreraEquals() {
-		Sarrera sa1 = new Sarrera(3, 2.2f);
-		Sarrera sa2 = new Sarrera(3, 2.2f);
+		Sarrera sa1 = new Sarrera(3, 2, 2.2f, 6, 8);
+		Sarrera sa2 = new Sarrera(3, 2, 2.2f, 6, 8);
 		Sarrera sa3 = new Sarrera();
 		
 		// Equals
@@ -140,75 +164,61 @@ public class ModelTest {
 	// Saioa
 	@Test
 	public void testSaioaConsGet() {
-		Hora h1 = new Hora();
-		h1.setHoras(12);
-		h1.setMinutos(39);
+		Calendar t = Calendar.getInstance();
+		t.set(Calendar.AM_PM, Calendar.PM);
+		t.set(Calendar.HOUR, 3);
+		t.set(Calendar.MINUTE, 20);
 		
-		Sarrera[] sarrerak = new Sarrera[1];
-		Sarrera sarrera = new Sarrera(6, 2.2f);
-		sarrerak[0] = sarrera; 
-		
-		Saioa s1 = new Saioa(3, h1, sarrerak);
+		Saioa s1 = new Saioa(3, t);
 		
 		// Getters
 		assertEquals(3, s1.getId_saioa());
-		assertEquals(h1, s1.getOrdua());
-		assertEquals(12, h1.getHoras());
-		assertEquals(39, h1.getMinutos());
-		assertEquals(6, sarrerak[0].getId_sarrera());
-		assertEquals(2.2, sarrerak[0].getPrezioa(),0.01);
+		assertEquals(3, s1.getOrdua().get(Calendar.HOUR));
+		assertEquals(20, s1.getOrdua().get(Calendar.MINUTE));
 	}
 	
 	@Test
 	public void testSaioaSetters() {
-		Hora h1 = new Hora();
-		h1.setHoras(12);
-		h1.setMinutos(39);
+		Calendar t = Calendar.getInstance();
+		t.set(Calendar.AM_PM, Calendar.PM);
+		t.set(Calendar.HOUR, 3);
+		t.set(Calendar.MINUTE, 20);
 		
-		Sarrera[] sarrerak = new Sarrera[1];
-		Sarrera sarrera = new Sarrera(6, 2.2f);
-		sarrerak[0] = sarrera; 
-		
-		Saioa s1 = new Saioa(3, h1, sarrerak);
+		Saioa s1 = new Saioa(3, t);
 		
 		// Setters
 		s1.setId_saioa(7);
-		h1.setHoras(16);
-		h1.setMinutos(50);
-		s1.setOrdua(h1);
-		sarrerak[0].setId_sarrera(8);
-		sarrerak[0].setPrezioa(5.5f);
-		s1.setSarrera(sarrerak);
+		t.set(Calendar.HOUR, 5);
+		t.set(Calendar.MINUTE, 30);
+		s1.setOrdua(t);
+		
+		assertEquals(7, s1.getId_saioa());
+		assertEquals(5, s1.getOrdua().get(Calendar.HOUR));
+		assertEquals(30, s1.getOrdua().get(Calendar.MINUTE));
 	}
 	
 	@Test
 	public void testSaioaToString() {
-		Hora h1 = new Hora();
-		h1.setHoras(12);
-		h1.setMinutos(39);
+		Calendar t = Calendar.getInstance();
+		t.set(Calendar.AM_PM, Calendar.PM);
+		t.set(Calendar.HOUR, 3);
+		t.set(Calendar.MINUTE, 20);
 		
-		Sarrera[] sarrerak = new Sarrera[1];
-		Sarrera sarrera = new Sarrera(6, 2.2f);
-		sarrerak[0] = sarrera; 
-		
-		Saioa s1 = new Saioa(3, h1, sarrerak);
+		Saioa s1 = new Saioa(3, t);
 		
 		// ToString
-		assertEquals(s1.toString(), "Saioa [id_saioa=" + s1.getId_saioa() + ", ordua=" + s1.getOrdua() + ", sarrera=" + Arrays.toString(sarrerak) + "]");
+		assertEquals(s1.toString(), "Saioa [id_saioa=" + s1.getId_saioa() + ", ordua=" + s1.getOrdua() + "]");
 	}
 	
 	@Test
 	public void testSaioaEquals() {
-		Hora h1 = new Hora();
-		h1.setHoras(12);
-		h1.setMinutos(39);
+		Calendar t = Calendar.getInstance();
+		t.set(Calendar.AM_PM, Calendar.PM);
+		t.set(Calendar.HOUR, 3);
+		t.set(Calendar.MINUTE, 20);
 		
-		Sarrera[] sarrerak = new Sarrera[1];
-		Sarrera sarrera = new Sarrera(6, 2.2f);
-		sarrerak[0] = sarrera; 
-		
-		Saioa s1 = new Saioa(3, h1, sarrerak);
-		Saioa s2 = new Saioa(3, h1, sarrerak);
+		Saioa s1 = new Saioa(3, t);
+		Saioa s2 = new Saioa(3, t);
 		Saioa s3 = new Saioa();
 		
 		// Equals
@@ -219,16 +229,13 @@ public class ModelTest {
 	// Aretoa
 	@Test
 	public void testAretoaConsGet() {
-		Hora h1 = new Hora();
-		h1.setHoras(10);
-		h1.setMinutos(25);
-		
-		Sarrera[] sarrerak = new Sarrera[1];
-		Sarrera sarrera = new Sarrera(6, 2.2f);
-		sarrerak[0] = sarrera;
+		Calendar t = Calendar.getInstance();
+		t.set(Calendar.AM_PM, Calendar.PM);
+		t.set(Calendar.HOUR, 3);
+		t.set(Calendar.MINUTE, 20);
 		
 		Saioa[] saioak = new Saioa[1];
-		Saioa s1 = new Saioa(3, h1, sarrerak);
+		Saioa s1 = new Saioa(3, t);
 		saioak[0] = s1;
 		
 		Aretoa a1 = new Aretoa(1,"areto 1", saioak);
@@ -236,26 +243,20 @@ public class ModelTest {
 		// Getters
 		assertEquals(1, a1.getId_areto());
 		assertEquals("areto 1", a1.getIzenAret());
-		Saioa[] s3 = a1.getSaioa();
-		assertEquals(3, s3[0].getId_saioa());
-		assertEquals(10, s3[0].getOrdua().getHoras());
-		assertEquals(25, s3[0].getOrdua().getMinutos());
-		assertEquals(6, s3[0].getSarrera()[0].getId_sarrera());
-		assertEquals(2.2, saioak[0].getSarrera()[0].getPrezioa(), 0.01);
+		assertEquals(3, saioak[0].getId_saioa());
+		assertEquals(3, s1.getOrdua().get(Calendar.HOUR));
+		assertEquals(20, s1.getOrdua().get(Calendar.MINUTE));
 	}
 	
 	@Test
 	public void testAretoaSetters() {
-		Hora h1 = new Hora();
-		h1.setHoras(10);
-		h1.setMinutos(25);
-		
-		Sarrera[] sarrerak = new Sarrera[1];
-		Sarrera sarrera = new Sarrera(6, 2.2f);
-		sarrerak[0] = sarrera;
+		Calendar t = Calendar.getInstance();
+		t.set(Calendar.AM_PM, Calendar.PM);
+		t.set(Calendar.HOUR, 3);
+		t.set(Calendar.MINUTE, 20);
 		
 		Saioa[] saioak = new Saioa[1];
-		Saioa s1 = new Saioa(3, h1, sarrerak);
+		Saioa s1 = new Saioa(3, t);
 		saioak[0] = s1;
 		
 		Aretoa a1 = new Aretoa(1,"areto 1", saioak);
@@ -263,28 +264,28 @@ public class ModelTest {
 		// Setters
 		a1.setId_areto(2);
 		a1.setIzenAret("areto 2");
-		sarrerak[0].setId_sarrera(8);
-		sarrerak[0].setPrezioa(5.5f);
 		saioak[0].setId_saioa(5);
-		h1.setHoras(15);
-		h1.setMinutos(40);
-		saioak[0].setOrdua(h1);
-		saioak[0].setSarrera(sarrerak);
+		t.set(Calendar.HOUR, 6);
+		t.set(Calendar.MINUTE, 45);
+		saioak[0].setOrdua(t);
 		a1.setSaioa(saioak);
+		
+		assertEquals(2, a1.getId_areto());
+		assertEquals("areto 2", a1.getIzenAret());
+		assertEquals(5, saioak[0].getId_saioa());
+		assertEquals(6, s1.getOrdua().get(Calendar.HOUR));
+		assertEquals(45, s1.getOrdua().get(Calendar.MINUTE));
 	}
 	
 	@Test
 	public void testAretoaToString() {
-		Hora h1 = new Hora();
-		h1.setHoras(10);
-		h1.setMinutos(25);
-		
-		Sarrera[] sarrerak = new Sarrera[1];
-		Sarrera sarrera = new Sarrera(6, 2.2f);
-		sarrerak[0] = sarrera;
+		Calendar t = Calendar.getInstance();
+		t.set(Calendar.AM_PM, Calendar.PM);
+		t.set(Calendar.HOUR, 3);
+		t.set(Calendar.MINUTE, 20);
 		
 		Saioa[] saioak = new Saioa[1];
-		Saioa s1 = new Saioa(3, h1, sarrerak);
+		Saioa s1 = new Saioa(3, t);
 		saioak[0] = s1;
 		
 		Aretoa a1 = new Aretoa(1,"areto 1", saioak);
@@ -295,16 +296,13 @@ public class ModelTest {
 
 	@Test
 	public void testAretoaEquals() {
-		Hora h1 = new Hora();
-		h1.setHoras(10);
-		h1.setMinutos(25);
-		
-		Sarrera[] sarrerak = new Sarrera[1];
-		Sarrera sarrera = new Sarrera(6, 2.2f);
-		sarrerak[0] = sarrera;
+		Calendar t = Calendar.getInstance();
+		t.set(Calendar.AM_PM, Calendar.PM);
+		t.set(Calendar.HOUR, 3);
+		t.set(Calendar.MINUTE, 20);
 		
 		Saioa[] saioak = new Saioa[1];
-		Saioa s1 = new Saioa(3, h1, sarrerak);
+		Saioa s1 = new Saioa(3, t);
 		saioak[0] = s1;
 		
 		Aretoa a1 = new Aretoa(1,"areto 1", saioak);
@@ -319,16 +317,13 @@ public class ModelTest {
 	// Zinema
 	@Test
 	public void testZinemaConsGet() {
-		Hora h1 = new Hora();
-		h1.setHoras(10);
-		h1.setMinutos(25);
-		
-		Sarrera[] sarrerak = new Sarrera[1];
-		Sarrera sarrera = new Sarrera(6, 2.2f);
-		sarrerak[0] = sarrera;
+		Calendar t = Calendar.getInstance();
+		t.set(Calendar.AM_PM, Calendar.PM);
+		t.set(Calendar.HOUR, 3);
+		t.set(Calendar.MINUTE, 20);
 		
 		Saioa[] saioak = new Saioa[1];
-		Saioa s1 = new Saioa(3, h1, sarrerak);
+		Saioa s1 = new Saioa(3, t);
 		saioak[0] = s1;
 		
 		Aretoa[] aretoak = new Aretoa[1];
@@ -344,24 +339,19 @@ public class ModelTest {
 		assertEquals(1, z1.getAretoa()[0].getId_areto());
 		assertEquals("areto 1", z1.getAretoa()[0].getIzenAret());
 		assertEquals(3, z1.getAretoa()[0].getSaioa()[0].getId_saioa());
-		assertEquals(10, z1.getAretoa()[0].getSaioa()[0].getOrdua().getHoras());
-		assertEquals(25, z1.getAretoa()[0].getSaioa()[0].getOrdua().getMinutos());
-		assertEquals(6, z1.getAretoa()[0].getSaioa()[0].getSarrera()[0].getId_sarrera());
-		assertEquals(2.2, z1.getAretoa()[0].getSaioa()[0].getSarrera()[0].getPrezioa(), 0.01);
+		assertEquals(3, s1.getOrdua().get(Calendar.HOUR));
+		assertEquals(20, s1.getOrdua().get(Calendar.MINUTE));
 	}
 	
 	@Test
 	public void testZinemaSetters() {
-		Hora h1 = new Hora();
-		h1.setHoras(10);
-		h1.setMinutos(25);
-		
-		Sarrera[] sarrerak = new Sarrera[1];
-		Sarrera sarrera = new Sarrera(6, 2.2f);
-		sarrerak[0] = sarrera;
+		Calendar t = Calendar.getInstance();
+		t.set(Calendar.AM_PM, Calendar.PM);
+		t.set(Calendar.HOUR, 3);
+		t.set(Calendar.MINUTE, 20);
 		
 		Saioa[] saioak = new Saioa[1];
-		Saioa s1 = new Saioa(3, h1, sarrerak);
+		Saioa s1 = new Saioa(3, t);
 		saioak[0] = s1;
 		
 		Aretoa[] aretoak = new Aretoa[1];
@@ -374,38 +364,41 @@ public class ModelTest {
 		z1.setId_zinema(7);
 		z1.setIzenZin("Golem zinema");
 		z1.setKokalekua("Arriqu�bar Plaza, 4, 48001 Bilbo, Bizkaia");
-		sarrerak[0].setId_sarrera(8);
-		sarrerak[0].setPrezioa(5.5f);
-		saioak[0].setId_saioa(5);
-		h1.setHoras(15);
-		h1.setMinutos(40);
-		saioak[0].setOrdua(h1);
-		saioak[0].setSarrera(sarrerak);
 		aretoak[0].setId_areto(2);
 		aretoak[0].setIzenAret("areto 2");
+		t.set(Calendar.HOUR, 7);
+		t.set(Calendar.MINUTE, 55);
+		saioak[0].setOrdua(t);
+		saioak[0].setId_saioa(4);
 		aretoak[0].setSaioa(saioak);
 		z1.setAreto(aretoak);
+		
+		assertEquals(7, z1.getId_zinema());
+		assertEquals("Golem zinema", z1.getIzenZin());
+		assertEquals("Arriqu�bar Plaza, 4, 48001 Bilbo, Bizkaia", z1.getKokalekua());
+		assertEquals(2, z1.getAretoa()[0].getId_areto());
+		assertEquals("areto 2", z1.getAretoa()[0].getIzenAret());
+		assertEquals(4, z1.getAretoa()[0].getSaioa()[0].getId_saioa());
+		assertEquals(7, s1.getOrdua().get(Calendar.HOUR));
+		assertEquals(55, s1.getOrdua().get(Calendar.MINUTE));
 	}
 	
 	@Test
 	public void testZinemaToString() {
-		Hora h1 = new Hora();
-		h1.setHoras(10);
-		h1.setMinutos(25);
-		
-		Sarrera[] sarrerak = new Sarrera[1];
-		Sarrera sarrera = new Sarrera(6, 2.2f);
-		sarrerak[0] = sarrera;
+		Calendar t = Calendar.getInstance();
+		t.set(Calendar.AM_PM, Calendar.PM);
+		t.set(Calendar.HOUR, 3);
+		t.set(Calendar.MINUTE, 20);
 		
 		Saioa[] saioak = new Saioa[1];
-		Saioa s1 = new Saioa(3, h1, sarrerak);
+		Saioa s1 = new Saioa(3, t);
 		saioak[0] = s1;
 		
 		Aretoa[] aretoak = new Aretoa[1];
 		Aretoa a1 = new Aretoa(1,"areto 1", saioak);
 		aretoak[0] = a1;
 		
-		Zinema z1 = new Zinema(2, "Zubi Cinesa Zinema", "Leizaola Lehendakariaren Kalea, 2, 48009 Bilbo, Bizkaia", aretoak);// ToString
+		Zinema z1 = new Zinema(2, "Zubi Cinesa Zinema", "Leizaola Lehendakariaren Kalea, 2, 48009 Bilbo, Bizkaia", aretoak);
 		
 		assertEquals(z1.toString(),"Zinema [id_zinema=" + z1.getId_zinema() + ", IzenZin=" + z1.getIzenZin() + ", Kokalekua=" + z1.getKokalekua() + ", areto="
 				+ Arrays.toString(aretoak) + "]");
@@ -413,16 +406,13 @@ public class ModelTest {
 	
 	@Test
 	public void testZinemaEquals() {
-		Hora h1 = new Hora();
-		h1.setHoras(10);
-		h1.setMinutos(25);
-		
-		Sarrera[] sarrerak = new Sarrera[1];
-		Sarrera sarrera = new Sarrera(6, 2.2f);
-		sarrerak[0] = sarrera;
+		Calendar t = Calendar.getInstance();
+		t.set(Calendar.AM_PM, Calendar.PM);
+		t.set(Calendar.HOUR, 3);
+		t.set(Calendar.MINUTE, 20);
 		
 		Saioa[] saioak = new Saioa[1];
-		Saioa s1 = new Saioa(3, h1, sarrerak);
+		Saioa s1 = new Saioa(3, t);
 		saioak[0] = s1;
 		
 		Aretoa[] aretoak = new Aretoa[1];
@@ -441,81 +431,44 @@ public class ModelTest {
 	// Erosketa
 	@Test
 	public void testErosketaConsGet() {
-		Bezero[] bezeroak = new Bezero[1];
-		Bezero b1 = new Bezero("user123","User", "Diez", "12345678A", "12345");
-		bezeroak[0] = b1;
-		
-		Sarrera[] sarrerak = new Sarrera[1];
-		Sarrera sarrera = new Sarrera(6, 2.2f);
-		sarrerak[0] = sarrera;
-		
-		Erosketa e1 = new Erosketa(14, bezeroak, sarrerak);
+		Erosketa e1 = new Erosketa(14, "User123", 30, 24.5f);
 				
 		// Getters
 		assertEquals(14, e1.getId_erosketa());
-		assertEquals("user123", e1.getBezero()[0].getId_bezero());
-		assertEquals("User", e1.getBezero()[0].getIzenBez());
-		assertEquals("Diez", e1.getBezero()[0].getAbizen());
-		assertEquals("12345678A", e1.getBezero()[0].getNan());
-		assertEquals("12345", e1.getBezero()[0].getPasahitza());
-		assertEquals(6, e1.getSarrera()[0].getId_sarrera());
-		assertEquals(2.2, e1.getSarrera()[0].getPrezioa(), 0.01);	
+		assertEquals("User123", e1.getId_bezero());
+		assertEquals(30, e1.getDeskontua(), 0.01);
+		assertEquals(24.5, e1.getTotala(), 0.01);
 	}
 	
 	@Test
 	public void testErosketaSetters() {
-		Bezero[] bezeroak = new Bezero[1];
-		Bezero b1 = new Bezero("user123","User", "Diez", "12345678A", "12345");
-		bezeroak[0] = b1;
-		
-		Sarrera[] sarrerak = new Sarrera[1];
-		Sarrera sarrera = new Sarrera(6, 2.2f);
-		sarrerak[0] = sarrera;
-		
-		Erosketa e1 = new Erosketa(14, bezeroak, sarrerak);
+		Erosketa e1 = new Erosketa(14, "User123", 30, 24.5f);
 		
 		// Setters
 		e1.setId_erosketa(15);
-		bezeroak[0].setId_bezero("admin123");
-		bezeroak[0].setIzenBez("admin");
-		bezeroak[0].setAbizen("Perez");
-		bezeroak[0].setNan("12345678B");
-		bezeroak[0].setPasahitza("54321");
-		e1.setId_bezero(bezeroak);
-		sarrerak[0].setId_sarrera(9);
-		sarrerak[0].setPrezioa(8.2f);;
-		e1.setSarrera(sarrerak);
+		e1.setId_bezero("Admin123");
+		e1.setDeskontua(20);
+		e1.setTotala(15f);
+		
+		assertEquals(15, e1.getId_erosketa());
+		assertEquals("Admin123", e1.getId_bezero());
+		assertEquals(20, e1.getDeskontua(), 0.01);
+		assertEquals(15, e1.getTotala(), 0.01);
 	}
 	
 	@Test
 	public void testErosketaToString() {
-		Bezero[] bezeroak = new Bezero[1];
-		Bezero b1 = new Bezero("user123","User", "Diez", "12345678A", "12345");
-		bezeroak[0] = b1;
-		
-		Sarrera[] sarrerak = new Sarrera[1];
-		Sarrera sarrera = new Sarrera(6, 2.2f);
-		sarrerak[0] = sarrera;
-		
-		Erosketa e1 = new Erosketa(14, bezeroak, sarrerak);
+		Erosketa e1 = new Erosketa(14, "User123", 30, 24.5f);
 		
 		// ToString
-		assertEquals(e1.toString(), "Erosketa [id_erosketa=" + e1.getId_erosketa() + ", bezeroa=" + Arrays.toString(bezeroak) + ", sarrera="
-				+ Arrays.toString(sarrerak) + "]");
+		assertEquals(e1.toString(), "Erosketa [id_erosketa=" + e1.getId_erosketa() + ", id_bezero=" + e1.getId_bezero() + ", totala=" + e1.getTotala()
+				+ ", deskontua=" + e1.getDeskontua() + "]");
 	}
 	
 	@Test
 	public void testErosketaEquals() {
-		Bezero[] bezeroak = new Bezero[1];
-		Bezero b1 = new Bezero("user123","User", "Diez", "12345678A", "12345");
-		bezeroak[0] = b1;
-		
-		Sarrera[] sarrerak = new Sarrera[1];
-		Sarrera sarrera = new Sarrera(6, 2.2f);
-		sarrerak[0] = sarrera;
-		
-		Erosketa e1 = new Erosketa(14, bezeroak, sarrerak);
-		Erosketa e2 = new Erosketa(14, bezeroak, sarrerak);
+		Erosketa e1 = new Erosketa(14, "User123", 30, 24.5f);
+		Erosketa e2 = new Erosketa(14, "User123", 30, 24.5f);
 		Erosketa e3 = new Erosketa();
 				
 		// Equals
@@ -523,5 +476,4 @@ public class ModelTest {
 		assertFalse(e3.equals(null));
 		
 	}
-
 }
