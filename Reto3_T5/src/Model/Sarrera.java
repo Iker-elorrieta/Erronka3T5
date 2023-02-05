@@ -4,18 +4,18 @@ import java.util.Objects;
 
 public class Sarrera {
 	private int id_sarrera;
-	private int id_filma;
+	private Filma[] filma;
 	private float prezioa;
-	private int id_saioa;
-	private int id_erosketa;
+	private Saioa[] saioa;
+	private Erosketa[] erosketa;
 	
 	//Constructor
-	public Sarrera(int id_sarrera, int id_filma, float prezioa, int id_saioa, int id_erosketa) {
+	public Sarrera(int id_sarrera, Filma[] filma, float prezioa, Saioa[] saioa, Erosketa[] erosketa) {
 		this.id_sarrera = id_sarrera;
-		this.id_filma = id_filma;
+		this.filma = filma;
 		this.prezioa = prezioa;
-		this.id_saioa = id_saioa;
-		this.id_erosketa = id_erosketa;
+		this.saioa = saioa;
+		this.erosketa = erosketa;
 	}
 	
 	public Sarrera() {
@@ -25,41 +25,41 @@ public class Sarrera {
 	public void setId_sarrera(int id_sarrera) {
 		this.id_sarrera = id_sarrera;
 	}	
-	public void setId_filma(int id_filma) {
-		this.id_filma = id_filma;
+	public void setFilma(Filma[] filma) {
+		this.filma = filma;
 	}
 	public void setPrezioa(float prezioa) {
 		this.prezioa = prezioa;
 	}
-	public void setId_saioa(int id_saioa) {
-		this.id_saioa = id_saioa;
+	public void setSaioa(Saioa[] saioa) {
+		this.saioa = saioa;
 	}
-	public void setId_erosketa(int id_erosketa) {
-		this.id_erosketa = id_erosketa;
+	public void setErosketa(Erosketa[] erosketa) {
+		this.erosketa = erosketa;
 	}
 		
 	//Getters
 	public int getId_sarrera() {
 		return id_sarrera;
 	}
-	public int getId_filma() {
-		return id_filma;
+	public Filma[] getFilma() {
+		return filma;
 	}
 	public float getPrezioa() {
 		return prezioa;
 	}
-	public int getId_saioa() {
-		return id_saioa;
+	public Saioa[] getSaioa() {
+		return saioa;
 	}
-	public int getId_erosketa() {
-		return id_erosketa;
+	public Erosketa[] getErosketa() {
+		return erosketa;
 	}
 	
 	// ToString
 	@Override
 	public String toString() {
-		return "Sarrera [id_sarrera=" + id_sarrera + ", id_filma=" + id_filma + ", prezioa=" + prezioa + ", id_saioa="
-				+ id_saioa + ", id_erosketa=" + id_erosketa + "]";
+		return "Sarrera [id_sarrera=" + id_sarrera + ", filma=" + filma + ", prezioa=" + prezioa + ", saioa="
+				+ saioa + ", erosketa=" + erosketa + "]";
 	}
 	
 	// Equals

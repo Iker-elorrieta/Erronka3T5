@@ -13,7 +13,7 @@ import org.jdatepicker.impl.UtilDateModel;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 
-import Model.DateLabelFormatter;
+//import Model.DateLabelFormatter;
 
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -355,7 +355,7 @@ public class Hasiera extends JFrame {
 		UtilDateModel model = new UtilDateModel();
         Properties p = new Properties();
         JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
-        datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
+        //datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
         //Date min = new Date(2023, 3,3);
         //datePicker.setMinDate(min.getTime());
        /* datePicker.setDayCellFactory(picker -> new DateCell() {
