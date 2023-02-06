@@ -14,6 +14,7 @@ import com.mysql.jdbc.Statement;
 import Controlador.Metodoak;
 import Model.Aretoa;
 import Model.Bezero;
+import Model.Erosketa;
 import Model.Filma;
 import Model.Saioa;
 import Model.Sarrera;
@@ -94,10 +95,11 @@ public class Hasiera extends JFrame {
 		setContentPane(APP);
 		APP.setLayout(new CardLayout(0, 0));
 		
-		//Objetuak kargatu
+		//////////////////////////////////
+		// 		Objetuak kargatu 		//
+		//////////////////////////////////
 		//Zinema guztiak kargatzen ditu
 		Zinema[] zinemak_array = metodoak.ZinemakKargatu();
-		//System.out.println(zinemak_array);
 		//Aretoak guztiak kargatzen ditu
 		Aretoa[] aretoak_array = metodoak.AretoakKargatu();
 		//Saio guztiak kargatzen ditu
@@ -108,11 +110,15 @@ public class Hasiera extends JFrame {
 		Filma[] filmak_array = metodoak.FilmakKargatu();
 		//Sarrera guztiak kargatzen ditu
 		Sarrera[] sarrerak_array = metodoak.SarrerakKargatu();
-		for(int i=0;i<zinemak_array.length;i++) {
+		//Erosketa guztiak kargatzen ditu
+		//Erosketa[] erosketak_array = metodoak.ErosketakKargatu();
+		/*for(int i=0;i<zinemak_array.length;i++) {
 			System.out.println(zinemak_array[i]);
-		}
+		}*/
 		
-		//Panelak
+		//////////////////////////////////
+		// 			Panel guztiak 		//
+		//////////////////////////////////
 		JPanel ongi_etorri = new JPanel();
 		APP.add(ongi_etorri, "name_689304451220100");
 		ongi_etorri.setLayout(null);

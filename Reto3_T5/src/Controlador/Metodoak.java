@@ -307,8 +307,8 @@ public class Metodoak {
 		String[][] film_array= new String[0][0];
 		Connection conn;					
 		try {
-			String url = "jdbc:mysql://10.5.14.232:3306/db_zinema";
-			conn = (Connection) DriverManager.getConnection (url, "talde5","elorrieta");
+			String url = "jdbc:mysql://localhost:3306/db_zinema";
+			conn = (Connection) DriverManager.getConnection (url, "root","");
 			Statement comando = (Statement) conn.createStatement();						
 			String query = "Select Izenburua,Generoa, Iraupena,Prezioa from filma join saioa using (id_filma) join aretoa using (id_aretoa) join zinema using (id_zinema) where id_zinema = (select id_zinema from zinema where id_zinema ="+aukera+") order by ordua;";
 			ResultSet request = comando.executeQuery( query);
