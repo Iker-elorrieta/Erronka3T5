@@ -5,12 +5,19 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 
 import Controlador.Metodoak;
+import Model.Aretoa;
+import Model.Bezero;
+import Model.Filma;
+import Model.Saioa;
+import Model.Sarrera;
+import Model.Zinema;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -49,6 +56,7 @@ public class Hasiera extends JFrame {
 	private JTextField textField_registroAbiz;
 	private JTextField textField_registroNan;
 	private JTextField textField_registroPas;
+	Metodoak metodoak = new Metodoak();
 	String[][] botoi_zinemak;
 	String[][] film_array = new String[0][0];
 	String[] goiburua = {"Izenburua","Genero","Iraupena","Prezioa"};
@@ -85,6 +93,24 @@ public class Hasiera extends JFrame {
 
 		setContentPane(APP);
 		APP.setLayout(new CardLayout(0, 0));
+		
+		//Objetuak kargatu
+		//Zinema guztiak kargatzen ditu
+		Zinema[] zinemak_array = metodoak.ZinemakKargatu();
+		//System.out.println(zinemak_array);
+		//Aretoak guztiak kargatzen ditu
+		Aretoa[] aretoak_array = metodoak.AretoakKargatu();
+		//Saio guztiak kargatzen ditu
+		Saioa[] saioak_array = metodoak.SaioakKargatu();
+		//Bezero guztiak kargatzen ditu
+		Bezero[] bezeroak_array = metodoak.BezeroakKargatu();
+		//Filma guztiak kargatzen ditu
+		Filma[] filmak_array = metodoak.FilmakKargatu();
+		//Sarrera guztiak kargatzen ditu
+		Sarrera[] sarrerak_array = metodoak.SarrerakKargatu();
+		for(int i=0;i<zinemak_array.length;i++) {
+			System.out.println(zinemak_array[i]);
+		}
 		
 		//Panelak
 		JPanel ongi_etorri = new JPanel();

@@ -52,7 +52,7 @@ public class Saioa {
 	// ToString
 	@Override
 	public String toString() {
-		return "Saioa [id_saioa=" + id_saioa + ", ordua=" + ordua + ", filma=" + filma + ", aretoa=" + aretoa + "]";
+		return "Saioa [id_saioa=" + id_saioa + ", ordua=" + ordua.get(Calendar.HOUR)+":"+ordua.get(Calendar.MINUTE) + ", filma=" + filma + ", aretoa=" + aretoa + "]";
 	}
 	
 	// Equals
