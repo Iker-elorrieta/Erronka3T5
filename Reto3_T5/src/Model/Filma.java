@@ -7,13 +7,15 @@ public class Filma {
 	private String izenburu;
 	private String genero;
 	private int iraupena;
+	private float prezioa;
 	
 	//Constructor
-	public Filma(int id_filma, String izenburu, String genero, int iraupena){
+	public Filma(int id_filma, String izenburu, String genero, int iraupena, float prezioa){
 		this.id_filma = id_filma;
 		this.izenburu = izenburu;
 		this.genero = genero;
 		this.iraupena = iraupena;
+		this.prezioa = prezioa;
 	}
 	
 	public Filma(){
@@ -32,12 +34,15 @@ public class Filma {
 	public int getIraupena() {
 		return iraupena;
 	}
+	public float getPrezioa() {
+		return prezioa;
+	}
 	
 	// ToString
 	@Override
 	public String toString() {
 		return "Filma [id_filma=" + id_filma + ", izenburu=" + izenburu + ", genero=" + genero + ", iraupena="
-				+ iraupena + "]";
+				+ iraupena + ", prezioa=" + prezioa + "]";
 	}
 	
 	// Equals

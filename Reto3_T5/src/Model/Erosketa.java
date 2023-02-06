@@ -1,20 +1,23 @@
 package Model;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 public class Erosketa {
 	private int id_erosketa;
-	private Bezero[] bezero;
+	private Bezero bezero;
 	private float deskontua;
 	private float totala;
+	private Sarrera[] sarrera;
 	
 	
 	// Constructor
-	public Erosketa(int id_erosketa, Bezero[] bezero, float deskontua, float totala){
+	public Erosketa(int id_erosketa, Bezero bezero, float deskontua, float totala, Sarrera[] sarrera){
 		this.id_erosketa = id_erosketa;
 		this.bezero = bezero;
 		this.deskontua = deskontua;
 		this.totala = totala;
+		this.sarrera = sarrera;
 	}
 	
 	public Erosketa(){
@@ -25,7 +28,7 @@ public class Erosketa {
 	public void setId_erosketa(int id_erosketa) {
 		this.id_erosketa = id_erosketa;
 	}
-	public void setBezero(Bezero[] id_bezero) {
+	public void setBezero(Bezero id_bezero) {
 		this.bezero = id_bezero;
 	}
 	public void setDeskontua(float deskontua) {
@@ -34,13 +37,15 @@ public class Erosketa {
 	public void setTotala(float totala) {
 		this.totala = totala;
 	}
-		
+	public void setSarrera(Sarrera[] sarrera) {
+		this.sarrera = sarrera;
+	}	
 		
 	//Getters
 	public int getId_erosketa() {
 		return id_erosketa;
 	}
-	public Bezero[] getBezero() {
+	public Bezero getBezero() {
 		return bezero;
 	}
 	public Float getDeskontua() {
@@ -49,12 +54,15 @@ public class Erosketa {
 	public Float getTotala() {
 		return totala;
 	}
+	public Sarrera[] getSarrera() {
+		return sarrera;
+	}
 
 	// ToString
 	@Override
 	public String toString() {
-		return "Erosketa [id_erosketa=" + id_erosketa + ", bezero=" + bezero + ", totala=" + totala
-				+ ", deskontua=" + deskontua + "]";
+		return "Erosketa [id_erosketa=" + id_erosketa + ", bezero=" + bezero + ", deskontua=" + deskontua + ", totala="
+				+ totala + ", sarrera=" + Arrays.toString(sarrera) + "]";
 	}
 
 	// Equals
