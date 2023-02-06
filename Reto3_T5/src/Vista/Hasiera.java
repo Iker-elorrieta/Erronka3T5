@@ -5,17 +5,16 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
-import org.jdatepicker.impl.JDatePanelImpl;
-import org.jdatepicker.impl.JDatePickerImpl;
-import org.jdatepicker.impl.UtilDateModel;
+import javax.swing.table.DefaultTableModel;
 
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 
-//import Model.DateLabelFormatter;
+import Controlador.Metodoak;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.Image;
 
@@ -23,11 +22,11 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.CardLayout;
 import java.awt.event.ActionListener;
-import java.sql.Date;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Properties;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -36,6 +35,7 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import java.awt.Toolkit;
+import javax.swing.JRadioButton;
 
 public class Hasiera extends JFrame {
 
@@ -49,8 +49,13 @@ public class Hasiera extends JFrame {
 	private JTextField textField_registroAbiz;
 	private JTextField textField_registroNan;
 	private JTextField textField_registroPas;
-	JDatePickerImpl datePicker;
-
+	String[][] botoi_zinemak;
+	String[][] film_array = new String[0][0];
+	String[] goiburua = {"Izenburua","Genero","Iraupena","Prezioa"};
+	String[] sexuak = {"Gizona","Emakumea"};
+	private JTable taula_filmak_2;
+	private JTextField textField_registroAdin;
+	String izenburua="";
 	/**
 	 * Launch the application.
 	 */
@@ -213,62 +218,114 @@ public class Hasiera extends JFrame {
 		erregistratu.add(abizena_registro);
 		
 		JLabel nan_registro = new JLabel("NAN:");
-		nan_registro.setBounds(228, 215, 37, 30);
+		nan_registro.setBounds(226, 239, 37, 30);
 		nan_registro.setFont(new Font("Tahoma", Font.BOLD, 14));
 		erregistratu.add(nan_registro);
 		
 		JLabel pass_registro = new JLabel("Pasahitza:");
-		pass_registro.setBounds(228, 249, 70, 30);
+		pass_registro.setBounds(226, 273, 70, 30);
 		pass_registro.setFont(new Font("Tahoma", Font.BOLD, 14));
 		erregistratu.add(pass_registro);		
 
 		JLabel lbl_sexua = new JLabel("Sexua:");
 		lbl_sexua.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lbl_sexua.setBounds(228, 171, 59, 30);
+		lbl_sexua.setBounds(226, 195, 59, 30);
 		erregistratu.add(lbl_sexua);
+		
+		JLabel adina_registro = new JLabel("Adina:");
+		adina_registro.setFont(new Font("Tahoma", Font.BOLD, 14));
+		adina_registro.setBounds(228, 166, 59, 30);
+		erregistratu.add(adina_registro);
+		
+		//////////////////////////////////
+		// 			Taula guztiak		 //
+		//////////////////////////////////
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(87, 61, 430, 220);
+		filmak.add(scrollPane);		
+		
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(89, 80, 469, 206);
+		laburpena.add(scrollPane_1);		
+		taula_laburpen = new JTable();
+		scrollPane_1.setViewportView(taula_laburpen);
+		
+
+		//////////////////////////////////
+		// 		ComboBox guztiak		 //
+		//////////////////////////////////
+		
+		JComboBox comboBox_ordutegi = new JComboBox();
+		comboBox_ordutegi.setBounds(282, 110, 146, 22);
+		saioak.add(comboBox_ordutegi);
+		
+		JComboBox comboBox_aretoak = new JComboBox();
+		comboBox_aretoak.setBounds(282, 175, 146, 22);
+		saioak.add(comboBox_aretoak);		
+		
+		JComboBox comboBox_sexua = new JComboBox(sexuak);
+		comboBox_sexua.setBounds(313, 205, 86, 22);
+		erregistratu.add(comboBox_sexua);	
+
 		//////////////////////////////////
 		// 			Botoi guztiak		 //
 		//////////////////////////////////
-		JButton btn_ongietorri = new JButton("");
-		btn_ongietorri.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				ongi_etorri.setVisible(false);
-				zinemak.setVisible(true);
-			}
-		});
-		btn_ongietorri.setBounds(0, 0, 650, 373);
-		ongi_etorri.add(btn_ongietorri);
-		btn_ongietorri.setOpaque(false);
-		btn_ongietorri.setContentAreaFilled(false);
-		btn_ongietorri.setBorderPainted(false);
-		
+				
 		//Zinemen botoiak sortu
 		Connection conn;
-		String[][] botoi_zinemak = new String[3][2];
+		
 		try {
 			String url = "jdbc:mysql://localhost:3306/db_zinema";
 			conn = (Connection) DriverManager.getConnection (url, "root","");
 			Statement comando = (Statement) conn.createStatement();						
 			
 			ResultSet request = comando.executeQuery("SELECT bounds,route FROM zinema");
-			
+						
 			int cont=0;
-			while(request.next()) {
-				botoi_zinemak[cont][0]=request.getString(1);
-				botoi_zinemak[cont][1]=request.getString(2);
+			botoi_zinemak = new String[cont][2];
+			
+			while(request.next()) {						
+				String[][] botones_prov = new String[botoi_zinemak.length+1][2];
+				for(int i=0;i<botoi_zinemak.length;i++) {
+					for(int k=0;k<botoi_zinemak[i].length;k++) {
+						botones_prov[i][k]=botoi_zinemak[i][k];
+					}
+				}
+				botones_prov[botoi_zinemak.length][0]=request.getString(1);
+				botones_prov[botoi_zinemak.length][1]=request.getString(2);
+				botoi_zinemak = new String[botones_prov.length][2];
+				for(int i=0;i<botones_prov.length;i++) {
+					for(int k=0;k<botones_prov[i].length;k++) {
+						botoi_zinemak[i][k]=botones_prov[i][k];
+					}
+				}
 				cont++;
 			}
+			conn.close();
 		}catch(SQLException ex) {
 			System.out.println("SQLException: "+ ex.getMessage());
 			System.out.println("SQLState: "+ ex.getSQLState());
 			System.out.println("ErrorCode: "+ ex.getErrorCode());
-		}
+		}		
 		
+		// Zinema aukeratzean filmak erakustea
 		for(int j=0;j<botoi_zinemak.length;j++) {
-			ImageIcon logo_zubi = new ImageIcon(new ImageIcon(botoi_zinemak[j][1]).getImage().getScaledInstance(150,150,Image.SCALE_DEFAULT));
-			JButton btn_zine = new JButton(logo_zubi);
+			ImageIcon logo_cine = new ImageIcon(new ImageIcon(botoi_zinemak[j][1]).getImage().getScaledInstance(150,150,Image.SCALE_DEFAULT));
+			JButton btn_zine = new JButton(logo_cine);
+			btn_zine.setToolTipText(String.valueOf(j+1));
 			btn_zine.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
+				public void actionPerformed(ActionEvent e) {	
+					
+					film_array= Metodoak.FilmQuery(Character.getNumericValue(btn_zine.getToolTipText().charAt(0)));	
+					
+					scrollPane.setViewportView(taula_filmak);
+					taula_filmak = new JTable(film_array,goiburua);
+					taula_filmak.setRowHeight(50);  
+					taula_filmak.getTableHeader().setReorderingAllowed(false);
+					scrollPane.setViewportView(taula_filmak);
+					setBounds(100, 100, 676, 422);
+					
 					zinemak.setVisible(false);
 					filmak.setVisible(true);
 				}
@@ -284,6 +341,7 @@ public class Hasiera extends JFrame {
 		JButton btn_amaitu = new JButton("Amaitu");
 		btn_amaitu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				setBounds(100, 100, 676, 422);
 				zinemak.setVisible(false);
 				laburpena.setVisible(true);
 			}
@@ -291,9 +349,35 @@ public class Hasiera extends JFrame {
 		btn_amaitu.setBounds(288, 313, 89, 23);
 		zinemak.add(btn_amaitu);
 		
+		JButton btn_ongietorri = new JButton("");
+		btn_ongietorri.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(botoi_zinemak.length>3) {
+					setBounds(100, 100, 676, 550);
+					btn_amaitu.setBounds(288, 450, 89, 23);
+				}
+				ongi_etorri.setVisible(false);
+				zinemak.setVisible(true);
+				
+			}
+		});
+		btn_ongietorri.setBounds(0, 0, 650, 373);
+		ongi_etorri.add(btn_ongietorri);
+		btn_ongietorri.setOpaque(false);
+		btn_ongietorri.setContentAreaFilled(false);
+		btn_ongietorri.setBorderPainted(false);
+		
+				
 		JButton btn_atzera_1 = new JButton("");
 		btn_atzera_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if(botoi_zinemak.length>3) {
+					setBounds(100, 100, 676, 550);
+					btn_amaitu.setBounds(288, 450, 89, 23);
+				}else {
+					setBounds(100, 100, 676, 422);
+					btn_amaitu.setBounds(288, 313, 89, 23);
+				}
 				filmak.setVisible(false);
 				zinemak.setVisible(true);
 			}
@@ -309,8 +393,15 @@ public class Hasiera extends JFrame {
 		JButton btn_aurrera_1 = new JButton("");
 		btn_aurrera_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				filmak.setVisible(false);
-				datak.setVisible(true);
+				int column = 0;
+				int row = taula_filmak.getSelectedRow();
+				if(row>=0 && column>=0) {
+					izenburua = taula_filmak.getModel().getValueAt(row, column).toString(); //Taulan aukeratutako balioa gordetzen du
+					filmak.setVisible(false);
+					datak.setVisible(true);
+				}else {
+					JOptionPane.showMessageDialog(null, "Film bat aukeratu behar duzu.","Alerta", JOptionPane.INFORMATION_MESSAGE);
+				}
 			}
 		});
 		btn_aurrera_1.setBounds(596, 332, 44, 30);
@@ -340,6 +431,22 @@ public class Hasiera extends JFrame {
 		JButton btn_aurrera_2 = new JButton("");
 		btn_aurrera_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				Connection conn;					
+				try {
+					String url = "jdbc:mysql://localhost:3306/db_zinema";
+					conn = (Connection) DriverManager.getConnection (url, "root","");
+					Statement comando = (Statement) conn.createStatement();						
+											
+					ResultSet request = comando.executeQuery( "select prezioa from filma where Izenburua='"+izenburua+"';");
+					
+					if(request.next()) {	
+						lbl_prezioa.setText(request.getString(1)+"€ ");
+					}
+				}catch(SQLException ex) {
+					System.out.println("SQLException: "+ ex.getMessage());
+					System.out.println("SQLState: "+ ex.getSQLState());
+					System.out.println("ErrorCode: "+ ex.getErrorCode());
+				}
 				datak.setVisible(false);
 				saioak.setVisible(true);
 			}
@@ -351,26 +458,10 @@ public class Hasiera extends JFrame {
 		btn_aurrera_2.setContentAreaFilled(false);
 		btn_aurrera_2.setBorderPainted(false);
 		
-		
-		UtilDateModel model = new UtilDateModel();
-        Properties p = new Properties();
-        JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
-        //datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
-        //Date min = new Date(2023, 3,3);
-        //datePicker.setMinDate(min.getTime());
-       /* datePicker.setDayCellFactory(picker -> new DateCell() {
-            public void updateItem(LocalDate date, boolean empty) {
-                super.updateItem(date, empty);
-                LocalDate today = LocalDate.now();
-
-                setDisable(empty || date.compareTo(today) < 0 );
-            }
-        });*/
-        
-        datePicker.setLocation(255, 81);
-        datePicker.setSize(125, 30);
-        
-        datak.add(datePicker);
+		JFormattedTextField formattedTextField = new JFormattedTextField();
+		formattedTextField.setEditable(false);
+		formattedTextField.setBounds(255, 81, 125, 20);
+		datak.add(formattedTextField);
 		
 		
 		JButton btn_atzera_3 = new JButton("");
@@ -390,6 +481,10 @@ public class Hasiera extends JFrame {
 		JButton btn_aurrera_3 = new JButton("");
 		btn_aurrera_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if(botoi_zinemak.length>3) {
+					setBounds(100, 100, 676, 550);
+					btn_amaitu.setBounds(288, 450, 89, 23);
+				}
 				saioak.setVisible(false);
 				zinemak.setVisible(true);
 			}
@@ -404,6 +499,10 @@ public class Hasiera extends JFrame {
 		JButton btn_atzera_4 = new JButton("");
 		btn_atzera_4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if(botoi_zinemak.length>3) {
+					setBounds(100, 100, 676, 550);
+					btn_amaitu.setBounds(288, 450, 89, 23);
+				}
 				laburpena.setVisible(false);
 				zinemak.setVisible(true);
 			}
@@ -429,22 +528,32 @@ public class Hasiera extends JFrame {
 		laburpena.add(btn_aurrera_4);
 		btn_aurrera_4.setIcon(logo_aurrera);
 		
-		JButton btn_erregistratu = new JButton("Erregistratu");
+		JButton btn_erregistratu = new JButton("Ez dut konturik");
 		btn_erregistratu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				login.setVisible(false);
 				erregistratu.setVisible(true);
 			}
 		});
-		btn_erregistratu.setBounds(274, 258, 110, 23);
+		btn_erregistratu.setBounds(268, 281, 119, 23);
 		login.add(btn_erregistratu);		
 
 		JButton btn_erregistratuOk = new JButton("Erregistratu");
-		btn_erregistratuOk.setBounds(203, 315, 109, 23);
+		btn_erregistratuOk.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				if(!textField_registroId.getText().equals("") && !textField_registroIzen.getText().equals("") && !textField_registroAbiz.getText().equals("") && !textField_registroAdin.getText().equals("") && !String.valueOf(comboBox_sexua.getSelectedItem()).equals("") && !textField_registroNan.getText().equals("") && !textField_registroPas.getText().equals("")) {
+					Metodoak.RegistroaEgin(textField_registroId.getText(),textField_registroIzen.getText(),textField_registroAbiz.getText(),Integer.parseInt(textField_registroAdin.getText()),String.valueOf(comboBox_sexua.getSelectedItem()),textField_registroNan.getText(),textField_registroPas.getText());
+				}else {
+					JOptionPane.showMessageDialog(null, "Datu guztiak sartu behar dituzu.","Alerta", JOptionPane.INFORMATION_MESSAGE);
+				}
+			}
+		});
+		btn_erregistratuOk.setBounds(201, 339, 109, 23);
 		erregistratu.add(btn_erregistratuOk);
 		
-		JButton btn_loginRegistro = new JButton("Login");
-		btn_loginRegistro.setBounds(354, 315, 89, 23);
+		JButton btn_loginRegistro = new JButton("Kontu bat daukat");
+		btn_loginRegistro.setBounds(352, 339, 132, 23);
 		btn_loginRegistro.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				erregistratu.setVisible(false);
@@ -457,6 +566,10 @@ public class Hasiera extends JFrame {
 		JButton btn_etxea_1 = new JButton(homeicon);
 		btn_etxea_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if(botoi_zinemak.length>3) {
+					setBounds(100, 100, 676, 550);
+					btn_amaitu.setBounds(288, 450, 89, 23);
+				}
 				login.setVisible(false);
 				zinemak.setVisible(true);
 			}
@@ -471,6 +584,10 @@ public class Hasiera extends JFrame {
 		btn_etxea_2.setBounds(10, 11, 44, 34);
 		btn_etxea_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if(botoi_zinemak.length>3) {
+					setBounds(100, 100, 676, 550);
+					btn_amaitu.setBounds(288, 450, 89, 23);
+				}
 				erregistratu.setVisible(false);
 				zinemak.setVisible(true);
 			}
@@ -480,40 +597,7 @@ public class Hasiera extends JFrame {
 		btn_etxea_2.setContentAreaFilled(false);
 		btn_etxea_2.setBorderPainted(false);
 		
-		//////////////////////////////////
-		// 			Taula guztiak		 //
-		//////////////////////////////////
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(138, 61, 365, 215);
-		filmak.add(scrollPane);		
-		taula_filmak = new JTable();
-		scrollPane.setViewportView(taula_filmak);
 		
-		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(89, 80, 469, 206);
-		laburpena.add(scrollPane_1);		
-		taula_laburpen = new JTable();
-		scrollPane_1.setViewportView(taula_laburpen);
-		
-		
-		//////////////////////////////////
-		// 		Combo Box guztiak		//
-		//////////////////////////////////
-		JComboBox comboBox_filmak = new JComboBox();
-		comboBox_filmak.setBounds(535, 58, 71, 22);
-		filmak.add(comboBox_filmak);
-		
-		JComboBox comboBox_ordutegi = new JComboBox();
-		comboBox_ordutegi.setBounds(282, 110, 146, 22);
-		saioak.add(comboBox_ordutegi);
-		
-		JComboBox comboBox_aretoak = new JComboBox();
-		comboBox_aretoak.setBounds(282, 175, 146, 22);
-		saioak.add(comboBox_aretoak);		
-		
-		JComboBox comboBox_sexua = new JComboBox();
-		comboBox_sexua.setBounds(315, 181, 86, 22);
-		erregistratu.add(comboBox_sexua);		
 		
 		//////////////////////////////////
 		// 		JTextField guztiak		//
@@ -527,6 +611,15 @@ public class Hasiera extends JFrame {
 		pass_login = new JPasswordField();
 		pass_login.setBounds(309, 189, 96, 20);
 		login.add(pass_login);
+		
+		JButton btn_sartu = new JButton("Sartu");
+		btn_sartu.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				boolean balidatu = Metodoak.LoginBalidatu(nan_login.getText(),String.valueOf(pass_login.getPassword()));
+			}
+		});
+		btn_sartu.setBounds(280, 247, 89, 23);
+		login.add(btn_sartu);
 				
 		textField_registroId = new JTextField();
 		textField_registroId.setBounds(315, 74, 86, 20);
@@ -544,14 +637,29 @@ public class Hasiera extends JFrame {
 		erregistratu.add(textField_registroAbiz);
 		
 		textField_registroNan = new JTextField();
-		textField_registroNan.setBounds(315, 222, 86, 20);
+		textField_registroNan.setBounds(313, 246, 86, 20);
 		textField_registroNan.setColumns(10);
 		erregistratu.add(textField_registroNan);
 		
 		textField_registroPas = new JTextField();
-		textField_registroPas.setBounds(315, 256, 86, 20);
+		textField_registroPas.setBounds(313, 280, 86, 20);
 		textField_registroPas.setColumns(10);
 		erregistratu.add(textField_registroPas);
+		
+		textField_registroAdin = new JTextField();
+		textField_registroAdin.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				char c = e.getKeyChar();
+				
+				if(!Character.isDigit(c) || textField_registroAdin.getText().length() >= 3 ){
+					e.consume();
+				}
+			}
+		});
+		textField_registroAdin.setColumns(3);
+		textField_registroAdin.setBounds(313, 174, 86, 20);
+		erregistratu.add(textField_registroAdin);
 		
 	}
 }
