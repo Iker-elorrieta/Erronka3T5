@@ -20,6 +20,10 @@ import Model.Zinema;
 
 public class Metodoak {
 	
+	/**
+	 * Datu basean dauden zinema guztiak kargatzen ditu array batean.
+	 * @return Zinema guztien array bat
+	 */
 	public Zinema[] ZinemakKargatu() {
 		Zinema[] zinemak= new Zinema[0];
 		Aretoa[] aretoak= new Aretoa[0];
@@ -30,11 +34,11 @@ public class Metodoak {
 			conn = (Connection) DriverManager.getConnection (url, "root","");
 			Statement comando = (Statement) conn.createStatement();	
 			ResultSet request = comando.executeQuery("Select Id_zinema,IzenZin, Kokalekua from zinema;");
-			
+
+			int id_zinema = 1;
 			//Zinema bakoitzaren informazioa gorde
 			while(request.next()) {
 				Zinema zinema = new Zinema();
-				int id_zinema = 1;
 				
 				zinema.setId_zinema(Integer.parseInt(request.getString(1)));
 				zinema.setIzenZin(request.getString(2));
@@ -44,7 +48,7 @@ public class Metodoak {
 				try {	
 					conn2 = (Connection) DriverManager.getConnection (url, "root","");
 					Statement comando2 = (Statement) conn2.createStatement();	
-					ResultSet request2 = comando2.executeQuery("Select Id_aretoa, IzenAret from aretoa a join zinema z ON a.Id_zinema=z.Id_zinema WHERE a.id_zinema='"+id_zinema+"';");		
+					ResultSet request2 = comando2.executeQuery("Select Id_aretoa, IzenAret from aretoa a join zinema z ON a.Id_zinema=z.Id_zinema WHERE a.id_zinema="+id_zinema+";");		
 					aretoak= new Aretoa[0];
 					//Zinema bakoitzean dauden aretoen informazioa gorde
 					while(request2.next()) {
@@ -87,6 +91,10 @@ public class Metodoak {
 		return zinemak;
 	}
 	
+	/**
+	 * Datu basean dauden areto guztiak kargatzen ditu array batean.
+	 * @return Areto guztien array bat
+	 */
 	public Aretoa[] AretoakKargatu() {
 		Aretoa[] aretoak = new Aretoa[0];
 		
@@ -121,6 +129,10 @@ public class Metodoak {
 		return aretoak;
 	}
 	
+	/**
+	 * Datu basean dauden saio guztiak kargatzen ditu array batean.
+	 * @return Saio guztien array bat
+	 */
 	public Saioa[] SaioakKargatu() {
 		Saioa[] saioak = new Saioa[0];
 		
@@ -178,6 +190,10 @@ public class Metodoak {
 		return saioak;
 	}
 	
+	/**
+	 * Datu basean dauden bezero guztiak kargatzen ditu array batean.
+	 * @return Bezero guztien array bat
+	 */
 	public Bezero[] BezeroakKargatu() {
 		Bezero[] bezeroak = new Bezero[0];
 		
@@ -218,6 +234,10 @@ public class Metodoak {
 		return bezeroak;
 	}
 	
+	/**
+	 * Datu basean dauden filma guztiak kargatzen ditu array batean.
+	 * @return Filma guztien array bat
+	 */
 	public Filma[] FilmakKargatu() {
 		Filma[] filmak = new Filma[0];
 		
@@ -226,7 +246,7 @@ public class Metodoak {
 			String url = "jdbc:mysql://localhost:3306/db_zinema";
 			conn = (Connection) DriverManager.getConnection (url, "root","");
 			Statement comando = (Statement) conn.createStatement();	
-			ResultSet request = comando.executeQuery("Select id_filma,izenburua,generoa,iraupena,prezioa from filma;");
+			ResultSet request = comando.executeQuery("Select f.id_filma,izenburua,generoa,iraupena,prezioa from filma f JOIN saioa s ON f.id_filma=s.id_filma order by data,ordua;");
 			
 			while(request.next()) {
 				Filma filma = new Filma(Integer.parseInt(request.getString(1)),request.getString(2),request.getString(3),Integer.parseInt(request.getString(4)),Float.parseFloat(request.getString(5)));
@@ -248,6 +268,10 @@ public class Metodoak {
 		return filmak;
 	}
 
+	/**
+	 * Datu basean dauden sarrera guztiak kargatzen ditu array batean.
+	 * @return Sarrera guztien array bat
+	 */
 	public Sarrera[] SarrerakKargatu() {
 		 Sarrera[] sarrerak = new Sarrera[0];
 		 
@@ -310,6 +334,10 @@ public class Metodoak {
 		 return sarrerak;
 	}
 	
+	/**
+	 * Datu basean dauden erosketa guztiak kargatzen ditu array batean.
+	 * @return Erosketa guztien array bat
+	 */
 	public Erosketa[] ErosketakKargatu() {
 		Erosketa[] erosketak = new Erosketa[0];	
 
@@ -409,6 +437,44 @@ public class Metodoak {
 				System.out.println("ErrorCode: "+ ex.getErrorCode());
 			}		
 		return erosketak;
+	}
+	
+	public String[][] ZinemarenFilmak(Filma[] filmak,Zinema[] zinemak, Aretoa[] aretoak, Saioa[] saioak, int aukera){
+		String[][] filmak_array = new String[0][4];
+		boolean aurkituta=false;
+		//Filmak aztertzen ditu
+		for(int i=0;i<filmak.length;i++) {
+			int id_filma= filmak[i].getId_filma();
+			aurkituta=false;
+			//Saioak aztertzen ditu
+			for(int j=0;j<saioak.length && !aurkituta;j++) {
+				if(id_filma==saioak[j].getFilma().getId_filma()) {
+					int id_aretoa_saioa= saioak[j].getAretoa().getId_areto();
+						Aretoa[] areto_zinema = zinemak[aukera-1].getAretoa();
+						//Zinemen aretoak aztertzen ditu
+						for(int g=0;g<areto_zinema.length && !aurkituta;g++) {
+							if(id_aretoa_saioa==areto_zinema[g].getId_areto() && zinemak[aukera-1].getId_zinema()==aukera) {								
+								//Filmen array-a berridazten du
+								String[][] filmak_array_prov = new String[filmak_array.length+1][4];
+								for(int f =0;f<filmak_array.length && !aurkituta;f++){
+									for(int d=0;d<filmak_array[f].length;d++) {
+										filmak_array_prov[f][d]=filmak_array[f][d];
+									}
+								}
+								filmak_array_prov[filmak_array.length][0] = filmak[i].getIzenburu();
+								filmak_array_prov[filmak_array.length][1] = filmak[i].getGenero();
+								filmak_array_prov[filmak_array.length][2] = String.valueOf(filmak[i].getIraupena());
+								filmak_array_prov[filmak_array.length][3] = String.valueOf(filmak[i].getPrezioa());
+								filmak_array = filmak_array_prov;
+								aurkituta=true;
+							
+						}
+					}
+				}
+			}
+		}
+		
+		return filmak_array;
 	}
 	
 	public static String[][] FilmQuery(int aukera){

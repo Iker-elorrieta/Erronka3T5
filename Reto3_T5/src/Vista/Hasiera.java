@@ -62,7 +62,6 @@ public class Hasiera extends JFrame {
 	String[][] film_array = new String[0][0];
 	String[] goiburua = {"Izenburua","Genero","Iraupena","Prezioa"};
 	String[] sexuak = {"Gizona","Emakumea"};
-	private JTable taula_filmak_2;
 	private JTextField textField_registroAdin;
 	String izenburua="";
 	/**
@@ -347,7 +346,8 @@ public class Hasiera extends JFrame {
 			btn_zine.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {	
 					
-					film_array= Metodoak.FilmQuery(Character.getNumericValue(btn_zine.getToolTipText().charAt(0)));	
+					//film_array= Metodoak.FilmQuery(Character.getNumericValue(btn_zine.getToolTipText().charAt(0)));	
+					film_array= metodoak.ZinemarenFilmak(filmak_array, zinemak_array, aretoak_array, saioak_array, Character.getNumericValue(btn_zine.getToolTipText().charAt(0)));
 					
 					scrollPane.setViewportView(taula_filmak);
 					taula_filmak = new JTable(film_array,goiburua);
