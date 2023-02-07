@@ -112,6 +112,7 @@ public class Metodoak {
 				areto_prov[aretoak.length] = areto;
 				aretoak = areto_prov;
 			}
+			conn.close();
 		}catch(SQLException ex) {
 				System.out.println("SQLException: "+ ex.getMessage());
 				System.out.println("SQLState: "+ ex.getSQLState());
@@ -168,6 +169,7 @@ public class Metodoak {
 				saio_prov[saioak.length] = saio;
 				saioak = saio_prov;
 			}
+			conn.close();
 		}catch(SQLException ex) {
 				System.out.println("SQLException: "+ ex.getMessage());
 				System.out.println("SQLState: "+ ex.getSQLState());
@@ -206,6 +208,7 @@ public class Metodoak {
 				bezeroak = bezero_prov;
 				
 			}
+			conn.close();
 		}catch(SQLException ex) {
 			System.out.println("SQLException: "+ ex.getMessage());
 			System.out.println("SQLState: "+ ex.getSQLState());
@@ -236,6 +239,7 @@ public class Metodoak {
 				film_prov[filmak.length] = filma;
 				filmak = film_prov;
 			}
+			conn.close();
 		}catch(SQLException ex) {
 			System.out.println("SQLException: "+ ex.getMessage());
 			System.out.println("SQLState: "+ ex.getSQLState());
@@ -255,20 +259,22 @@ public class Metodoak {
 				ResultSet request = comando.executeQuery("Select id_sarrera, s.Id_saioa, Ordua, Data, f.Id_filma,Izenburua, Generoa, iraupena, prezioa, a.Id_aretoa,IzenAret from saioa s JOIN filma f ON s.id_filma=f.id_filma JOIN aretoa a ON s.id_aretoa=a.id_aretoa JOIN sarrera sa ON sa.id_saioa=s.id_saioa;");
 				
 				while(request.next()) {
-					Sarrera sarrera = new Sarrera();
+					Sarrera sarrera = new Sarrera();					
+					sarrera.setId_sarrera(Integer.parseInt(request.getString(1)));
 					
-					Saioa saio = new Saioa();					
-					saio.setId_saioa(Integer.parseInt(request.getString(1)));
+					Saioa saio = new Saioa();				
+					saio.setId_saioa(Integer.parseInt(request.getString(2)));
 					
 					//Ordua 
-					String ordua = request.getString(2);
+					String ordua = request.getString(3);
 					String[] ordua_array = ordua.split(":");
+					
 					Calendar cal = Calendar.getInstance();
 					cal.set(Calendar.HOUR,Integer.parseInt(ordua_array[0]));
 					cal.set(Calendar.MINUTE,Integer.parseInt(ordua_array[1]));
 					
 					//Data
-					String data = request.getString(3);
+					String data = request.getString(4);
 					String[] data_array = data.split("-");
 					cal.set(Calendar.YEAR,Integer.parseInt(data_array[0]));
 					cal.set(Calendar.MONTH,Integer.parseInt(data_array[1]));
@@ -276,15 +282,15 @@ public class Metodoak {
 					saio.setOrdua(cal);
 					
 					//Filma
-					Filma filma = new Filma(Integer.parseInt(request.getString(4)),request.getString(5),request.getString(6),Integer.parseInt(request.getString(7)),Float.parseFloat(request.getString(8)));
+					Filma filma = new Filma(Integer.parseInt(request.getString(5)),request.getString(6),request.getString(7),Integer.parseInt(request.getString(8)),Float.parseFloat(request.getString(9)));
 					saio.setFilma(filma);
 				
 					//Aretoa
 					Aretoa areto = new Aretoa();
-					areto.setId_areto(Integer.parseInt(request.getString(9)));
-					areto.setIzenAret(request.getString(10));
+					areto.setId_areto(Integer.parseInt(request.getString(10)));
+					areto.setIzenAret(request.getString(11));
 					saio.setAretoa(areto);					
-				
+					sarrera.setSaioa(saio);
 					
 					//Filmens array-a berridazten du
 					Sarrera[] sarrerak_prov = new Sarrera[sarrerak.length+1];
@@ -294,6 +300,7 @@ public class Metodoak {
 					sarrerak_prov[sarrerak.length] = sarrera;
 					sarrerak = sarrerak_prov;
 				}
+				conn.close();
 			}catch(SQLException ex) {
 				System.out.println("SQLException: "+ ex.getMessage());
 				System.out.println("SQLState: "+ ex.getSQLState());
@@ -301,6 +308,107 @@ public class Metodoak {
 			}
 		 
 		 return sarrerak;
+	}
+	
+	public Erosketa[] ErosketakKargatu() {
+		Erosketa[] erosketak = new Erosketa[0];	
+
+		 Connection conn;					
+			try {
+				String url = "jdbc:mysql://localhost:3306/db_zinema";
+				conn = (Connection) DriverManager.getConnection (url, "root","");
+				Statement comando = (Statement) conn.createStatement();	
+				ResultSet request = comando.executeQuery("Select id_erosketa,e.id_bezeroa, izebez, abizbez, sexua, adina, nan, pasahitza, deskontua, totala from erosketa e,bezeroa b WHERE e.id_bezeroa=b.id_bezeroa;");
+				
+				while(request.next()) {
+					Erosketa erosketa = new Erosketa();
+					erosketa.setId_erosketa(Integer.parseInt(request.getString(1)));
+					
+					Bezero bezero = new Bezero();
+					bezero.setId_bezero(request.getString(2));
+					bezero.setIzenBez(request.getString(3));
+					bezero.setAbizen(request.getString(4));
+					bezero.setSexua(request.getString(5));
+					bezero.setAdina(Integer.parseInt(request.getString(6)));
+					bezero.setNan(request.getString(7));
+					bezero.setPasahitza(request.getString(8));
+					
+					erosketa.setBezero(bezero);
+					
+					erosketa.setDeskontua(Float.parseFloat(request.getString(9)));
+					erosketa.setTotala(Float.parseFloat(request.getString(10)));
+					
+					Sarrera[] sarrerak = new Sarrera[0];
+					Connection conn2;					
+					try {
+						conn2 = (Connection) DriverManager.getConnection (url, "root","");
+						Statement comando2 = (Statement) conn2.createStatement();	
+						ResultSet request2 = comando2.executeQuery("Select id_sarrera, s.Id_saioa, Ordua, Data, f.Id_filma,Izenburua, Generoa, iraupena, prezioa, a.Id_aretoa,IzenAret from saioa s JOIN filma f ON s.id_filma=f.id_filma JOIN aretoa a ON s.id_aretoa=a.id_aretoa JOIN sarrera sa ON sa.id_saioa=s.id_saioa JOIN erosketa e ON e.id_erosketa=sa.id_erosketa WHERE e.id_erosketa='"+Integer.parseInt(request.getString(1))+"';");
+						
+						while(request2.next()) {
+							Sarrera sarrera = new Sarrera();					
+							sarrera.setId_sarrera(Integer.parseInt(request2.getString(1)));
+							Saioa saio = new Saioa();				
+							saio.setId_saioa(Integer.parseInt(request2.getString(2)));
+							
+							//Ordua 
+							String ordua = request2.getString(3);
+							String[] ordua_array = ordua.split(":");
+							
+							Calendar cal = Calendar.getInstance();
+							cal.set(Calendar.HOUR,Integer.parseInt(ordua_array[0]));
+							cal.set(Calendar.MINUTE,Integer.parseInt(ordua_array[1]));
+							
+							//Data
+							String data = request2.getString(4);
+							String[] data_array = data.split("-");
+							cal.set(Calendar.YEAR,Integer.parseInt(data_array[0]));
+							cal.set(Calendar.MONTH,Integer.parseInt(data_array[1]));
+							cal.set(Calendar.DAY_OF_MONTH,Integer.parseInt(data_array[2]));
+							saio.setOrdua(cal);
+							
+							//Filma
+							Filma filma = new Filma(Integer.parseInt(request2.getString(5)),request2.getString(6),request2.getString(7),Integer.parseInt(request2.getString(8)),Float.parseFloat(request2.getString(9)));
+							saio.setFilma(filma);
+						
+							//Aretoa
+							Aretoa areto = new Aretoa();
+							areto.setId_areto(Integer.parseInt(request2.getString(10)));
+							areto.setIzenAret(request2.getString(11));
+							saio.setAretoa(areto);					
+							sarrera.setSaioa(saio);
+							
+							//Filmens array-a berridazten du
+							Sarrera[] sarrerak_prov = new Sarrera[sarrerak.length+1];
+							for(int i =0;i<sarrerak.length;i++){
+								sarrerak_prov[i]=sarrerak[i];
+							}
+							sarrerak_prov[sarrerak.length] = sarrera;
+							sarrerak = sarrerak_prov;
+						}
+						conn2.close();
+					}catch(SQLException ex) {
+						System.out.println("SQLException: "+ ex.getMessage());
+						System.out.println("SQLState: "+ ex.getSQLState());
+						System.out.println("ErrorCode: "+ ex.getErrorCode());
+					}
+					erosketa.setSarrera(sarrerak);
+					
+					//Erosketen array-a berridazten du
+					Erosketa[] erosketak_prov = new Erosketa[erosketak.length+1];
+					for(int i =0;i<erosketak.length;i++){
+						erosketak_prov[i]=erosketak[i];
+					}
+					erosketak_prov[erosketak.length] = erosketa;
+					erosketak = erosketak_prov;
+				}
+				conn.close();
+			}catch(SQLException ex) {
+				System.out.println("SQLException: "+ ex.getMessage());
+				System.out.println("SQLState: "+ ex.getSQLState());
+				System.out.println("ErrorCode: "+ ex.getErrorCode());
+			}		
+		return erosketak;
 	}
 	
 	public static String[][] FilmQuery(int aukera){

@@ -111,10 +111,8 @@ public class Hasiera extends JFrame {
 		//Sarrera guztiak kargatzen ditu
 		Sarrera[] sarrerak_array = metodoak.SarrerakKargatu();
 		//Erosketa guztiak kargatzen ditu
-		//Erosketa[] erosketak_array = metodoak.ErosketakKargatu();
-		/*for(int i=0;i<zinemak_array.length;i++) {
-			System.out.println(zinemak_array[i]);
-		}*/
+		Erosketa[] erosketak_array = metodoak.ErosketakKargatu();
+		
 		
 		//////////////////////////////////
 		// 			Panel guztiak 		//
