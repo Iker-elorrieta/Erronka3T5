@@ -439,6 +439,15 @@ public class Metodoak {
 		return erosketak;
 	}
 	
+	/**
+	 * Aukeratutako zinemaren filmak array bidimentzional batean gordetzen ditu
+	 * @param filmak Datu baseko filmak dituen arraya
+	 * @param zinemak Datu baseko zinemak dituen arraya
+	 * @param aretoak Datu baseko aretoak dituen arraya
+	 * @param saioak Datu baseko saioak dituen arraya
+	 * @param aukera Aukeratutako zinema
+	 * @return Aukeratutako zinemaren filmak array bidimentzional batean
+	 */
 	public String[][] ZinemarenFilmak(Filma[] filmak,Zinema[] zinemak, Aretoa[] aretoak, Saioa[] saioak, int aukera){
 		String[][] filmak_array = new String[0][4];
 		boolean aurkituta=false;
@@ -477,37 +486,46 @@ public class Metodoak {
 		return filmak_array;
 	}
 	
-	public static String[][] FilmQuery(int aukera){
-		String[][] film_array= new String[0][0];
-		Connection conn;					
-		try {
-			String url = "jdbc:mysql://localhost:3306/db_zinema";
-			conn = (Connection) DriverManager.getConnection (url, "root","");
-			Statement comando = (Statement) conn.createStatement();						
-			String query = "Select Izenburua,Generoa, Iraupena,Prezioa from filma join saioa using (id_filma) join aretoa using (id_aretoa) join zinema using (id_zinema) where id_zinema = (select id_zinema from zinema where id_zinema ="+aukera+") order by ordua;";
-			ResultSet request = comando.executeQuery( query);
-									
-			while(request.next()) {
-				String[][] array_prov = new String[film_array.length+1][4];
-				for(int i=0;i<film_array.length;i++) {
-					for(int j=0;j<film_array[i].length;j++) {
-						array_prov[i][j]=film_array[i][j];
-					}
-				}				
-				array_prov[film_array.length][0]=request.getString(1);
-				array_prov[film_array.length][1]=request.getString(2);
-				array_prov[film_array.length][2]=request.getString(3);
-				array_prov[film_array.length][3]=request.getString(4)+"€";
-				film_array=array_prov;
-				
-			}			
-			conn.close();
-		}catch(SQLException ex) {
-			System.out.println("SQLException: "+ ex.getMessage());
-			System.out.println("SQLState: "+ ex.getSQLState());
-			System.out.println("ErrorCode: "+ ex.getErrorCode());
+	public int IdFilma(String izenburua, Filma[] filmak) {
+		int id_filma=0;
+		boolean aurkituta=false;
+		
+		for(int i=0;i<filmak.length && !aurkituta;i++) {
+			if(filmak[i].getIzenburu().equals(izenburua)) {
+				id_filma=filmak[i].getId_filma();
+				aurkituta=true;
+			}
+		}		
+		return id_filma;
+	}
+	
+	public String[] SaioOrduak(int id_filma, String data, Saioa[] saioak) {
+		String[] orduak= new String[0];
+	
+		for(int i=0;i<saioak.length;i++) {
+			int eguna = saioak[i].getOrdua().get(Calendar.DAY_OF_MONTH);
+			int hila = saioak[i].getOrdua().get(Calendar.MONTH+1);
+			int urtea = saioak[i].getOrdua().get(Calendar.YEAR);
+			String data_saio= urtea+"-"+hila+"-"+eguna;
+			System.out.println("data saio:"+ data_saio);
+			System.out.println("data:"+ data);
+			if(saioak[i].getFilma().getId_filma()==id_filma && data.equals(data_saio)) {
+				System.out.println("OK");
+			}
 		}
-		return film_array;
+		
+		return orduak;
+	}
+	
+	public float FilmPrezioa(String izenburua, Filma[] filmak) {
+		float prezioa=0;
+		
+		for(int i=0;i<filmak.length;i++) {
+			if(filmak[i].getIzenburu().equals(izenburua)) {
+				prezioa= filmak[i].getPrezioa();
+			}
+		}			
+		return prezioa;
 	}
 	
 	public static boolean LoginBalidatu(String erabiltzaile, String pasahitza) {

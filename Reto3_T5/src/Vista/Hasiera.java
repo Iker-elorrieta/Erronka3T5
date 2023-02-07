@@ -8,12 +8,17 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
+
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 
 import Controlador.Metodoak;
 import Model.Aretoa;
 import Model.Bezero;
+import Model.DateLabelFormatter;
 import Model.Erosketa;
 import Model.Filma;
 import Model.Saioa;
@@ -35,6 +40,8 @@ import java.awt.event.KeyEvent;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
+import java.util.Properties;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -57,6 +64,7 @@ public class Hasiera extends JFrame {
 	private JTextField textField_registroAbiz;
 	private JTextField textField_registroNan;
 	private JTextField textField_registroPas;
+	JDatePickerImpl datePicker;
 	Metodoak metodoak = new Metodoak();
 	String[][] botoi_zinemak;
 	String[][] film_array = new String[0][0];
@@ -64,6 +72,7 @@ public class Hasiera extends JFrame {
 	String[] sexuak = {"Gizona","Emakumea"};
 	private JTextField textField_registroAdin;
 	String izenburua="";
+	int id_filma=0;
 	/**
 	 * Launch the application.
 	 */
@@ -200,9 +209,9 @@ public class Hasiera extends JFrame {
 		lbl_prezio.setBounds(187, 229, 85, 30);
 		saioak.add(lbl_prezio);
 		
-		JLabel lbl_prezioa = new JLabel("New label");
+		JLabel lbl_prezioa = new JLabel("");
 		lbl_prezioa.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lbl_prezioa.setBounds(278, 232, 150, 24);
+		lbl_prezioa.setBounds(300, 232, 85, 24);
 		saioak.add(lbl_prezioa);		
 
 		JLabel lbl_laburpen = new JLabel("Laburpena");
@@ -346,11 +355,14 @@ public class Hasiera extends JFrame {
 			btn_zine.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {	
 					
-					//film_array= Metodoak.FilmQuery(Character.getNumericValue(btn_zine.getToolTipText().charAt(0)));	
 					film_array= metodoak.ZinemarenFilmak(filmak_array, zinemak_array, aretoak_array, saioak_array, Character.getNumericValue(btn_zine.getToolTipText().charAt(0)));
 					
 					scrollPane.setViewportView(taula_filmak);
-					taula_filmak = new JTable(film_array,goiburua);
+					taula_filmak = new JTable(film_array,goiburua) {
+						public boolean editCellAt(int row, int column, java.util.EventObject e) {
+				            return false;
+				        }	
+					};
 					taula_filmak.setRowHeight(50);  
 					taula_filmak.getTableHeader().setReorderingAllowed(false);
 					scrollPane.setViewportView(taula_filmak);
@@ -426,7 +438,8 @@ public class Hasiera extends JFrame {
 				int column = 0;
 				int row = taula_filmak.getSelectedRow();
 				if(row>=0 && column>=0) {
-					izenburua = taula_filmak.getModel().getValueAt(row, column).toString(); //Taulan aukeratutako balioa gordetzen du
+					izenburua = taula_filmak.getModel().getValueAt(row, column).toString(); //Taulan aukeratutako filmaren izenburua gordetzen du
+					id_filma = metodoak.IdFilma(izenburua, filmak_array);
 					filmak.setVisible(false);
 					datak.setVisible(true);
 				}else {
@@ -461,24 +474,16 @@ public class Hasiera extends JFrame {
 		JButton btn_aurrera_2 = new JButton("");
 		btn_aurrera_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Connection conn;					
-				try {
-					String url = "jdbc:mysql://localhost:3306/db_zinema";
-					conn = (Connection) DriverManager.getConnection (url, "root","");
-					Statement comando = (Statement) conn.createStatement();						
-											
-					ResultSet request = comando.executeQuery( "select prezioa from filma where Izenburua='"+izenburua+"';");
+				System.out.println(datePicker.getModel().getValue());
+				if(datePicker.getModel().getValue()!=null){
+					//String[] saio_orduak = metodoak.SaioOrduak(id_filma,datePicker.getModel().getValue(),saioak_array);
+					lbl_prezioa.setText(metodoak.FilmPrezioa(izenburua, filmak_array)+"€");
 					
-					if(request.next()) {	
-						lbl_prezioa.setText(request.getString(1)+"€ ");
-					}
-				}catch(SQLException ex) {
-					System.out.println("SQLException: "+ ex.getMessage());
-					System.out.println("SQLState: "+ ex.getSQLState());
-					System.out.println("ErrorCode: "+ ex.getErrorCode());
+					datak.setVisible(false);
+					saioak.setVisible(true);
+				}else {
+					JOptionPane.showMessageDialog(null, "Data bat aukeratu behar duzu.","Alerta", JOptionPane.INFORMATION_MESSAGE);
 				}
-				datak.setVisible(false);
-				saioak.setVisible(true);
 			}
 		});
 		btn_aurrera_2.setBounds(596, 332, 44, 30);
@@ -486,13 +491,14 @@ public class Hasiera extends JFrame {
 		btn_aurrera_2.setIcon(logo_aurrera);
 		btn_aurrera_2.setOpaque(false);
 		btn_aurrera_2.setContentAreaFilled(false);
-		btn_aurrera_2.setBorderPainted(false);
-		
-		JFormattedTextField formattedTextField = new JFormattedTextField();
-		formattedTextField.setEditable(false);
-		formattedTextField.setBounds(255, 81, 125, 20);
-		datak.add(formattedTextField);
-		
+		btn_aurrera_2.setBorderPainted(false);		
+				
+		UtilDateModel model = new UtilDateModel();
+        Properties p = new Properties();
+        JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
+        datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
+        datePicker.setBounds(204, 69, 202, 30);	        
+        datak.add(datePicker);		
 		
 		JButton btn_atzera_3 = new JButton("");
 		btn_atzera_3.addActionListener(new ActionListener() {
