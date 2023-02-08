@@ -77,6 +77,7 @@ public class Hasiera extends JFrame {
 	private JTextField textField_registroAdin;
 	String izenburua="";
 	int id_filma=0;
+	private JComboBox comboBox_ordutegi;
 	/**
 	 * Launch the application.
 	 */
@@ -459,6 +460,7 @@ public class Hasiera extends JFrame {
 		JButton btn_atzera_2 = new JButton("");
 		btn_atzera_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				datePicker.getJFormattedTextField().setText("");
 				datak.setVisible(false);
 				filmak.setVisible(true);
 			}
@@ -474,22 +476,23 @@ public class Hasiera extends JFrame {
 		JButton btn_aurrera_2 = new JButton("");
 		btn_aurrera_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String data_string = new SimpleDateFormat("d-M-yyyy").format(datePicker.getModel().getValue());
-				if(datePicker.getModel().getValue()!=null){					
+				if(datePicker.getModel().getValue()!=null && !datePicker.getModel().getValue().equals("")){		
+					String data_string = new SimpleDateFormat("d-M-yyyy").format(datePicker.getModel().getValue());
 					datak.setVisible(false);
 					saioak.setVisible(true);
 					
 					String[] saio_orduak = metodoak.SaioOrduak(id_filma,data_string,saioak_array);					
-					JComboBox comboBox_ordutegi = new JComboBox(saio_orduak);					
+					comboBox_ordutegi = new JComboBox(saio_orduak);	
 					comboBox_ordutegi.addActionListener (new ActionListener () {
 						public void actionPerformed(ActionEvent e) {							
+							System.out.println(String.valueOf(comboBox_ordutegi.getSelectedIndex()));
 							String saio_aretoa = metodoak.SaioAretoak(id_filma,data_string,String.valueOf(comboBox_ordutegi.getSelectedItem()),saioak_array);
 							lbl_areto.setText("");
 							lbl_areto.setText(saio_aretoa);
 						}
-					});
+					});					
 					comboBox_ordutegi.setBounds(282, 110, 146, 22);
-					saioak.add(comboBox_ordutegi);					
+					saioak.add(comboBox_ordutegi);	
 					lbl_prezioa.setText(metodoak.FilmPrezioa(izenburua, filmak_array)+"€");
 					
 				}else {
@@ -514,6 +517,10 @@ public class Hasiera extends JFrame {
 		JButton btn_atzera_3 = new JButton("");
 		btn_atzera_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+
+				datePicker.getJFormattedTextField().setText("");
+				lbl_areto.setText("");
+				comboBox_ordutegi.setSelectedIndex(-1);	
 				saioak.setVisible(false);
 				datak.setVisible(true);
 			}
