@@ -52,18 +52,8 @@ public class Saioa {
 	// ToString
 	@Override
 	public String toString() {
-		return "Saioa [id_saioa=" + id_saioa + ", ordua=" + ordua.get(Calendar.HOUR)+":"+ordua.get(Calendar.MINUTE) + ", filma=" + filma + ", aretoa=" + aretoa + "]";
+		return "Saioa [id_saioa=" + id_saioa + ", ordua=" + ordua.get(Calendar.HOUR)+":"+ordua.get(Calendar.MINUTE)+", data="+ordua.get(Calendar.DAY_OF_MONTH)+"-"+ordua.get(Calendar.MONTH)+"-"+ordua.get(Calendar.YEAR)+ ", filma=" + filma + ", aretoa=" + aretoa + "]";
 	}
-	
-	// Equals
-	/*@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + Arrays.hashCode(sarrera);
-		result = prime * result + Objects.hash(id_saioa, ordua);
-		return result;
-	}*/
 
 	@Override
 	public boolean equals(Object obj) {

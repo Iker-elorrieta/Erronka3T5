@@ -40,7 +40,11 @@ import java.awt.event.KeyEvent;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Properties;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
@@ -209,6 +213,11 @@ public class Hasiera extends JFrame {
 		lbl_prezio.setBounds(187, 229, 85, 30);
 		saioak.add(lbl_prezio);
 		
+		JLabel lbl_areto = new JLabel("");
+		lbl_areto.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lbl_areto.setBounds(300, 175, 85, 24);
+		saioak.add(lbl_areto);
+		
 		JLabel lbl_prezioa = new JLabel("");
 		lbl_prezioa.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lbl_prezioa.setBounds(300, 232, 85, 24);
@@ -293,15 +302,6 @@ public class Hasiera extends JFrame {
 		//////////////////////////////////
 		// 		ComboBox guztiak		 //
 		//////////////////////////////////
-		
-		JComboBox comboBox_ordutegi = new JComboBox();
-		comboBox_ordutegi.setBounds(282, 110, 146, 22);
-		saioak.add(comboBox_ordutegi);
-		
-		JComboBox comboBox_aretoak = new JComboBox();
-		comboBox_aretoak.setBounds(282, 175, 146, 22);
-		saioak.add(comboBox_aretoak);		
-		
 		JComboBox comboBox_sexua = new JComboBox(sexuak);
 		comboBox_sexua.setBounds(313, 205, 86, 22);
 		erregistratu.add(comboBox_sexua);	
@@ -474,13 +474,24 @@ public class Hasiera extends JFrame {
 		JButton btn_aurrera_2 = new JButton("");
 		btn_aurrera_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println(datePicker.getModel().getValue());
-				if(datePicker.getModel().getValue()!=null){
-					//String[] saio_orduak = metodoak.SaioOrduak(id_filma,datePicker.getModel().getValue(),saioak_array);
-					lbl_prezioa.setText(metodoak.FilmPrezioa(izenburua, filmak_array)+"€");
-					
+				String data_string = new SimpleDateFormat("d-M-yyyy").format(datePicker.getModel().getValue());
+				if(datePicker.getModel().getValue()!=null){					
 					datak.setVisible(false);
 					saioak.setVisible(true);
+					
+					String[] saio_orduak = metodoak.SaioOrduak(id_filma,data_string,saioak_array);					
+					JComboBox comboBox_ordutegi = new JComboBox(saio_orduak);					
+					comboBox_ordutegi.addActionListener (new ActionListener () {
+						public void actionPerformed(ActionEvent e) {							
+							String saio_aretoa = metodoak.SaioAretoak(id_filma,data_string,String.valueOf(comboBox_ordutegi.getSelectedItem()),saioak_array);
+							lbl_areto.setText("");
+							lbl_areto.setText(saio_aretoa);
+						}
+					});
+					comboBox_ordutegi.setBounds(282, 110, 146, 22);
+					saioak.add(comboBox_ordutegi);					
+					lbl_prezioa.setText(metodoak.FilmPrezioa(izenburua, filmak_array)+"€");
+					
 				}else {
 					JOptionPane.showMessageDialog(null, "Data bat aukeratu behar duzu.","Alerta", JOptionPane.INFORMATION_MESSAGE);
 				}
@@ -532,6 +543,7 @@ public class Hasiera extends JFrame {
 		saioak.add(btn_aurrera_3);
 		btn_aurrera_3.setIcon(logo_aurrera);
 		
+				
 		JButton btn_atzera_4 = new JButton("");
 		btn_atzera_4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

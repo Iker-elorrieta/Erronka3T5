@@ -141,7 +141,7 @@ public class Metodoak {
 			String url = "jdbc:mysql://localhost:3306/db_zinema";
 			conn = (Connection) DriverManager.getConnection (url, "root","");
 			Statement comando = (Statement) conn.createStatement();	
-			ResultSet request = comando.executeQuery("Select Id_saioa, Ordua, Data, f.Id_filma,Izenburua, Generoa, iraupena, prezioa, a.Id_aretoa,IzenAret from saioa s JOIN filma f ON s.id_filma=f.id_filma JOIN aretoa a ON s.id_aretoa=a.id_aretoa;");
+			ResultSet request = comando.executeQuery("Select Id_saioa, Ordua, Data, f.Id_filma,Izenburua, Generoa, iraupena, prezioa, a.Id_aretoa,IzenAret from saioa s JOIN filma f ON s.id_filma=f.id_filma JOIN aretoa a ON s.id_aretoa=a.id_aretoa order by data,ordua;");
 			
 			while(request.next()) {
 				Saioa saio = new Saioa();
@@ -246,7 +246,7 @@ public class Metodoak {
 			String url = "jdbc:mysql://localhost:3306/db_zinema";
 			conn = (Connection) DriverManager.getConnection (url, "root","");
 			Statement comando = (Statement) conn.createStatement();	
-			ResultSet request = comando.executeQuery("Select f.id_filma,izenburua,generoa,iraupena,prezioa from filma f JOIN saioa s ON f.id_filma=s.id_filma order by data,ordua;");
+			ResultSet request = comando.executeQuery("Select f.id_filma,izenburua,generoa,iraupena,prezioa from filma f JOIN saioa s ON f.id_filma=s.id_filma group by f.id_filma order by data,ordua;");
 			
 			while(request.next()) {
 				Filma filma = new Filma(Integer.parseInt(request.getString(1)),request.getString(2),request.getString(3),Integer.parseInt(request.getString(4)),Float.parseFloat(request.getString(5)));
@@ -501,20 +501,44 @@ public class Metodoak {
 	
 	public String[] SaioOrduak(int id_filma, String data, Saioa[] saioak) {
 		String[] orduak= new String[0];
-	
-		for(int i=0;i<saioak.length;i++) {
-			int eguna = saioak[i].getOrdua().get(Calendar.DAY_OF_MONTH);
-			int hila = saioak[i].getOrdua().get(Calendar.MONTH+1);
-			int urtea = saioak[i].getOrdua().get(Calendar.YEAR);
-			String data_saio= urtea+"-"+hila+"-"+eguna;
-			System.out.println("data saio:"+ data_saio);
-			System.out.println("data:"+ data);
-			if(saioak[i].getFilma().getId_filma()==id_filma && data.equals(data_saio)) {
-				System.out.println("OK");
-			}
-		}
 		
+		for(int i=0;i<saioak.length;i++) {
+			int eguna = saioak[i].getOrdua().get(Calendar.DAY_OF_MONTH)-1;
+			int hila = saioak[i].getOrdua().get(Calendar.MONTH);
+			int urtea = saioak[i].getOrdua().get(Calendar.YEAR);
+			String data_saio= eguna+"-"+hila+"-"+urtea;
+			int id_film_saio = saioak[i].getFilma().getId_filma();
+			int id_saio = saioak[i].getId_saioa();
+			if(saioak[i].getFilma().getId_filma()==id_filma && data.equals(data_saio)) {
+				
+				//Orduak array-a berridazten du
+				String[] orduak_prov = new String[orduak.length+1];
+				for(int j =0;j<orduak.length;j++){
+					orduak_prov[j]=orduak[j];
+				}
+				orduak_prov[orduak.length] = saioak[i].getOrdua().get(Calendar.HOUR)+":"+saioak[i].getOrdua().get(Calendar.MINUTE);
+				orduak = orduak_prov;
+			}
+		}		
 		return orduak;
+	}
+	
+	public String SaioAretoak(int id_filma, String data, String ordua, Saioa[] saioak) {
+		String aretoa = "";
+		
+		for(int i=0;i<saioak.length;i++) {
+			int eguna = saioak[i].getOrdua().get(Calendar.DAY_OF_MONTH)-1;
+			int hila = saioak[i].getOrdua().get(Calendar.MONTH);
+			int urtea = saioak[i].getOrdua().get(Calendar.YEAR);
+			String data_saio= eguna+"-"+hila+"-"+urtea;
+			int h = saioak[i].getOrdua().get(Calendar.HOUR);
+			int min = saioak[i].getOrdua().get(Calendar.MINUTE);
+			String ordu_saio = h+":"+min;
+			if(saioak[i].getFilma().getId_filma()==id_filma && data.equals(data_saio) && ordu_saio.equals(ordua)) {
+				aretoa = saioak[i].getAretoa().getIzenAret();				
+			}
+		}		
+		return aretoa;
 	}
 	
 	public float FilmPrezioa(String izenburua, Filma[] filmak) {
