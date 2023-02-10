@@ -582,18 +582,26 @@ public class Metodoak {
 		return prezioa;
 	}
 	
-	public String[][] SaioaGorde(String[][] saioak_laburpen, String izenburua, String aretoa,String data, String ordua, String prezioa){
+	public String[][] SaioaGorde(String[][] saioak_laburpen,Zinema[] zinemak, int id_zinema, String izenburua, String aretoa,String data, String ordua, String prezioa){
 		String[] ordua_string = ordua.split(" ");
+		String zinema= "";
+		for(int i=0;i<zinemak.length;i++) {
+			if(zinemak[i].getId_zinema()==id_zinema) {
+				zinema=zinemak[i].getIzenZin();
+			}
+		}
+		
 		//Filmens array-a berridazten du
-		String[][] saioak_prov = new String[saioak_laburpen.length+1][5];
+		String[][] saioak_prov = new String[saioak_laburpen.length+1][6];
 		for(int i =0;i<saioak_laburpen.length;i++){
 			saioak_prov[i]=saioak_laburpen[i];
 		}
-		saioak_prov[saioak_laburpen.length][0] = izenburua;
-		saioak_prov[saioak_laburpen.length][1] = data;
-		saioak_prov[saioak_laburpen.length][2] = ordua_string[1];
-		saioak_prov[saioak_laburpen.length][3] = aretoa;
-		saioak_prov[saioak_laburpen.length][4] = prezioa;
+		saioak_prov[saioak_laburpen.length][0] = zinema;
+		saioak_prov[saioak_laburpen.length][1] = izenburua;
+		saioak_prov[saioak_laburpen.length][2] = data;
+		saioak_prov[saioak_laburpen.length][3] = ordua_string[1];
+		saioak_prov[saioak_laburpen.length][4] = aretoa;
+		saioak_prov[saioak_laburpen.length][5] = prezioa;
 		saioak_laburpen = saioak_prov;		
 		return saioak_laburpen;
 	}
@@ -605,7 +613,7 @@ public class Metodoak {
 		DecimalFormat formato1 = new DecimalFormat("#.00");
 		
 		for(int i=0;i<saioak.length;i++) {
-			prob=saioak[i][4].split("€");
+			prob=saioak[i][5].split("€");
 			totala+= Float.parseFloat(prob[0]);
 		}
 		return formato1.format(totala);
@@ -628,7 +636,7 @@ public class Metodoak {
 		DecimalFormat formato1 = new DecimalFormat("#.00");
 		
 		for(int i=0;i<saio_laburpen.length;i++) {
-			String[] prezio = saio_laburpen[i][4].split("€");
+			String[] prezio = saio_laburpen[i][5].split("€");
 			prezio_totala+=Float.parseFloat(prezio[0]);
 		}		
 		prezio_totala = (prezio_totala*(100-DeskotuKalkulatu(saio_laburpen)))/100;

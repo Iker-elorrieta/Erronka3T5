@@ -79,10 +79,11 @@ public class Hasiera extends JFrame {
 	String[] sexuak = {"Gizona","Emakumea"};
 	String izenburua="";
 	int id_filma=0;
+	int id_zine=0;
 	String saio_aretoa = "";
 	String data_string = "";
-	String[][] laburpen_array = new String[0][5];
-	String[] goiburu_laburpen = {"Izenburua","Data","Ordua","Aretoa","Prezioa"};
+	String[][] laburpen_array = new String[0][6];
+	String[] goiburu_laburpen = {"Zinema","Izenburua","Data","Ordua","Aretoa","Prezioa"};
 	String[] saio_orduak = new String[0];
 	String[][] saio_orduak_id = new String[0][2];
 	Bezero[] bezeroak_array = new Bezero[0];
@@ -310,7 +311,7 @@ public class Hasiera extends JFrame {
 		filmak.add(scrollPane);				
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(89, 80, 469, 206);
+		scrollPane_1.setBounds(60, 80, 532, 206);
 		laburpena.add(scrollPane_1);
 		
 
@@ -383,8 +384,8 @@ public class Hasiera extends JFrame {
 			btn_zine.setToolTipText(String.valueOf(j+1));
 			btn_zine.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {	
-					
-					film_array= metodoak.ZinemarenFilmak(filmak_array, zinemak_array, aretoak_array, saioak_array, Character.getNumericValue(btn_zine.getToolTipText().charAt(0)));
+					id_zine = Character.getNumericValue(btn_zine.getToolTipText().charAt(0));
+					film_array= metodoak.ZinemarenFilmak(filmak_array, zinemak_array, aretoak_array, saioak_array, id_zine);
 					
 					scrollPane.setViewportView(taula_filmak);
 					taula_filmak = new JTable(film_array,goiburua) {
@@ -475,6 +476,7 @@ public class Hasiera extends JFrame {
 				if(row>=0 && column>=0) {
 					izenburua = taula_filmak.getModel().getValueAt(row, column).toString(); //Taulan aukeratutako filmaren izenburua gordetzen du
 					id_filma = metodoak.IdFilma(izenburua, filmak_array);
+					datePicker.getJFormattedTextField().setText("");
 					filmak.setVisible(false);
 					datak.setVisible(true);
 				}else {
@@ -566,7 +568,7 @@ public class Hasiera extends JFrame {
 		btn_aurrera_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				laburpen_array= metodoak.SaioaGorde(laburpen_array, izenburua, saio_aretoa, data_string, String.valueOf(comboBox_ordutegi.getSelectedItem()),lbl_prezioa.getText());
+				laburpen_array= metodoak.SaioaGorde(laburpen_array,zinemak_array,id_zine, izenburua, saio_aretoa, data_string, String.valueOf(comboBox_ordutegi.getSelectedItem()),lbl_prezioa.getText());
 								
 				scrollPane_1.setViewportView(taula_laburpen);
 				taula_laburpen = new JTable(laburpen_array,goiburu_laburpen) {
@@ -577,6 +579,8 @@ public class Hasiera extends JFrame {
 				taula_laburpen.setRowHeight(50);  
 				taula_laburpen.getTableHeader().setReorderingAllowed(false);
 				scrollPane_1.setViewportView(taula_laburpen);
+				
+				JOptionPane.showMessageDialog(null, "Saioa gorde da.","Alerta", JOptionPane.INFORMATION_MESSAGE);
 				
 				if(botoi_zinemak.length>3) {
 					setBounds(100, 100, 676, 550);
@@ -634,7 +638,7 @@ public class Hasiera extends JFrame {
 				erregistratu.setVisible(true);
 			}
 		});
-		btn_erregistratu.setBounds(268, 281, 119, 23);
+		btn_erregistratu.setBounds(268, 302, 119, 23);
 		login.add(btn_erregistratu);		
 
 		JButton btn_erregistratuOk = new JButton("Erregistratu");
@@ -666,6 +670,7 @@ public class Hasiera extends JFrame {
 		JButton btn_etxea_1 = new JButton(homeicon);
 		btn_etxea_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				laburpen_array = new String[0][6];
 				if(botoi_zinemak.length>3) {
 					setBounds(100, 100, 676, 550);
 					btn_amaitu.setBounds(288, 450, 89, 23);
@@ -684,6 +689,7 @@ public class Hasiera extends JFrame {
 		btn_etxea_2.setBounds(10, 11, 44, 34);
 		btn_etxea_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				laburpen_array = new String[0][6];
 				if(botoi_zinemak.length>3) {
 					setBounds(100, 100, 676, 550);
 					btn_amaitu.setBounds(288, 450, 89, 23);
