@@ -3,6 +3,7 @@ package Controlador;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.Calendar;
 
 import javax.swing.JOptionPane;
@@ -499,11 +500,28 @@ public class Metodoak {
 		return id_filma;
 	}
 	
+	public boolean FilmarenDataBalidatu(Saioa[] saioak, String data, int id_filma) {
+		boolean aurkituta= false;
+		
+		for(int i=0;i<saioak.length;i++) {
+			Calendar cal = Calendar.getInstance();
+			int eguna = saioak[i].getOrdua().get(Calendar.DAY_OF_MONTH)-1;
+			int hila = saioak[i].getOrdua().get(Calendar.MONTH);
+			int urtea = saioak[i].getOrdua().get(Calendar.YEAR);
+			String data_saio= eguna+"-"+hila+"-"+urtea;
+			if(data_saio.equals(data) && saioak[i].getFilma().getId_filma()==id_filma) {
+				aurkituta=true;
+			}
+		}
+		
+		return aurkituta;
+	}
+	
 	public String[][] SaioOrduakId(int id_filma, String data, Saioa[] saioak) {
 		String[][] orduak= new String[0][2];
 		
 		for(int i=0;i<saioak.length;i++) {
-			int eguna = saioak[i].getOrdua().get(Calendar.DAY_OF_MONTH);
+			int eguna = saioak[i].getOrdua().get(Calendar.DAY_OF_MONTH)-1;
 			int hila = saioak[i].getOrdua().get(Calendar.MONTH);
 			int urtea = saioak[i].getOrdua().get(Calendar.YEAR);
 			String data_saio= eguna+"-"+hila+"-"+urtea;
@@ -564,59 +582,72 @@ public class Metodoak {
 		return prezioa;
 	}
 	
-	public String[][] SaioaGorde(String[][] saioak, String izenburua, String aretoa,String data, String ordua, String prezioa){
-		
+	public String[][] SaioaGorde(String[][] saioak_laburpen, String izenburua, String aretoa,String data, String ordua, String prezioa){
+		String[] ordua_string = ordua.split(" ");
 		//Filmens array-a berridazten du
-		String[][] saioak_prov = new String[saioak.length+1][5];
-		for(int i =0;i<saioak.length;i++){
-			saioak_prov[i]=saioak[i];
+		String[][] saioak_prov = new String[saioak_laburpen.length+1][5];
+		for(int i =0;i<saioak_laburpen.length;i++){
+			saioak_prov[i]=saioak_laburpen[i];
 		}
-		saioak_prov[saioak.length][0] = izenburua;
-		saioak_prov[saioak.length][1] = data;
-		saioak_prov[saioak.length][2] = ordua;
-		saioak_prov[saioak.length][3] = aretoa;
-		saioak_prov[saioak.length][4] = prezioa;
-		saioak = saioak_prov;		
-		return saioak;
+		saioak_prov[saioak_laburpen.length][0] = izenburua;
+		saioak_prov[saioak_laburpen.length][1] = data;
+		saioak_prov[saioak_laburpen.length][2] = ordua_string[1];
+		saioak_prov[saioak_laburpen.length][3] = aretoa;
+		saioak_prov[saioak_laburpen.length][4] = prezioa;
+		saioak_laburpen = saioak_prov;		
+		return saioak_laburpen;
 	}
 	
 	public String PrezioTotalaKalkulatu(String[][] saioak) {
-		String totala="";
-		float prezioa=0;
+		float totala=0;
 		String[] prob = new String[0];
+		
+		DecimalFormat formato1 = new DecimalFormat("#.00");
 		
 		for(int i=0;i<saioak.length;i++) {
 			prob=saioak[i][4].split("€");
-			prezioa+= Float.parseFloat(prob[0]);
+			totala+= Float.parseFloat(prob[0]);
 		}
-		totala = String.valueOf(prezioa);
-		return totala;
+		return formato1.format(totala);
 	}
 	
-	public static boolean LoginBalidatu(String erabiltzaile, String pasahitza) {
-		boolean balidatu= false;
-		Connection conn;					
-		try {
-			String url = "jdbc:mysql://localhost:3306/db_zinema";
-			conn = (Connection) DriverManager.getConnection (url, "root","");
-			Statement comando = (Statement) conn.createStatement();						
-									
-			ResultSet request = comando.executeQuery( "select NAN, Pasahitza from bezeroa where NAN='"+erabiltzaile+"' AND Pasahitza='"+pasahitza+"';");
-			
-			if(request.next()) {	
-				balidatu=true;
-			}else {
-				JOptionPane.showMessageDialog(null, "Erabiltzailea edo pasahitza okerrak dira","Alerta", JOptionPane.INFORMATION_MESSAGE);
-			}
-		}catch(SQLException ex) {
-			System.out.println("SQLException: "+ ex.getMessage());
-			System.out.println("SQLState: "+ ex.getSQLState());
-			System.out.println("ErrorCode: "+ ex.getErrorCode());
+	public int DeskotuKalkulatu(String[][] saio_laburpen) {
+		int deskontu = 0;
+		
+		if(saio_laburpen.length==2) {
+			deskontu=20;
+		}else if(saio_laburpen.length>=3) {
+			deskontu=30;
 		}		
+		return deskontu;
+	}
+
+	public String PrezioTotalaKalkulatuDeskontuarekin(String[][] saio_laburpen) {
+		float prezio_totala= 0;
+
+		DecimalFormat formato1 = new DecimalFormat("#.00");
+		
+		for(int i=0;i<saio_laburpen.length;i++) {
+			String[] prezio = saio_laburpen[i][4].split("€");
+			prezio_totala+=Float.parseFloat(prezio[0]);
+		}		
+		prezio_totala = (prezio_totala*(100-DeskotuKalkulatu(saio_laburpen)))/100;
+		return formato1.format(prezio_totala);
+	}
+	
+	public static boolean LoginBalidatu(String erabiltzaile, String pasahitza, Bezero[] bezeroak) {
+		boolean balidatu= false;
+		
+		for(int i=0;i<bezeroak.length && !balidatu;i++) {
+			if(bezeroak[i].getId_bezero().equalsIgnoreCase(erabiltzaile) && bezeroak[i].getPasahitza().equals(pasahitza)) {
+				balidatu=true;
+			}
+		}
 		return balidatu;
 	}
 	
-	public static void RegistroaEgin(String id, String izen, String abizen, int adina, String sexua, String nan, String pass) {
+	public static boolean RegistroaEgin(String id, String izen, String abizen, int adina, String sexua, String nan, String pass) {
+		boolean erregistratuta = false;
 		Connection conn;					
 		try {
 			String url = "jdbc:mysql://localhost:3306/db_zinema";
@@ -624,10 +655,12 @@ public class Metodoak {
 			Statement comando = (Statement) conn.createStatement();						
 									
 			comando.executeUpdate( "INSERT INTO bezeroa VALUES ('"+id+"','"+izen+"','"+abizen+"',"+adina+",'"+sexua+"','"+nan+"','"+pass+"');");
+			erregistratuta=true;
 		}catch(SQLException ex) {
 				System.out.println("SQLException: "+ ex.getMessage());
 				System.out.println("SQLState: "+ ex.getSQLState());
 				System.out.println("ErrorCode: "+ ex.getErrorCode());
 		}
+		return erregistratuta;
 	}
  }
