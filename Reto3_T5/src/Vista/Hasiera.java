@@ -34,6 +34,7 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.CardLayout;
+import java.awt.Component;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -68,16 +69,22 @@ public class Hasiera extends JFrame {
 	private JTextField textField_registroAbiz;
 	private JTextField textField_registroNan;
 	private JTextField textField_registroPas;
+	private JComboBox comboBox_ordutegi;
+	private JTextField textField_registroAdin;
 	JDatePickerImpl datePicker;
 	Metodoak metodoak = new Metodoak();
 	String[][] botoi_zinemak;
 	String[][] film_array = new String[0][0];
 	String[] goiburua = {"Izenburua","Genero","Iraupena","Prezioa"};
 	String[] sexuak = {"Gizona","Emakumea"};
-	private JTextField textField_registroAdin;
 	String izenburua="";
 	int id_filma=0;
-	private JComboBox comboBox_ordutegi;
+	String saio_aretoa = "";
+	String data_string = "";
+	String[][] laburpen_array = new String[0][5];
+	String[] goiburu_laburpen = {"Izenburua","Data","Ordua","Aretoa","Prezioa"};
+	String[] saio_orduak = new String[0];
+	String[][] saio_orduak_id = new String[0][2];
 	/**
 	 * Launch the application.
 	 */
@@ -229,6 +236,11 @@ public class Hasiera extends JFrame {
 		lbl_laburpen.setBounds(280, 31, 87, 30);
 		laburpena.add(lbl_laburpen);
 		
+		JLabel lbl_total_laburpen = new JLabel("");
+		lbl_total_laburpen.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lbl_total_laburpen.setBounds(432, 297, 126, 30);
+		laburpena.add(lbl_total_laburpen);
+		
 		JLabel lbl_login = new JLabel("Login");
 		lbl_login.setFont(new Font("Tahoma", Font.BOLD, 15));
 		lbl_login.setBounds(300, 28, 49, 30);
@@ -290,14 +302,11 @@ public class Hasiera extends JFrame {
 		//////////////////////////////////
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(87, 61, 430, 220);
-		filmak.add(scrollPane);		
-		
+		filmak.add(scrollPane);				
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
 		scrollPane_1.setBounds(89, 80, 469, 206);
-		laburpena.add(scrollPane_1);		
-		taula_laburpen = new JTable();
-		scrollPane_1.setViewportView(taula_laburpen);
+		laburpena.add(scrollPane_1);
 		
 
 		//////////////////////////////////
@@ -306,6 +315,20 @@ public class Hasiera extends JFrame {
 		JComboBox comboBox_sexua = new JComboBox(sexuak);
 		comboBox_sexua.setBounds(313, 205, 86, 22);
 		erregistratu.add(comboBox_sexua);	
+		
+		comboBox_ordutegi = new JComboBox(saio_orduak);	
+		comboBox_ordutegi.addActionListener (new ActionListener () {
+			public void actionPerformed(ActionEvent e) {
+				if(comboBox_ordutegi.getSelectedIndex()!=-1) {
+					saio_aretoa = metodoak.SaioAretoak(saio_orduak_id,comboBox_ordutegi.getSelectedIndex(),saioak_array);
+					lbl_areto.setText("");
+					lbl_areto.setText(saio_aretoa);	
+					lbl_prezioa.setText(metodoak.FilmPrezioa(izenburua, filmak_array)+"€");
+				}
+			}
+		});					
+		comboBox_ordutegi.setBounds(282, 110, 146, 22);
+		saioak.add(comboBox_ordutegi);	
 
 		//////////////////////////////////
 		// 			Botoi guztiak		 //
@@ -384,6 +407,7 @@ public class Hasiera extends JFrame {
 		JButton btn_amaitu = new JButton("Amaitu");
 		btn_amaitu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				lbl_total_laburpen.setText("Totala: "+metodoak.PrezioTotalaKalkulatu(laburpen_array)+"€");
 				setBounds(100, 100, 676, 422);
 				zinemak.setVisible(false);
 				laburpena.setVisible(true);
@@ -476,25 +500,20 @@ public class Hasiera extends JFrame {
 		JButton btn_aurrera_2 = new JButton("");
 		btn_aurrera_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(datePicker.getModel().getValue()!=null && !datePicker.getModel().getValue().equals("")){		
-					String data_string = new SimpleDateFormat("d-M-yyyy").format(datePicker.getModel().getValue());
+				
+				if(datePicker.getModel().getValue()!=null && !datePicker.getModel().getValue().equals("")){	
+					
+					data_string = new SimpleDateFormat("d-M-yyyy").format(datePicker.getModel().getValue());
+					
+					saio_orduak_id = metodoak.SaioOrduakId(id_filma,data_string,saioak_array);	
+					saio_orduak = metodoak.SaioOrduak(saio_orduak_id);										
+					comboBox_ordutegi.removeAllItems();	
+
+					for(int i=0;i<saio_orduak.length;i++) {
+						comboBox_ordutegi.addItem(saio_orduak[i]);
+					}	
 					datak.setVisible(false);
 					saioak.setVisible(true);
-					
-					String[] saio_orduak = metodoak.SaioOrduak(id_filma,data_string,saioak_array);					
-					comboBox_ordutegi = new JComboBox(saio_orduak);	
-					comboBox_ordutegi.addActionListener (new ActionListener () {
-						public void actionPerformed(ActionEvent e) {							
-							System.out.println(String.valueOf(comboBox_ordutegi.getSelectedIndex()));
-							String saio_aretoa = metodoak.SaioAretoak(id_filma,data_string,String.valueOf(comboBox_ordutegi.getSelectedItem()),saioak_array);
-							lbl_areto.setText("");
-							lbl_areto.setText(saio_aretoa);
-						}
-					});					
-					comboBox_ordutegi.setBounds(282, 110, 146, 22);
-					saioak.add(comboBox_ordutegi);	
-					lbl_prezioa.setText(metodoak.FilmPrezioa(izenburua, filmak_array)+"€");
-					
 				}else {
 					JOptionPane.showMessageDialog(null, "Data bat aukeratu behar duzu.","Alerta", JOptionPane.INFORMATION_MESSAGE);
 				}
@@ -517,10 +536,9 @@ public class Hasiera extends JFrame {
 		JButton btn_atzera_3 = new JButton("");
 		btn_atzera_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
+				comboBox_ordutegi.setSelectedIndex(0);
 				datePicker.getJFormattedTextField().setText("");
 				lbl_areto.setText("");
-				comboBox_ordutegi.setSelectedIndex(-1);	
 				saioak.setVisible(false);
 				datak.setVisible(true);
 			}
@@ -535,6 +553,19 @@ public class Hasiera extends JFrame {
 		JButton btn_aurrera_3 = new JButton("");
 		btn_aurrera_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				laburpen_array= metodoak.SaioaGorde(laburpen_array, izenburua, saio_aretoa, data_string, String.valueOf(comboBox_ordutegi.getSelectedItem()),lbl_prezioa.getText());
+								
+				scrollPane_1.setViewportView(taula_laburpen);
+				taula_laburpen = new JTable(laburpen_array,goiburu_laburpen) {
+					public boolean editCellAt(int row, int column, java.util.EventObject e) {
+			            return false;
+			        }	
+				};
+				taula_laburpen.setRowHeight(50);  
+				taula_laburpen.getTableHeader().setReorderingAllowed(false);
+				scrollPane_1.setViewportView(taula_laburpen);
+				
 				if(botoi_zinemak.length>3) {
 					setBounds(100, 100, 676, 550);
 					btn_amaitu.setBounds(288, 450, 89, 23);
@@ -583,6 +614,7 @@ public class Hasiera extends JFrame {
 		laburpena.add(btn_aurrera_4);
 		btn_aurrera_4.setIcon(logo_aurrera);
 		
+			
 		JButton btn_erregistratu = new JButton("Ez dut konturik");
 		btn_erregistratu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

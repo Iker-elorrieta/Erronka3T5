@@ -499,45 +499,57 @@ public class Metodoak {
 		return id_filma;
 	}
 	
-	public String[] SaioOrduak(int id_filma, String data, Saioa[] saioak) {
-		String[] orduak= new String[0];
+	public String[][] SaioOrduakId(int id_filma, String data, Saioa[] saioak) {
+		String[][] orduak= new String[0][2];
 		
 		for(int i=0;i<saioak.length;i++) {
-			int eguna = saioak[i].getOrdua().get(Calendar.DAY_OF_MONTH)-1;
+			int eguna = saioak[i].getOrdua().get(Calendar.DAY_OF_MONTH);
 			int hila = saioak[i].getOrdua().get(Calendar.MONTH);
 			int urtea = saioak[i].getOrdua().get(Calendar.YEAR);
 			String data_saio= eguna+"-"+hila+"-"+urtea;
-			int id_film_saio = saioak[i].getFilma().getId_filma();
-			int id_saio = saioak[i].getId_saioa();
+			int id_film_saioa = saioak[i].getFilma().getId_filma();
 			if(saioak[i].getFilma().getId_filma()==id_filma && data.equals(data_saio)) {
 				
 				//Orduak array-a berridazten du
-				String[] orduak_prov = new String[orduak.length+1];
+				String[][] orduak_prov = new String[orduak.length+1][2];
 				for(int j =0;j<orduak.length;j++){
-					orduak_prov[j]=orduak[j];
+					for(int k=0;k<orduak[j].length;k++) {
+						orduak_prov[j][k]=orduak[j][k];
+					}
 				}
-				orduak_prov[orduak.length] = saioak[i].getOrdua().get(Calendar.HOUR)+":"+saioak[i].getOrdua().get(Calendar.MINUTE);
+				orduak_prov[orduak.length][0] =(saioak[i].getOrdua().get(Calendar.HOUR)+12)+":"+saioak[i].getOrdua().get(Calendar.MINUTE);
+				orduak_prov[orduak.length][1] = String.valueOf(saioak[i].getId_saioa());
 				orduak = orduak_prov;
 			}
 		}		
 		return orduak;
 	}
 	
-	public String SaioAretoak(int id_filma, String data, String ordua, Saioa[] saioak) {
-		String aretoa = "";
+	public String[] SaioOrduak(String[][] ordu_id) {
+		String[] orduak = new String[0];
+		
+		for(int i=0; i<ordu_id.length;i++) {			
+			//Filmens array-a berridazten du
+			String[] orduak_prov = new String[orduak.length+1];
+			for(int j =0;j<orduak.length;j++){
+				orduak_prov[j]=orduak[j];
+			}
+			orduak_prov[orduak.length] = (orduak.length+1)+". "+ordu_id[i][0];
+			orduak = orduak_prov;			
+		}		
+		return orduak;
+	}
+	
+	public String SaioAretoak(String[][] array_ordu_id, int index, Saioa[] saioak) {
+		String aretoa = "";		
+		String id_saioa=array_ordu_id[index][1];
 		
 		for(int i=0;i<saioak.length;i++) {
-			int eguna = saioak[i].getOrdua().get(Calendar.DAY_OF_MONTH)-1;
-			int hila = saioak[i].getOrdua().get(Calendar.MONTH);
-			int urtea = saioak[i].getOrdua().get(Calendar.YEAR);
-			String data_saio= eguna+"-"+hila+"-"+urtea;
-			int h = saioak[i].getOrdua().get(Calendar.HOUR);
-			int min = saioak[i].getOrdua().get(Calendar.MINUTE);
-			String ordu_saio = h+":"+min;
-			if(saioak[i].getFilma().getId_filma()==id_filma && data.equals(data_saio) && ordu_saio.equals(ordua)) {
-				aretoa = saioak[i].getAretoa().getIzenAret();				
+			if(saioak[i].getId_saioa()== Integer.parseInt(id_saioa)) {
+				aretoa=saioak[i].getAretoa().getIzenAret();
 			}
-		}		
+		}
+		
 		return aretoa;
 	}
 	
@@ -550,6 +562,35 @@ public class Metodoak {
 			}
 		}			
 		return prezioa;
+	}
+	
+	public String[][] SaioaGorde(String[][] saioak, String izenburua, String aretoa,String data, String ordua, String prezioa){
+		
+		//Filmens array-a berridazten du
+		String[][] saioak_prov = new String[saioak.length+1][5];
+		for(int i =0;i<saioak.length;i++){
+			saioak_prov[i]=saioak[i];
+		}
+		saioak_prov[saioak.length][0] = izenburua;
+		saioak_prov[saioak.length][1] = data;
+		saioak_prov[saioak.length][2] = ordua;
+		saioak_prov[saioak.length][3] = aretoa;
+		saioak_prov[saioak.length][4] = prezioa;
+		saioak = saioak_prov;		
+		return saioak;
+	}
+	
+	public String PrezioTotalaKalkulatu(String[][] saioak) {
+		String totala="";
+		float prezioa=0;
+		String[] prob = new String[0];
+		
+		for(int i=0;i<saioak.length;i++) {
+			prob=saioak[i][4].split("€");
+			prezioa+= Float.parseFloat(prob[0]);
+		}
+		totala = String.valueOf(prezioa);
+		return totala;
 	}
 	
 	public static boolean LoginBalidatu(String erabiltzaile, String pasahitza) {
