@@ -7,14 +7,12 @@ public class Saioa {
 	private int id_saioa;
 	private Calendar ordua;
 	private Filma filma;
-	private Aretoa aretoa;
 	
 	//Constructor
-	public Saioa(int id_saioa, Calendar ordua, Filma filma, Aretoa aretoa){
+	public Saioa(int id_saioa, Calendar ordua, Filma filma){
 		this.id_saioa = id_saioa;
 		this.ordua = ordua;
 		this.filma = filma;
-		this.aretoa = aretoa;
 	}
 	
 	public Saioa(){
@@ -31,9 +29,6 @@ public class Saioa {
 	public Filma getFilma() {
 		return filma;
 	}
-	public Aretoa getAretoa() {
-		return aretoa;
-	}
 	
 	// Setters
 	public void setId_saioa(int id_saioa) {
@@ -45,14 +40,11 @@ public class Saioa {
 	public void setFilma(Filma filma) {
 		this.filma = filma;
 	}
-	public void setAretoa(Aretoa aretoa) {
-		this.aretoa = aretoa;
-	}
 	
 	// ToString
 	@Override
 	public String toString() {
-		return "Saioa [id_saioa=" + id_saioa + ", ordua=" + ordua.get(Calendar.HOUR)+":"+ordua.get(Calendar.MINUTE)+", data="+ordua.get(Calendar.DAY_OF_MONTH)+"-"+ordua.get(Calendar.MONTH)+"-"+ordua.get(Calendar.YEAR)+ ", filma=" + filma + ", aretoa=" + aretoa + "]";
+		return "Saioa [id_saioa=" + id_saioa + ", ordua=" + ordua.get(Calendar.HOUR)+":"+ordua.get(Calendar.MINUTE)+", data="+ordua.get(Calendar.DAY_OF_MONTH)+"-"+ordua.get(Calendar.MONTH)+"-"+ordua.get(Calendar.YEAR)+ ", filma=" + filma + "]";
 	}
 
 	@Override

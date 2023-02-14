@@ -5,7 +5,6 @@ import static org.junit.Assert.*;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Calendar;
 
 import org.junit.Test;
 
@@ -13,12 +12,7 @@ import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 
 import Controlador.Metodoak;
-import Model.Aretoa;
 import Model.Bezero;
-import Model.Erosketa;
-import Model.Filma;
-import Model.Saioa;
-import Model.Sarrera;
 import Model.Zinema;
 
 public class MetodoakTest {
@@ -40,32 +34,6 @@ public class MetodoakTest {
 	}
 	
 	@Test
-	public void AretoakKargatuTest() {
-		Metodoak metodoak = new Metodoak();
-		Aretoa[] aretoak_array = metodoak.AretoakKargatu();
-		
-		assertEquals(1,aretoak_array[0].getId_areto());
-		assertEquals("Areto 1",aretoak_array[0].getIzenAret());
-	}
-	
-	@Test
-	public void SaioakKargatuTest() {
-		Metodoak metodoak = new Metodoak();
-		Saioa[] saioak_array = metodoak.SaioakKargatu();
-		
-		assertEquals(216,saioak_array[2].getId_saioa());
-		assertEquals(2,saioak_array[2].getOrdua().get(Calendar.HOUR));
-		assertEquals(0,saioak_array[2].getOrdua().get(Calendar.MINUTE));
-		assertEquals(16,saioak_array[2].getFilma().getId_filma());
-		assertEquals("Cisne negro",saioak_array[2].getFilma().getIzenburu());
-		assertEquals("Beldurra",saioak_array[2].getFilma().getGenero());
-		assertEquals(110,saioak_array[2].getFilma().getIraupena());
-		assertEquals(6.5,saioak_array[2].getFilma().getPrezioa(), 0.01);
-		assertEquals(2,saioak_array[2].getAretoa().getId_areto());
-		assertEquals("Areto 2",saioak_array[2].getAretoa().getIzenAret());
-	}
-	
-	@Test
 	public void BezeroakKargatuTest() {
 		Metodoak metodoak = new Metodoak();
 		Bezero[] bezeroak_array = metodoak.BezeroakKargatu();
@@ -79,21 +47,9 @@ public class MetodoakTest {
 		assertEquals("1234", bezeroak_array[0].getPasahitza());
 	}
 	
-	@Test
-	public void FilmakKargatuTest() {
-		Metodoak metodoak = new Metodoak();
-		Filma[] filmak_array = metodoak.FilmakKargatu();
-		
-		assertEquals(1, filmak_array[0].getId_filma());
-		assertEquals("Handia", filmak_array[0].getIzenburu());
-		assertEquals("Drama", filmak_array[0].getGenero());
-		assertEquals(116, filmak_array[0].getIraupena());
-		assertEquals(4.5, filmak_array[0].getPrezioa(), 0.01);
-	}
-	
 	// No hay datos
-//	@Test
-//	public void SarrerakKargatuTest() {
+	@Test
+	public void SarrerakKargatuTest() {
 //		Metodoak metodoak = new Metodoak();
 //		Sarrera[] sarrerak_array = metodoak.SarrerakKargatu();
 //		
@@ -108,11 +64,11 @@ public class MetodoakTest {
 //		assertEquals(1, sarrerak_array[0].getSaioa().getFilma().getPrezioa(), 0.01);
 //		assertEquals(1, sarrerak_array[0].getSaioa().getAretoa().getId_areto());
 //		assertEquals(1, sarrerak_array[0].getSaioa().getAretoa().getIzenAret());
-//	}
+	}
 	
-	// nN hay datos
-//	@Test
-//	public void ErosketakKargatuTest() {
+	// No hay datos
+	@Test
+	public void ErosketakKargatuTest() {
 //		Metodoak metodoak = new Metodoak();
 //		Erosketa[] erosketak_array = metodoak.ErosketakKargatu();
 //		
@@ -136,98 +92,165 @@ public class MetodoakTest {
 //		assertEquals(1, erosketak_array[0].getSarrera()[0].getSaioa().getFilma().getPrezioa(), 0.01);
 //		assertEquals(1, erosketak_array[0].getSarrera()[0].getSaioa().getAretoa().getId_areto());
 //		assertEquals(1, erosketak_array[0].getSarrera()[0].getSaioa().getAretoa().getIzenAret());
-//	}
+	}
+	
+	@Test
+	public void BotoiakKargatuTest(){
+		Metodoak metodoak = new Metodoak();
+		Zinema[] zinemak_array = metodoak.ZinemakKargatu();
+		String[][] botoi_zinemak;
+		botoi_zinemak = metodoak.BotoiakKargatu(zinemak_array);
+		
+		assertEquals("10,69,199,168",botoi_zinemak[0][0]);
+		assertEquals("src/resources/zubi.png",botoi_zinemak[0][1]);
+	}
 	
 	@Test
 	public void ZinemarenFilmakTest(){
 		Metodoak metodoak = new Metodoak();
-		Filma[] filmak_array = metodoak.FilmakKargatu();
 		Zinema[] zinemak_array = metodoak.ZinemakKargatu();
-		Aretoa[] aretoak_array = metodoak.AretoakKargatu();
-		Saioa[] saioak_array = metodoak.SaioakKargatu();
-		String[][] filma_array = metodoak.ZinemarenFilmak(filmak_array, zinemak_array, aretoak_array, saioak_array,1);
-		assertEquals("Handia", filma_array[0][0]);
-		assertEquals("Drama", filma_array[0][1]);
-		assertEquals("116", filma_array[0][2]);
-		assertEquals("4.5", filma_array[0][3]);
+		String[][] film_array = new String[0][0];
+		film_array= metodoak.ZinemarenFilmak(zinemak_array, 1);
+		
+		assertEquals("Handia", film_array[0][0]);
+		assertEquals("Drama", film_array[0][1]);
+		assertEquals("116", film_array[0][2]);
+		assertEquals("4.5", film_array[0][3]);
 	}
 	
 	@Test
 	public void IdFilmaTest(){
 		Metodoak metodoak = new Metodoak();
-		Filma[] filmak_array = metodoak.FilmakKargatu();
-		assertEquals(1, metodoak.IdFilma("Handia",filmak_array));
+		Zinema[] zinemak_array = metodoak.ZinemakKargatu();
+		
+		assertEquals(1, metodoak.IdFilma("Handia", zinemak_array, 1));
+	}
+	
+	@Test
+	public void FilmarenDataBalidatuTest(){
+		Metodoak metodoak = new Metodoak();
+		Zinema[] zinemak_array = metodoak.ZinemakKargatu();
+		assertTrue(metodoak.FilmarenDataBalidatu(zinemak_array, "22-3-2023", 1));
 	}
 	
 	@Test
 	public void SaioOrduakIdTest(){
 		Metodoak metodoak = new Metodoak();
-		Saioa[] saioak_array = metodoak.SaioakKargatu();
-		String[][] ordua_id = metodoak.SaioOrduakId(1, "6-2-2023",saioak_array);
-		assertEquals("14:0", ordua_id[0][0]);
-		assertEquals("445", ordua_id[0][1]);
+		Zinema[] zinemak_array = metodoak.ZinemakKargatu();
+		int id_filma = metodoak.IdFilma("Handia", zinemak_array, 1);
+		String[][] saio_orduak_id = new String[0][2];
+		saio_orduak_id = metodoak.SaioOrduakId(id_filma,"6-2-2023",zinemak_array,1);
+		
+		assertEquals("14:0", saio_orduak_id[0][0]);
+		assertEquals("445", saio_orduak_id[0][1]);
 	}
 	
 	@Test
 	public void SaioOrduakTest(){
 		Metodoak metodoak = new Metodoak();
-		Saioa[] saioak_array = metodoak.SaioakKargatu();
-		String[][] ordua_id = metodoak.SaioOrduakId(1, "6-2-2023",saioak_array);
-		String[] orduak = metodoak.SaioOrduak(ordua_id);
-		String[] ordua = orduak[0].split(" ");
-		assertEquals("14:0", ordua[1]);
+		Zinema[] zinemak_array = metodoak.ZinemakKargatu();
+		int id_filma = metodoak.IdFilma("Handia", zinemak_array, 1);
+		String[][] saio_orduak_id = new String[0][2];
+		saio_orduak_id = metodoak.SaioOrduakId(id_filma,"6-2-2023",zinemak_array,1);
+		String[] orduak = metodoak.SaioOrduak(saio_orduak_id);
+		assertEquals("1. 14:0", orduak[0]);
 	}
 	
 	@Test
 	public void SaioAretoakTest(){
 		Metodoak metodoak = new Metodoak();
-		Saioa[] saioak_array = metodoak.SaioakKargatu();
-		String[][] ordua_id = metodoak.SaioOrduakId(1, "6-2-2023",saioak_array);
-		assertEquals("Areto 3", metodoak.SaioAretoak(ordua_id, 0,saioak_array));
+		Zinema[] zinemak_array = metodoak.ZinemakKargatu();
+		int id_filma = metodoak.IdFilma("Handia", zinemak_array, 1);
+		String[][] saio_orduak_id = new String[0][2];
+		saio_orduak_id = metodoak.SaioOrduakId(id_filma,"6-2-2023",zinemak_array,1);
+		assertEquals("Areto 3", metodoak.SaioAretoak(saio_orduak_id, 0, zinemak_array, 1));
 	}
 	
 	@Test
 	public void FilmPrezioaTest(){
 		Metodoak metodoak = new Metodoak();
-		Filma[] filmak_array = metodoak.FilmakKargatu();
-		assertEquals(4.5f, metodoak.FilmPrezioa("Handia",filmak_array), 0.01);
+		Zinema[] zinemak_array = metodoak.ZinemakKargatu();
+		assertEquals(4.5f, metodoak.FilmPrezioa("Handia", zinemak_array, 1), 0.01);
 	}
 	
 	@Test
 	public void SaioaGordeTest(){
 		Metodoak metodoak = new Metodoak();
-		String[][] laburpena = new String [0][5];
-		laburpena = metodoak.SaioaGorde(laburpena,"Handia","Areto 3", "6-2-2023", "1. 14:0", "4.5");
-		assertEquals("Handia", laburpena[0][0]);
-		assertEquals("6-2-2023", laburpena[0][1]);
-		assertEquals("14:0", laburpena[0][2]);
-		assertEquals("Areto 3", laburpena[0][3]);
-		assertEquals("4.5", laburpena[0][4]);
+		String[][] laburpena = new String [0][7];
+		Zinema[] zinemak_array = metodoak.ZinemakKargatu();
+		laburpena = metodoak.SaioaGorde(laburpena,zinemak_array, 1, "Handia","Areto 3", "6-2-2023", "1. 14:0", "4.5",445);
+		assertEquals("Cinesa Zubiarte", laburpena[0][0]);
+		assertEquals("Handia", laburpena[0][1]);
+		assertEquals("6-2-2023", laburpena[0][2]);
+		assertEquals("14:0", laburpena[0][3]);
+		assertEquals("Areto 3", laburpena[0][4]);
+		assertEquals("4.5", laburpena[0][5]);
+		assertEquals("445", laburpena[0][6]);
 	}
 	
 	@Test
 	public void PrezioTotalaKalkulatuTest(){
 		Metodoak metodoak = new Metodoak();
+		String[][] laburpena = new String [0][7];
+		Zinema[] zinemak_array = metodoak.ZinemakKargatu();
+		laburpena = metodoak.SaioaGorde(laburpena,zinemak_array, 1, "Handia","Areto 3", "6-2-2023", "1. 14:0", "4.5", 445);
+		assertEquals("4,50", metodoak.PrezioTotalaKalkulatu(laburpena));
+	}
+	
+	@Test
+	public void DeskotuKalkulatu0Test(){
+		Metodoak metodoak = new Metodoak();
+		String[][] laburpena = new String [0][7];
+		Zinema[] zinemak_array = metodoak.ZinemakKargatu();
+		laburpena = metodoak.SaioaGorde(laburpena,zinemak_array, 1, "Handia","Areto 3", "6-2-2023", "1. 14:0", "4.5", 445);
+		assertEquals(0, metodoak.DeskotuKalkulatu(laburpena));
+	}
+	
+	@Test
+	public void DeskotuKalkulatu20Test(){
+		Metodoak metodoak = new Metodoak();
+		String[][] laburpena = new String [0][7];
+		Zinema[] zinemak_array = metodoak.ZinemakKargatu();
+		laburpena = metodoak.SaioaGorde(laburpena,zinemak_array, 1, "Handia","Areto 3", "6-2-2023", "1. 14:0", "4.5", 445);
+		laburpena = metodoak.SaioaGorde(laburpena,zinemak_array, 1, "La novia de Frankenstein","Areto 1", "6-2-2023", "3. 20:0", "5.75", 21);
+		assertEquals(20, metodoak.DeskotuKalkulatu(laburpena));
+	}
+	
+	@Test
+	public void DeskotuKalkulatu30Test(){
+		Metodoak metodoak = new Metodoak();
 		String[][] laburpena = new String [0][5];
-		laburpena = metodoak.SaioaGorde(laburpena,"Cisne negro","Areto 2", "6-2-2023", "1. 14:0", "6.5");
-		assertEquals("6,50", metodoak.PrezioTotalaKalkulatu(laburpena));
+		Zinema[] zinemak_array = metodoak.ZinemakKargatu();
+		laburpena = metodoak.SaioaGorde(laburpena,zinemak_array, 1, "Handia","Areto 3", "6-2-2023", "1. 14:0", "4.5", 445);
+		laburpena = metodoak.SaioaGorde(laburpena,zinemak_array, 1, "La novia de Frankenstein","Areto 1", "6-2-2023", "3. 20:0", "5.75", 21);
+		laburpena = metodoak.SaioaGorde(laburpena,zinemak_array, 1, "El gran Lebowsky","Areto 2", "28-3-2023", "4. 23:0", "6.25", 207);
+		assertEquals(30, metodoak.DeskotuKalkulatu(laburpena));
+	}
+	
+	@Test
+	public void PrezioTotalaKalkulatuDeskontuarekinTest(){
+		Metodoak metodoak = new Metodoak();
+		String[][] laburpena = new String [0][5];
+		Zinema[] zinemak_array = metodoak.ZinemakKargatu();
+		laburpena = metodoak.SaioaGorde(laburpena,zinemak_array, 1, "Handia","Areto 3", "6-2-2023", "1. 14:0", "4.5", 445);
+		laburpena = metodoak.SaioaGorde(laburpena,zinemak_array, 1, "La novia de Frankenstein","Areto 1", "6-2-2023", "3. 20:0", "5.75", 21);
+		laburpena = metodoak.SaioaGorde(laburpena,zinemak_array, 1, "El gran Lebowsky","Areto 2", "28-3-2023", "4. 23:0", "6.25", 207);
+		assertEquals("11,55", metodoak.PrezioTotalaKalkulatuDeskontuarekin(laburpena));
 	}
 	
 	@Test
 	public void LoginBalidatuTest(){
 		Metodoak metodoak = new Metodoak();
 		Bezero[] bezeroak_array = metodoak.BezeroakKargatu();
-		for(int i = 0; i < bezeroak_array.length; i ++){
-			System.out.println(bezeroak_array[i]);
-		}
-		assertTrue(Metodoak.LoginBalidatu("ibai0","1234", bezeroak_array));
+		assertTrue(metodoak.LoginBalidatu("ibai0","1234", bezeroak_array));
 	}
 	
 	@Test
 	public void RegistroaEginTest(){
 		Metodoak metodoak = new Metodoak();
-		Metodoak.RegistroaEgin("juan3","Juan","Martinez",32,"gizon","12345678J","1234");
-		Bezero[] bezeroak_array = metodoak.BezeroakKargatu();
+		Bezero[] bezeroak_array = new Bezero[0];
+		bezeroak_array = metodoak.BezeroakKargatu();
+		metodoak.RegistroaEgin(bezeroak_array,"juan3","Juan","Martinez",32,"gizon","12345678J","1234");
 		String id_bez = bezeroak_array[2].getId_bezero();
 		String id_bezeroa = "";
 		String izenbez = "";
@@ -272,4 +295,5 @@ public class MetodoakTest {
 			System.out.println("ErrorCode: "+ ex.getErrorCode());
 		}
 	}
+
 }

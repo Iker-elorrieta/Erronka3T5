@@ -8,14 +8,18 @@ public class Zinema {
 	private String IzenZin;
 	private String Kokalekua;
 	private Aretoa[] areto;
+	private String bounds;
+	private String route;
 	
 	
 	//Constructor
-	public Zinema(int id_zinema, String izenZin, String kokalekua, Aretoa[] aretoa) {
+	public Zinema(int id_zinema, String izenZin, String kokalekua, Aretoa[] aretoa, String bounds, String route) {
 		this.id_zinema = id_zinema;
 		this.IzenZin = izenZin;
 		this.Kokalekua = kokalekua;
 		this.areto = aretoa;
+		this.bounds=bounds;
+		this.route=route;
 	}
 	
 	public Zinema(){
@@ -35,6 +39,12 @@ public class Zinema {
 	public void setAreto(Aretoa[] areto) {
 		this.areto = areto;
 	}
+	public void setBounds(String bounds) {
+		this.bounds = bounds;
+	}
+	public void setRoute(String route) {
+		this.route = route;
+	}
 	
 	//Getters
 	public int getId_zinema() {
@@ -49,12 +59,17 @@ public class Zinema {
 	public Aretoa[] getAretoa() {
 		return areto;
 	}
+	public String getBounds() {
+		return bounds;
+	}
+	public String getRoute() {
+		return route;
+	}
 
 	// ToString
 	@Override
 	public String toString() {
-		return "Zinema [id_zinema=" + id_zinema + ", IzenZin=" + IzenZin + ", Kokalekua=" + Kokalekua + ", areto="
-				+ Arrays.toString(areto) + "]";
+		return "Zinema [id_zinema=" + id_zinema + ", IzenZin=" + IzenZin + ", Kokalekua=" + Kokalekua + ", areto="+ Arrays.toString(areto) + ",Bounds="+bounds+",Route="+route+"]";
 	}
 
 	// Equals

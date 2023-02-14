@@ -5,24 +5,15 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
 
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
-import com.mysql.jdbc.Connection;
-import com.mysql.jdbc.Statement;
-
 import Controlador.Metodoak;
-import Model.Aretoa;
 import Model.Bezero;
 import Model.DateLabelFormatter;
 import Model.Erosketa;
-import Model.Filma;
-import Model.Saioa;
-import Model.Sarrera;
 import Model.Zinema;
 
 import javax.swing.JLabel;
@@ -34,28 +25,18 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.CardLayout;
-import java.awt.Component;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.Locale;
 import java.util.Properties;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import java.awt.Toolkit;
-import javax.swing.JRadioButton;
 
 public class Hasiera extends JFrame {
 
@@ -80,13 +61,16 @@ public class Hasiera extends JFrame {
 	String izenburua="";
 	int id_filma=0;
 	int id_zine=0;
+	int saio_id =0;
 	String saio_aretoa = "";
 	String data_string = "";
-	String[][] laburpen_array = new String[0][6];
+	String[][] laburpen_array = new String[0][7];
 	String[] goiburu_laburpen = {"Zinema","Izenburua","Data","Ordua","Aretoa","Prezioa"};
 	String[] saio_orduak = new String[0];
 	String[][] saio_orduak_id = new String[0][2];
 	Bezero[] bezeroak_array = new Bezero[0];
+	Erosketa[] erosketak_array = new Erosketa[0];
+	Erosketa erosketa= new Erosketa();
 	/**
 	 * Launch the application.
 	 */
@@ -122,19 +106,9 @@ public class Hasiera extends JFrame {
 		//////////////////////////////////
 		//Zinema guztiak kargatzen ditu
 		Zinema[] zinemak_array = metodoak.ZinemakKargatu();
-		//Aretoak guztiak kargatzen ditu
-		Aretoa[] aretoak_array = metodoak.AretoakKargatu();
-		//Saio guztiak kargatzen ditu
-		Saioa[] saioak_array = metodoak.SaioakKargatu();
+		
 		//Bezero guztiak kargatzen ditu
 		bezeroak_array = metodoak.BezeroakKargatu();
-		//Filma guztiak kargatzen ditu
-		Filma[] filmak_array = metodoak.FilmakKargatu();
-		//Sarrera guztiak kargatzen ditu
-		Sarrera[] sarrerak_array = metodoak.SarrerakKargatu();
-		//Erosketa guztiak kargatzen ditu
-		Erosketa[] erosketak_array = metodoak.ErosketakKargatu();
-		
 		
 		//////////////////////////////////
 		// 			Panel guztiak 		//
@@ -252,9 +226,9 @@ public class Hasiera extends JFrame {
 		lbl_login.setBounds(300, 28, 49, 30);
 		login.add(lbl_login);
 		
-		JLabel lbl_nan = new JLabel("NAN:");
+		JLabel lbl_nan = new JLabel("Erabiltzailea:");
 		lbl_nan.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lbl_nan.setBounds(236, 129, 54, 24);
+		lbl_nan.setBounds(223, 129, 89, 24);
 		login.add(lbl_nan);
 		
 		JLabel lbl_pass = new JLabel("Pasahitza:");
@@ -326,10 +300,11 @@ public class Hasiera extends JFrame {
 		comboBox_ordutegi.addActionListener (new ActionListener () {
 			public void actionPerformed(ActionEvent e) {
 				if(comboBox_ordutegi.getSelectedIndex()!=-1) {
-					saio_aretoa = metodoak.SaioAretoak(saio_orduak_id,comboBox_ordutegi.getSelectedIndex(),saioak_array);
+					saio_aretoa = metodoak.SaioAretoak(saio_orduak_id,comboBox_ordutegi.getSelectedIndex(),zinemak_array,id_zine);
+					saio_id = Integer.parseInt(saio_orduak_id[comboBox_ordutegi.getSelectedIndex()][1]);
 					lbl_areto.setText("");
 					lbl_areto.setText(saio_aretoa);	
-					lbl_prezioa.setText(metodoak.FilmPrezioa(izenburua, filmak_array)+"€");
+					lbl_prezioa.setText(metodoak.FilmPrezioa(izenburua, zinemak_array, id_zine)+"€");
 				}
 			}
 		});					
@@ -339,53 +314,17 @@ public class Hasiera extends JFrame {
 		//////////////////////////////////
 		// 			Botoi guztiak		 //
 		//////////////////////////////////
-				
-		//Zinemen botoiak sortu
-		Connection conn;
-		
-		try {
-			String url = "jdbc:mysql://localhost:3306/db_zinema";
-			conn = (Connection) DriverManager.getConnection (url, "root","");
-			Statement comando = (Statement) conn.createStatement();						
-			
-			ResultSet request = comando.executeQuery("SELECT bounds,route FROM zinema");
-						
-			int cont=0;
-			botoi_zinemak = new String[cont][2];
-			
-			while(request.next()) {						
-				String[][] botones_prov = new String[botoi_zinemak.length+1][2];
-				for(int i=0;i<botoi_zinemak.length;i++) {
-					for(int k=0;k<botoi_zinemak[i].length;k++) {
-						botones_prov[i][k]=botoi_zinemak[i][k];
-					}
-				}
-				botones_prov[botoi_zinemak.length][0]=request.getString(1);
-				botones_prov[botoi_zinemak.length][1]=request.getString(2);
-				botoi_zinemak = new String[botones_prov.length][2];
-				for(int i=0;i<botones_prov.length;i++) {
-					for(int k=0;k<botones_prov[i].length;k++) {
-						botoi_zinemak[i][k]=botones_prov[i][k];
-					}
-				}
-				cont++;
-			}
-			conn.close();
-		}catch(SQLException ex) {
-			System.out.println("SQLException: "+ ex.getMessage());
-			System.out.println("SQLState: "+ ex.getSQLState());
-			System.out.println("ErrorCode: "+ ex.getErrorCode());
-		}		
 		
 		// Zinema aukeratzean filmak erakustea
+		botoi_zinemak = metodoak.BotoiakKargatu(zinemak_array);
 		for(int j=0;j<botoi_zinemak.length;j++) {
-			ImageIcon logo_cine = new ImageIcon(new ImageIcon(botoi_zinemak[j][1]).getImage().getScaledInstance(150,150,Image.SCALE_DEFAULT));
+			ImageIcon logo_cine = metodoak.ZinemaArgazkia(botoi_zinemak, j);
 			JButton btn_zine = new JButton(logo_cine);
 			btn_zine.setToolTipText(String.valueOf(j+1));
 			btn_zine.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {	
 					id_zine = Character.getNumericValue(btn_zine.getToolTipText().charAt(0));
-					film_array= metodoak.ZinemarenFilmak(filmak_array, zinemak_array, aretoak_array, saioak_array, id_zine);
+					film_array= metodoak.ZinemarenFilmak(zinemak_array, id_zine);
 					
 					scrollPane.setViewportView(taula_filmak);
 					taula_filmak = new JTable(film_array,goiburua) {
@@ -475,7 +414,7 @@ public class Hasiera extends JFrame {
 				int row = taula_filmak.getSelectedRow();
 				if(row>=0 && column>=0) {
 					izenburua = taula_filmak.getModel().getValueAt(row, column).toString(); //Taulan aukeratutako filmaren izenburua gordetzen du
-					id_filma = metodoak.IdFilma(izenburua, filmak_array);
+					id_filma = metodoak.IdFilma(izenburua, zinemak_array,id_zine);
 					datePicker.getJFormattedTextField().setText("");
 					filmak.setVisible(false);
 					datak.setVisible(true);
@@ -513,10 +452,10 @@ public class Hasiera extends JFrame {
 		btn_aurrera_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(datePicker.getModel().getValue()!=null && !datePicker.getJFormattedTextField().getText().equals("")){	
-					if(metodoak.FilmarenDataBalidatu(saioak_array,datePicker.getJFormattedTextField().getText(),id_filma)) {
+					if(metodoak.FilmarenDataBalidatu(zinemak_array,datePicker.getJFormattedTextField().getText(),id_filma)) {
 						data_string = new SimpleDateFormat("d-M-yyyy").format(datePicker.getModel().getValue());
 						
-						saio_orduak_id = metodoak.SaioOrduakId(id_filma,data_string,saioak_array);	
+						saio_orduak_id = metodoak.SaioOrduakId(id_filma,data_string,zinemak_array,id_zine);	
 						saio_orduak = metodoak.SaioOrduak(saio_orduak_id);										
 						comboBox_ordutegi.removeAllItems();	
 						for(int i=0;i<saio_orduak.length;i++) {
@@ -568,7 +507,7 @@ public class Hasiera extends JFrame {
 		btn_aurrera_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				laburpen_array= metodoak.SaioaGorde(laburpen_array,zinemak_array,id_zine, izenburua, saio_aretoa, data_string, String.valueOf(comboBox_ordutegi.getSelectedItem()),lbl_prezioa.getText());
+				laburpen_array= metodoak.SaioaGorde(laburpen_array,zinemak_array,id_zine, izenburua, saio_aretoa, data_string, String.valueOf(comboBox_ordutegi.getSelectedItem()),lbl_prezioa.getText(),saio_id );
 								
 				scrollPane_1.setViewportView(taula_laburpen);
 				taula_laburpen = new JTable(laburpen_array,goiburu_laburpen) {
@@ -645,8 +584,15 @@ public class Hasiera extends JFrame {
 		btn_erregistratuOk.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(!textField_registroId.getText().equals("") && !textField_registroIzen.getText().equals("") && !textField_registroAbiz.getText().equals("") && !textField_registroAdin.getText().equals("") && !textField_registroNan.getText().equals("") && !textField_registroPas.getText().equals("")) {
-					if(Metodoak.RegistroaEgin(textField_registroId.getText(),textField_registroIzen.getText(),textField_registroAbiz.getText(),Integer.parseInt(textField_registroAdin.getText()),String.valueOf(comboBox_sexua.getSelectedItem()),textField_registroNan.getText(),textField_registroPas.getText())) {
+					if(metodoak.RegistroaEgin(bezeroak_array,textField_registroId.getText(),textField_registroIzen.getText(),textField_registroAbiz.getText(),Integer.parseInt(textField_registroAdin.getText()),String.valueOf(comboBox_sexua.getSelectedItem()),textField_registroNan.getText(),textField_registroPas.getText())) {
 						bezeroak_array = metodoak.BezeroakKargatu();
+						JOptionPane.showMessageDialog(null, "Erabiltzailea erregistratu da.","Alerta", JOptionPane.INFORMATION_MESSAGE);
+						metodoak.ErosketaGorde(erosketa);
+						erosketak_array=metodoak.ErosketakKargatu();
+						metodoak.SarrerakGorde(erosketak_array);
+						JOptionPane.showMessageDialog(null, "Erosketa gorde da.","Alerta", JOptionPane.INFORMATION_MESSAGE);
+					}else {
+						JOptionPane.showMessageDialog(null, "Erabiltzailea existitzen da.","Alerta", JOptionPane.INFORMATION_MESSAGE);
 					}
 				}else {
 					JOptionPane.showMessageDialog(null, "Datu guztiak sartu behar dituzu.","Alerta", JOptionPane.INFORMATION_MESSAGE);
@@ -670,7 +616,7 @@ public class Hasiera extends JFrame {
 		JButton btn_etxea_1 = new JButton(homeicon);
 		btn_etxea_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				laburpen_array = new String[0][6];
+				laburpen_array = new String[0][7];
 				if(botoi_zinemak.length>3) {
 					setBounds(100, 100, 676, 550);
 					btn_amaitu.setBounds(288, 450, 89, 23);
@@ -689,7 +635,7 @@ public class Hasiera extends JFrame {
 		btn_etxea_2.setBounds(10, 11, 44, 34);
 		btn_etxea_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				laburpen_array = new String[0][6];
+				laburpen_array = new String[0][7];
 				if(botoi_zinemak.length>3) {
 					setBounds(100, 100, 676, 550);
 					btn_amaitu.setBounds(288, 450, 89, 23);
@@ -710,7 +656,7 @@ public class Hasiera extends JFrame {
 		//////////////////////////////////
 		
 		nan_login = new JTextField();
-		nan_login.setBounds(300, 133, 105, 20);
+		nan_login.setBounds(316, 133, 89, 20);
 		login.add(nan_login);
 		nan_login.setColumns(10);
 		
@@ -721,7 +667,15 @@ public class Hasiera extends JFrame {
 		JButton btn_sartu = new JButton("Sartu");
 		btn_sartu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				boolean balidatu = Metodoak.LoginBalidatu(nan_login.getText(),String.valueOf(pass_login.getPassword()),bezeroak_array);
+				if(metodoak.LoginBalidatu(nan_login.getText(),String.valueOf(pass_login.getPassword()),bezeroak_array)) {
+					erosketa = metodoak.ErosketaSortu(laburpen_array, nan_login.getText(), bezeroak_array);
+					metodoak.ErosketaGorde(erosketa);
+					erosketak_array=metodoak.ErosketakKargatu();
+					metodoak.SarrerakGorde(erosketak_array);
+					JOptionPane.showMessageDialog(null, "Erosketa gorde da.","Alerta", JOptionPane.INFORMATION_MESSAGE);
+				}else {
+					JOptionPane.showMessageDialog(null, "Erabiltzaile edo pasahitza okerrak dira.","Alerta", JOptionPane.INFORMATION_MESSAGE);
+				}
 			}
 		});
 		btn_sartu.setBounds(280, 247, 89, 23);

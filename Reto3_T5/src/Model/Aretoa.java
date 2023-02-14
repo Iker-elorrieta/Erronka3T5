@@ -1,15 +1,19 @@
 package Model;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 public class Aretoa {
 	private int id_areto;
 	private String izenAret;
+	private Saioa[] saioak;
+	
 	
 	// Constructor
-	public Aretoa(int id_aretoa, String izenAret){
+	public Aretoa(int id_aretoa, String izenAret, Saioa[] saioak){
 		this.id_areto = id_aretoa;
 		this.izenAret = izenAret;
+		this.saioak=saioak;
 	}
 	
 	public Aretoa(){
@@ -23,6 +27,9 @@ public class Aretoa {
 	public void setIzenAret(String izenAret) {
 		this.izenAret = izenAret;
 	}
+	public void setSaioak(Saioa[] saioak) {
+		this.saioak = saioak;
+	}
 	
 	// Getters
 	public int getId_areto() {
@@ -31,11 +38,14 @@ public class Aretoa {
 	public String getIzenAret() {
 		return izenAret;
 	}
+	public Saioa[] getSaioak() {
+		return saioak;
+	}
 	
 	// ToString
 	@Override
 	public String toString() {
-		return "Aretoa [id_areto=" + id_areto + ", izenAret=" + izenAret + "]";
+		return "Aretoa [id_areto=" + id_areto + ", izenAret=" + izenAret + ", saioak=" + Arrays.toString(saioak) + "]";
 	}
 
 	// Equals
@@ -54,6 +64,5 @@ public class Aretoa {
 			return false;
 		Aretoa other = (Aretoa) obj;
 		return Objects.equals(id_areto, other.id_areto);
-	}
-	
+	}	
 }

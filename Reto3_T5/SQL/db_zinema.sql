@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 10-02-2023 a las 12:55:15
+-- Tiempo de generación: 14-02-2023 a las 13:58:31
 -- Versión del servidor: 10.4.27-MariaDB
 -- Versión de PHP: 8.2.0
 
@@ -31,7 +31,7 @@ CREATE TABLE `aretoa` (
   `Id_aretoa` int(11) NOT NULL,
   `IzenAret` varchar(30) DEFAULT NULL,
   `Id_zinema` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `aretoa`
@@ -62,7 +62,7 @@ CREATE TABLE `bezeroa` (
   `Sexua` enum('gizon','emakume') DEFAULT NULL,
   `NAN` varchar(9) DEFAULT NULL,
   `Pasahitza` varchar(30) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `bezeroa`
@@ -83,7 +83,7 @@ CREATE TABLE `erosketa` (
   `Deskontua` int(11) DEFAULT NULL,
   `Totala` float DEFAULT NULL,
   `Id_bezeroa` varchar(30) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -97,7 +97,7 @@ CREATE TABLE `filma` (
   `Generoa` enum('Beldurra','Komedia','Drama','Zientzia') DEFAULT NULL,
   `Iraupena` int(11) DEFAULT NULL,
   `Prezioa` float NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `filma`
@@ -133,7 +133,7 @@ CREATE TABLE `saioa` (
   `Data` date DEFAULT NULL,
   `Id_aretoa` int(11) DEFAULT NULL,
   `Id_filma` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `saioa`
@@ -1840,7 +1840,7 @@ CREATE TABLE `sarrera` (
   `Id_sarrera` int(11) NOT NULL,
   `Id_saioa` int(11) DEFAULT NULL,
   `Id_erosketa` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -1854,7 +1854,7 @@ CREATE TABLE `zinema` (
   `Kokalekua` varchar(100) DEFAULT NULL,
   `Bounds` varchar(30) DEFAULT NULL,
   `Route` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `zinema`
@@ -1863,8 +1863,7 @@ CREATE TABLE `zinema` (
 INSERT INTO `zinema` (`Id_zinema`, `IzenZin`, `Kokalekua`, `Bounds`, `Route`) VALUES
 (1, 'Cinesa Zubiarte', 'Leizaola Lehendakariaren Kalea, 2, 48009 Bilbo, Bizkaia', '10,69,199,168', 'src/resources/zubi.png'),
 (2, 'Cinesa Max Ocio', 'Barrio, Kareaga Kalea, S/N, 48903 Barakaldo, Biscay', '219,69,199,168', 'src/resources/max_cinesa.png'),
-(3, 'Golem Alhondiga', 'Arriquíbar Plaza, 4, 48001 Bilbo, Bizkaia', '428,69,212,168', 'src/resources/golem.png'),
-(4, 'Cinesa Zubiarte', 'Leizaola Lehendakariaren Kalea, 2, 48009 Bilbo, Bizkaia', '10,240,199,168', 'src/resources/zubi.png');
+(3, 'Golem Alhondiga', 'Arriquíbar Plaza, 4, 48001 Bilbo, Bizkaia', '428,69,212,168', 'src/resources/golem.png');
 
 --
 -- Índices para tablas volcadas
@@ -1933,7 +1932,7 @@ ALTER TABLE `aretoa`
 -- AUTO_INCREMENT de la tabla `erosketa`
 --
 ALTER TABLE `erosketa`
-  MODIFY `Id_erosketa` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `Id_erosketa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `saioa`
@@ -1951,7 +1950,7 @@ ALTER TABLE `sarrera`
 -- AUTO_INCREMENT de la tabla `zinema`
 --
 ALTER TABLE `zinema`
-  MODIFY `Id_zinema` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `Id_zinema` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Restricciones para tablas volcadas
@@ -1961,27 +1960,27 @@ ALTER TABLE `zinema`
 -- Filtros para la tabla `aretoa`
 --
 ALTER TABLE `aretoa`
-  ADD CONSTRAINT `FK_film_areto` FOREIGN KEY (`Id_zinema`) REFERENCES `zinema` (`Id_zinema`);
+  ADD CONSTRAINT `FK_film_areto` FOREIGN KEY (`Id_zinema`) REFERENCES `zinema` (`Id_zinema`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `erosketa`
 --
 ALTER TABLE `erosketa`
-  ADD CONSTRAINT `FK_bezero_eros` FOREIGN KEY (`Id_bezeroa`) REFERENCES `bezeroa` (`Id_bezeroa`);
+  ADD CONSTRAINT `FK_bezero_eros` FOREIGN KEY (`Id_bezeroa`) REFERENCES `bezeroa` (`Id_bezeroa`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `saioa`
 --
 ALTER TABLE `saioa`
-  ADD CONSTRAINT `FK_aretoa_funtzi` FOREIGN KEY (`Id_aretoa`) REFERENCES `aretoa` (`Id_aretoa`),
-  ADD CONSTRAINT `FK_filma_funtzi` FOREIGN KEY (`Id_filma`) REFERENCES `filma` (`Id_filma`);
+  ADD CONSTRAINT `FK_aretoa_funtzi` FOREIGN KEY (`Id_aretoa`) REFERENCES `aretoa` (`Id_aretoa`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK_filma_funtzi` FOREIGN KEY (`Id_filma`) REFERENCES `filma` (`Id_filma`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `sarrera`
 --
 ALTER TABLE `sarrera`
-  ADD CONSTRAINT `FK_eros_sarrera` FOREIGN KEY (`Id_erosketa`) REFERENCES `erosketa` (`Id_erosketa`),
-  ADD CONSTRAINT `FK_funtzi_sarrera` FOREIGN KEY (`Id_saioa`) REFERENCES `saioa` (`Id_saioa`);
+  ADD CONSTRAINT `FK_eros_sarrera` FOREIGN KEY (`Id_erosketa`) REFERENCES `erosketa` (`Id_erosketa`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK_funtzi_sarrera` FOREIGN KEY (`Id_saioa`) REFERENCES `saioa` (`Id_saioa`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
