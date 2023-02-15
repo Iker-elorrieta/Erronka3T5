@@ -43,7 +43,7 @@ public class Hasiera extends JFrame {
 	private JPanel APP;
 	private JTable taula_filmak;
 	private JTable taula_laburpen;
-	private JTextField nan_login;
+	private JTextField erabiltzaile_login;
 	private JPasswordField pass_login;
 	private JTextField textField_registroId;
 	private JTextField textField_registroIzen;
@@ -71,6 +71,8 @@ public class Hasiera extends JFrame {
 	Bezero[] bezeroak_array = new Bezero[0];
 	Erosketa[] erosketak_array = new Erosketa[0];
 	Erosketa erosketa= new Erosketa();
+	int erantzuna = 0;
+	Object[] options = {"Bai", "Ez"};
 	/**
 	 * Launch the application.
 	 */
@@ -569,6 +571,43 @@ public class Hasiera extends JFrame {
 		laburpena.add(btn_aurrera_4);
 		btn_aurrera_4.setIcon(logo_aurrera);
 				
+		JButton btn_sartu = new JButton("Sartu");
+		btn_sartu.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(metodoak.LoginBalidatu(erabiltzaile_login.getText(),String.valueOf(pass_login.getPassword()),bezeroak_array)) {
+					erosketa = metodoak.ErosketaSortu(laburpen_array, erabiltzaile_login.getText(), bezeroak_array);
+					metodoak.ErosketaGorde(erosketa,erabiltzaile_login.getText());
+					erosketak_array=metodoak.ErosketakKargatu();
+					erosketak_array= metodoak.ErosketenSarrerakSortu(erosketak_array, erosketa, laburpen_array,zinemak_array,id_zine);
+					metodoak.SarrerakGorde(erosketak_array);
+					JOptionPane.showMessageDialog(null, "Erosketa gorde da.","Alerta", JOptionPane.INFORMATION_MESSAGE);
+					erantzuna = JOptionPane.showOptionDialog(null, "Tiketa sortu nahi duzu?","Berrespena", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options,options[1]);
+					if(erantzuna == JOptionPane.YES_OPTION){
+						erosketak_array=metodoak.ErosketakKargatu();
+						metodoak.TiketaGorde(erosketak_array,zinemak_array);
+					}
+					erantzuna = JOptionPane.showOptionDialog(null, "Hasierara bueltatu nahi duzu?","Berrespena", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options,options[1]);
+					if(erantzuna == JOptionPane.YES_OPTION) {
+						erabiltzaile_login.setText("");
+						pass_login.setText("");
+						textField_registroId.setText("");
+						textField_registroIzen.setText("");
+						textField_registroAbiz.setText("");
+						textField_registroAdin.setText("");
+						textField_registroNan.setText("");
+						laburpen_array = new String[0][7];
+						login.setVisible(false);
+						ongi_etorri.setVisible(true);							
+					}else {
+						dispose();
+					}
+				}else {
+					JOptionPane.showMessageDialog(null, "Erabiltzaile edo pasahitza okerrak dira.","Alerta", JOptionPane.INFORMATION_MESSAGE);
+				}
+			}
+		});
+		btn_sartu.setBounds(280, 247, 89, 23);
+		login.add(btn_sartu);
 			
 		JButton btn_erregistratu = new JButton("Ez dut konturik");
 		btn_erregistratu.addActionListener(new ActionListener() {
@@ -587,10 +626,31 @@ public class Hasiera extends JFrame {
 					if(metodoak.RegistroaEgin(bezeroak_array,textField_registroId.getText(),textField_registroIzen.getText(),textField_registroAbiz.getText(),Integer.parseInt(textField_registroAdin.getText()),String.valueOf(comboBox_sexua.getSelectedItem()),textField_registroNan.getText(),textField_registroPas.getText())) {
 						bezeroak_array = metodoak.BezeroakKargatu();
 						JOptionPane.showMessageDialog(null, "Erabiltzailea erregistratu da.","Alerta", JOptionPane.INFORMATION_MESSAGE);
-						metodoak.ErosketaGorde(erosketa);
+						metodoak.ErosketaGorde(erosketa,textField_registroId.getText());
 						erosketak_array=metodoak.ErosketakKargatu();
+						erosketak_array= metodoak.ErosketenSarrerakSortu(erosketak_array, erosketa, laburpen_array,zinemak_array,id_zine);
 						metodoak.SarrerakGorde(erosketak_array);
 						JOptionPane.showMessageDialog(null, "Erosketa gorde da.","Alerta", JOptionPane.INFORMATION_MESSAGE);
+						erantzuna = JOptionPane.showOptionDialog(null, "Tiketa sortu nahi duzu?","Berrespena", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options,options[1]);
+						if(erantzuna == JOptionPane.YES_OPTION){
+							erosketak_array=metodoak.ErosketakKargatu();
+							metodoak.TiketaGorde(erosketak_array,zinemak_array);
+						}	
+						erantzuna = JOptionPane.showOptionDialog(null, "Hasierara bueltatu nahi duzu?","Berrespena", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options,options[1]);
+						if(erantzuna == JOptionPane.YES_OPTION){
+							erabiltzaile_login.setText("");
+							pass_login.setText("");
+							textField_registroId.setText("");
+							textField_registroIzen.setText("");
+							textField_registroAbiz.setText("");
+							textField_registroAdin.setText("");
+							textField_registroNan.setText("");
+							laburpen_array = new String[0][7];
+							login.setVisible(false);
+							ongi_etorri.setVisible(true);	
+						}else {
+							dispose();
+						}
 					}else {
 						JOptionPane.showMessageDialog(null, "Erabiltzailea existitzen da.","Alerta", JOptionPane.INFORMATION_MESSAGE);
 					}
@@ -616,6 +676,14 @@ public class Hasiera extends JFrame {
 		JButton btn_etxea_1 = new JButton(homeicon);
 		btn_etxea_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				erabiltzaile_login.setText("");
+				pass_login.setText("");
+				textField_registroId.setText("");
+				textField_registroIzen.setText("");
+				textField_registroAbiz.setText("");
+				textField_registroAdin.setText("");
+				textField_registroNan.setText("");
+				textField_registroPas.setText("");
 				laburpen_array = new String[0][7];
 				if(botoi_zinemak.length>3) {
 					setBounds(100, 100, 676, 550);
@@ -635,6 +703,15 @@ public class Hasiera extends JFrame {
 		btn_etxea_2.setBounds(10, 11, 44, 34);
 		btn_etxea_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				erabiltzaile_login.setText("");
+				pass_login.setText("");
+				textField_registroId.setText("");
+				textField_registroIzen.setText("");
+				textField_registroAbiz.setText("");
+				textField_registroAdin.setText("");
+				textField_registroNan.setText("");
+				textField_registroPas.setText("");
+				textField_registroPas.setText("");
 				laburpen_array = new String[0][7];
 				if(botoi_zinemak.length>3) {
 					setBounds(100, 100, 676, 550);
@@ -655,32 +732,15 @@ public class Hasiera extends JFrame {
 		// 		JTextField guztiak		//
 		//////////////////////////////////
 		
-		nan_login = new JTextField();
-		nan_login.setBounds(316, 133, 89, 20);
-		login.add(nan_login);
-		nan_login.setColumns(10);
+		erabiltzaile_login = new JTextField();
+		erabiltzaile_login.setBounds(316, 133, 89, 20);
+		login.add(erabiltzaile_login);
+		erabiltzaile_login.setColumns(10);
 		
 		pass_login = new JPasswordField();
 		pass_login.setBounds(309, 189, 96, 20);
 		login.add(pass_login);
 		
-		JButton btn_sartu = new JButton("Sartu");
-		btn_sartu.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(metodoak.LoginBalidatu(nan_login.getText(),String.valueOf(pass_login.getPassword()),bezeroak_array)) {
-					erosketa = metodoak.ErosketaSortu(laburpen_array, nan_login.getText(), bezeroak_array);
-					metodoak.ErosketaGorde(erosketa);
-					erosketak_array=metodoak.ErosketakKargatu();
-					metodoak.SarrerakGorde(erosketak_array);
-					JOptionPane.showMessageDialog(null, "Erosketa gorde da.","Alerta", JOptionPane.INFORMATION_MESSAGE);
-				}else {
-					JOptionPane.showMessageDialog(null, "Erabiltzaile edo pasahitza okerrak dira.","Alerta", JOptionPane.INFORMATION_MESSAGE);
-				}
-			}
-		});
-		btn_sartu.setBounds(280, 247, 89, 23);
-		login.add(btn_sartu);
-				
 		textField_registroId = new JTextField();
 		textField_registroId.setBounds(315, 74, 107, 20);
 		erregistratu.add(textField_registroId);
@@ -697,6 +757,13 @@ public class Hasiera extends JFrame {
 		erregistratu.add(textField_registroAbiz);
 		
 		textField_registroNan = new JTextField();
+		textField_registroNan.addKeyListener(new KeyAdapter() {
+	        @Override
+	        public void keyTyped(KeyEvent e) {
+	            if (textField_registroNan.getText().length() >= 9 ) // limit to 3 characters
+	                e.consume();
+	        }
+	    });
 		textField_registroNan.setBounds(313, 246, 109, 20);
 		textField_registroNan.setColumns(10);
 		erregistratu.add(textField_registroNan);

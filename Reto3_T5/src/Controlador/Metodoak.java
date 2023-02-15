@@ -1,13 +1,19 @@
 package Controlador;
 
 import java.awt.Image;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.Calendar;
+import java.util.TimeZone;
 
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
@@ -21,7 +27,8 @@ import Model.Sarrera;
 import Model.Zinema;
 
 public class Metodoak {
-	
+
+	final String url = "jdbc:mysql://localhost:3306/db_zinema";
 	/**
 	 * Datu basean dauden zinema guztiak kargatzen ditu array batean.
 	 * @return Zinema guztien array bat
@@ -34,7 +41,6 @@ public class Metodoak {
 		
 		Connection conn;					
 		try {
-			String url = "jdbc:mysql://localhost:3306/db_zinema";
 			conn = (Connection) DriverManager.getConnection (url, "root","");
 			Statement comando = (Statement) conn.createStatement();	
 			ResultSet request = comando.executeQuery("Select Id_zinema,IzenZin, Kokalekua, Bounds, Route from zinema;");
@@ -82,6 +88,7 @@ public class Metodoak {
 								String ordua = request3.getString(3);
 								String[] ordua_array = ordua.split(":");
 								Calendar cal = Calendar.getInstance();
+								cal.set( Calendar.AM_PM, Calendar.AM );
 								cal.set(Calendar.HOUR,Integer.parseInt(ordua_array[0]));
 								cal.set(Calendar.MINUTE,Integer.parseInt(ordua_array[1]));
 								
@@ -159,7 +166,6 @@ public class Metodoak {
 		
 		Connection conn;					
 		try {
-			String url = "jdbc:mysql://localhost:3306/db_zinema";
 			conn = (Connection) DriverManager.getConnection (url, "root","");
 			Statement comando = (Statement) conn.createStatement();	
 			ResultSet request = comando.executeQuery("Select id_bezeroa, izebez, abizbez, sexua, adina, nan, pasahitza from bezeroa;");
@@ -203,7 +209,6 @@ public class Metodoak {
 		 
 		 Connection conn;					
 			try {
-				String url = "jdbc:mysql://localhost:3306/db_zinema";
 				conn = (Connection) DriverManager.getConnection (url, "root","");
 				Statement comando = (Statement) conn.createStatement();	
 				ResultSet request = comando.executeQuery("Select id_sarrera, s.Id_saioa, Ordua, Data, f.Id_filma,Izenburua, Generoa, iraupena, prezioa, a.Id_aretoa,IzenAret from saioa s JOIN filma f ON s.id_filma=f.id_filma JOIN aretoa a ON s.id_aretoa=a.id_aretoa JOIN sarrera sa ON sa.id_saioa=s.id_saioa;");
@@ -220,6 +225,7 @@ public class Metodoak {
 					String[] ordua_array = ordua.split(":");
 					
 					Calendar cal = Calendar.getInstance();
+					cal.setTimeZone(TimeZone.getTimeZone("UTC" + 1));
 					cal.set(Calendar.HOUR,Integer.parseInt(ordua_array[0]));
 					cal.set(Calendar.MINUTE,Integer.parseInt(ordua_array[1]));
 					
@@ -268,7 +274,7 @@ public class Metodoak {
 				String url = "jdbc:mysql://localhost:3306/db_zinema";
 				conn = (Connection) DriverManager.getConnection (url, "root","");
 				Statement comando = (Statement) conn.createStatement();	
-				ResultSet request = comando.executeQuery("Select id_erosketa,e.id_bezeroa, izebez, abizbez, sexua, adina, nan, pasahitza, deskontua, totala from erosketa e,bezeroa b WHERE e.id_bezeroa=b.id_bezeroa;");
+				ResultSet request = comando.executeQuery("Select id_erosketa,e.id_bezeroa, izebez, abizbez, sexua, adina, nan, pasahitza, deskontua, totala from erosketa e,bezeroa b WHERE e.id_bezeroa=b.id_bezeroa order by id_erosketa;");
 				
 				while(request.next()) {
 					Erosketa erosketa = new Erosketa();
@@ -458,7 +464,7 @@ public class Metodoak {
 		for(int i=0;i<zinemak.length && !aurkituta;i++) {
 			for(int j=0;j<zinemak[i].getAretoa().length && !aurkituta;j++) {
 				for(int k=0;k<zinemak[i].getAretoa()[j].getSaioak().length && !aurkituta;k++) {
-					int eguna = zinemak[i].getAretoa()[j].getSaioak()[k].getOrdua().get(Calendar.DAY_OF_MONTH)-1;
+					int eguna = zinemak[i].getAretoa()[j].getSaioak()[k].getOrdua().get(Calendar.DAY_OF_MONTH);
 					int hila = zinemak[i].getAretoa()[j].getSaioak()[k].getOrdua().get(Calendar.MONTH);
 					int urtea = zinemak[i].getAretoa()[j].getSaioak()[k].getOrdua().get(Calendar.YEAR);
 					String data_saio= eguna+"-"+hila+"-"+urtea;
@@ -477,7 +483,7 @@ public class Metodoak {
 		
 		for(int j=0;j<zinemak[id_zinema-1].getAretoa().length;j++) {
 			for(int k=0;k<zinemak[id_zinema-1].getAretoa()[j].getSaioak().length;k++) {
-				int eguna = zinemak[id_zinema-1].getAretoa()[j].getSaioak()[k].getOrdua().get(Calendar.DAY_OF_MONTH)-1;
+				int eguna = zinemak[id_zinema-1].getAretoa()[j].getSaioak()[k].getOrdua().get(Calendar.DAY_OF_MONTH);
 				int hila = zinemak[id_zinema-1].getAretoa()[j].getSaioak()[k].getOrdua().get(Calendar.MONTH);
 				int urtea = zinemak[id_zinema-1].getAretoa()[j].getSaioak()[k].getOrdua().get(Calendar.YEAR);
 				String data_saio= eguna+"-"+hila+"-"+urtea;
@@ -677,7 +683,7 @@ public class Metodoak {
 		return erosketa;
 	}
 	
-	public void ErosketaGorde(Erosketa erosketa) {
+	public void ErosketaGorde(Erosketa erosketa, String bezero_id) {
 		
 		Connection conn;					
 		try {
@@ -685,7 +691,7 @@ public class Metodoak {
 			conn = (Connection) DriverManager.getConnection (url, "root","");
 			Statement comando = (Statement) conn.createStatement();		
 		
-			comando.executeUpdate( "INSERT INTO erosketa (Deskontua,Totala,Id_bezeroa) VALUES ("+erosketa.getDeskontua()+","+erosketa.getTotala()+",'"+erosketa.getBezero().getId_bezero()+"');");
+			comando.executeUpdate( "INSERT INTO erosketa (Deskontua,Totala,Id_bezeroa) VALUES ("+erosketa.getDeskontua()+","+erosketa.getTotala()+",'"+bezero_id+"');");
 			conn.close();
 		}catch(SQLException ex) {
 				System.out.println("SQLException: "+ ex.getMessage());
@@ -694,16 +700,38 @@ public class Metodoak {
 		}		
 	}
 	
-	public Erosketa[] ErosketenSarrerakSortu(Erosketa[] erosketak,Erosketa erosketa, String[][] laburpen_array,int id_saioa) {
+	public Erosketa[] ErosketenSarrerakSortu(Erosketa[] erosketak,Erosketa erosketa, String[][] laburpen_array,Zinema[] zinemak,int id_zinema) {
 		Sarrera[] sarrerak= new Sarrera[0];
 		
 		for(int i=0;i<laburpen_array.length;i++) {
 			Sarrera sarrera = new Sarrera();
 			Saioa saioa = new Saioa();
 			
-			saioa.setId_saioa(Integer.parseInt(laburpen_array[i][6]));
+			saioa.setId_saioa(Integer.parseInt(laburpen_array[i][6]));			
+			boolean aurkituta=false;
+			for(int k=0;k<zinemak[id_zinema-1].getAretoa().length && !aurkituta;k++) {
+				for(int l=0;l<zinemak[id_zinema-1].getAretoa()[k].getSaioak().length && !aurkituta;l++) {
+					if(zinemak[id_zinema-1].getAretoa()[k].getSaioak()[l].getId_saioa()==Integer.parseInt(laburpen_array[i][6])) {
+						Filma filma = new Filma(zinemak[id_zinema-1].getAretoa()[k].getSaioak()[l].getFilma().getId_filma(),zinemak[id_zinema-1].getAretoa()[k].getSaioak()[l].getFilma().getIzenburu(),zinemak[id_zinema-1].getAretoa()[k].getSaioak()[l].getFilma().getGenero(),zinemak[id_zinema-1].getAretoa()[k].getSaioak()[l].getFilma().getIraupena(),zinemak[id_zinema-1].getAretoa()[k].getSaioak()[l].getFilma().getPrezioa());
+						saioa.setFilma(filma);
+						
+						Calendar cal = Calendar.getInstance();
+						int eguna = zinemak[id_zinema-1].getAretoa()[k].getSaioak()[l].getOrdua().get(Calendar.DAY_OF_MONTH);
+						int hila = zinemak[id_zinema-1].getAretoa()[k].getSaioak()[l].getOrdua().get(Calendar.MONTH);
+						int urtea = zinemak[id_zinema-1].getAretoa()[k].getSaioak()[l].getOrdua().get(Calendar.YEAR);						
+						
+						cal.set(Calendar.HOUR,zinemak[id_zinema-1].getAretoa()[k].getSaioak()[l].getOrdua().get(Calendar.HOUR));
+						cal.set(Calendar.MINUTE,zinemak[id_zinema-1].getAretoa()[k].getSaioak()[l].getOrdua().get(Calendar.MINUTE));
+						
+						cal.set(Calendar.YEAR,urtea);						
+						cal.set(Calendar.MONTH,hila);
+						cal.set(Calendar.DAY_OF_MONTH,eguna);
+						saioa.setOrdua(cal);		
+						aurkituta=true;
+					}
+				}
+			}
 			sarrera.setSaioa(saioa);
-			
 			Sarrera[] sarrerak_prob= new Sarrera[sarrerak.length+1];
 			for(int j=0;j<sarrerak.length;j++) {
 				sarrerak_prob[j]=sarrerak[j];
@@ -725,7 +753,7 @@ public class Metodoak {
 			conn = (Connection) DriverManager.getConnection (url, "root","");
 			Statement comando = (Statement) conn.createStatement();		
 			while(i<erosketak[erosketak.length-1].getSarrera().length) {
-				comando.executeUpdate( "INSERT INTO sarrera (id_saioa,id_erosketa) VALUES ("+erosketak[erosketak.length-1].getSarrera()[i].getId_sarrera()+","+erosketak[erosketak.length-1].getId_erosketa()+");");
+				comando.executeUpdate("INSERT INTO sarrera (id_saioa,id_erosketa) VALUES ("+erosketak[erosketak.length-1].getSarrera()[i].getSaioa().getId_saioa()+","+erosketak[erosketak.length-1].getId_erosketa()+");");
 				i++;
 			}
 			conn.close();
@@ -735,5 +763,44 @@ public class Metodoak {
 				System.out.println("ErrorCode: "+ ex.getErrorCode());
 		}		
 		
+	}
+	
+	public void TiketaGorde(Erosketa[] erosketak, Zinema[] zinemak) {
+		String zinema = "";
+		String aretoa = "";
+		File file = new File("Sarrerak.txt");
+		
+		BufferedWriter fichero;
+		
+			try {
+				file.delete();
+				fichero = new BufferedWriter(new FileWriter(file));
+			for(int i =0;i<erosketak[erosketak.length-1].getSarrera().length;i++)
+			{
+				boolean aurkituta = false;
+				for(int h=0;h<zinemak.length && !aurkituta;h++) {
+					for(int k=0;k<zinemak[h].getAretoa().length && !aurkituta;k++) {
+						for(int j=0;j<zinemak[h].getAretoa()[k].getSaioak().length && !aurkituta;j++) {
+							if(zinemak[h].getAretoa()[k].getSaioak()[j].getId_saioa() == erosketak[erosketak.length-1].getSarrera()[i].getId_sarrera()){
+								zinema = zinemak[h].getIzenZin();
+								aretoa = zinemak[h].getAretoa()[k].getIzenAret();
+								aurkituta = true;
+							}
+						}
+					}	
+				}
+				
+				fichero.write("Zinema: "+zinema+", Aretoa :"+aretoa+" ,Id bezero : "+erosketak[erosketak.length-1].getBezero().getId_bezero()+", Saioa: "+erosketak[erosketak.length-1].getSarrera()[i].toString()+"\n");
+			}
+			fichero.close();
+			JOptionPane.showMessageDialog(null,
+					"Tiketa sortu da Sarrerak.txt fitxategian.",
+					"Gordeta!",
+					JOptionPane.INFORMATION_MESSAGE);
+			
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}			
 	}
 }

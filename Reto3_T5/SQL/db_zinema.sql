@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 14-02-2023 a las 13:58:31
+-- Tiempo de generación: 15-02-2023 a las 09:30:26
 -- Versión del servidor: 10.4.27-MariaDB
 -- Versión de PHP: 8.2.0
 
@@ -59,7 +59,7 @@ CREATE TABLE `bezeroa` (
   `IzeBez` varchar(30) NOT NULL,
   `AbizBez` varchar(30) NOT NULL,
   `Adina` int(11) NOT NULL,
-  `Sexua` enum('gizon','emakume') DEFAULT NULL,
+  `Sexua` enum('Gizona','Emakumea') DEFAULT NULL,
   `NAN` varchar(9) DEFAULT NULL,
   `Pasahitza` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -69,8 +69,8 @@ CREATE TABLE `bezeroa` (
 --
 
 INSERT INTO `bezeroa` (`Id_bezeroa`, `IzeBez`, `AbizBez`, `Adina`, `Sexua`, `NAN`, `Pasahitza`) VALUES
-('aingeru1', 'Aingeru', 'Siranaula', 54, 'emakume', '12345678R', '1234'),
-('ibai0', 'Ibai', 'Alvarez', 22, 'gizon', '12345678D', '1234');
+('aingeru1', 'Aingeru', 'Siranaula', 54, '', '12345678R', '1234'),
+('ibai0', 'Ibai', 'Alvarez', 22, '', '12345678D', '1234');
 
 -- --------------------------------------------------------
 
@@ -84,6 +84,30 @@ CREATE TABLE `erosketa` (
   `Totala` float DEFAULT NULL,
   `Id_bezeroa` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `erosketa`
+--
+
+INSERT INTO `erosketa` (`Id_erosketa`, `Deskontua`, `Totala`, `Id_bezeroa`) VALUES
+(3, 0, 4.5, 'ibai0'),
+(4, 0, 4.5, 'ibai0'),
+(5, 0, 4.5, 'ibai0'),
+(6, 0, 6.5, 'ibai0'),
+(7, 0, 5.75, 'ibai0'),
+(8, 0, 6.25, 'ibai0'),
+(9, 0, 6.5, 'ibai0'),
+(10, 20, 10.2, 'ibai0'),
+(11, 20, 10.2, 'ibai0'),
+(12, 20, 10.2, 'ibai0'),
+(13, 0, 4.5, 'ibai0'),
+(14, 0, 5.75, 'ibai0'),
+(15, 0, 6.5, 'ibai0'),
+(16, 0, 5.75, 'ibai0'),
+(17, 0, 5.75, 'ibai0'),
+(18, 0, 6.5, 'ibai0'),
+(19, 0, 5.75, 'ibai0'),
+(20, 0, 6.5, 'ibai0');
 
 -- --------------------------------------------------------
 
@@ -1932,7 +1956,7 @@ ALTER TABLE `aretoa`
 -- AUTO_INCREMENT de la tabla `erosketa`
 --
 ALTER TABLE `erosketa`
-  MODIFY `Id_erosketa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `Id_erosketa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT de la tabla `saioa`

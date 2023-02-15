@@ -44,7 +44,7 @@ public class Saioa {
 	// ToString
 	@Override
 	public String toString() {
-		return "Saioa [id_saioa=" + id_saioa + ", ordua=" + ordua.get(Calendar.HOUR)+":"+ordua.get(Calendar.MINUTE)+", data="+ordua.get(Calendar.DAY_OF_MONTH)+"-"+ordua.get(Calendar.MONTH)+"-"+ordua.get(Calendar.YEAR)+ ", filma=" + filma + "]";
+		return "Saioa [id_saioa=" + id_saioa + ", ordua=" + (ordua.get(Calendar.HOUR)+12)+":"+ordua.get(Calendar.MINUTE)+", data="+ordua.get(Calendar.DAY_OF_MONTH)+"-"+ordua.get(Calendar.MONTH)+"-"+ordua.get(Calendar.YEAR)+ ", filma=" + filma + "]";
 	}
 
 	@Override
