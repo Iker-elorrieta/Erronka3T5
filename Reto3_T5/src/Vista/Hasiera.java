@@ -320,7 +320,7 @@ public class Hasiera extends JFrame {
 		// Zinema aukeratzean filmak erakustea
 		botoi_zinemak = metodoak.BotoiakKargatu(zinemak_array);
 		for(int j=0;j<botoi_zinemak.length;j++) {
-			ImageIcon logo_cine = metodoak.ZinemaArgazkia(botoi_zinemak, j);
+			ImageIcon logo_cine = new ImageIcon(new ImageIcon(botoi_zinemak[j][1]).getImage().getScaledInstance(150,150,Image.SCALE_DEFAULT));
 			JButton btn_zine = new JButton(logo_cine);
 			btn_zine.setToolTipText(String.valueOf(j+1));
 			btn_zine.addActionListener(new ActionListener() {
@@ -455,8 +455,7 @@ public class Hasiera extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(datePicker.getModel().getValue()!=null && !datePicker.getJFormattedTextField().getText().equals("")){	
 					if(metodoak.FilmarenDataBalidatu(zinemak_array,datePicker.getJFormattedTextField().getText(),id_filma)) {
-						data_string = new SimpleDateFormat("d-M-yyyy").format(datePicker.getModel().getValue());
-						
+						data_string = new SimpleDateFormat("d-M-yyyy").format(datePicker.getModel().getValue());						
 						saio_orduak_id = metodoak.SaioOrduakId(id_filma,data_string,zinemak_array,id_zine);	
 						saio_orduak = metodoak.SaioOrduak(saio_orduak_id);										
 						comboBox_ordutegi.removeAllItems();	
@@ -485,6 +484,14 @@ public class Hasiera extends JFrame {
         Properties p = new Properties();
         JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
         datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
+        datePicker.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				data_string = new SimpleDateFormat("d-M-yyyy").format(datePicker.getModel().getValue());
+				if(!metodoak.FilmarenDataBalidatu(zinemak_array, data_string, id_filma)){
+					datePicker.getJFormattedTextField().setText("");					
+				}
+			}
+		});
         datePicker.setBounds(204, 69, 202, 30);	        
         datak.add(datePicker);		
 		

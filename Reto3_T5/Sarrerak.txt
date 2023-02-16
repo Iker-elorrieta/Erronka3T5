@@ -1,1 +1,1 @@
-Zinema: Cinesa Zubiarte, Aretoa :Areto 1 ,Id bezero : ibai0, Saioa: Sarrera [id_sarrera=2, saioa=Saioa [id_saioa=433, ordua=14:0, data=3-2-2023, filma=Filma [id_filma=1, izenburu=Handia, genero=Drama, iraupena=116, prezioa=4.5]]]
+Zinema: Cinesa Zubiarte, Aretoa :Areto 1 ,Id bezero : ibai0, Saioa: Sarrera [id_sarrera=1, saioa=Saioa [id_saioa=1, ordua=14:0, data=1-2-2023, filma=Filma [id_filma=1, izenburu=Handia, genero=Drama, iraupena=116, prezioa=4.5]]]

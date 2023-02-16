@@ -73,7 +73,7 @@ public class SaioaTest {
 		Saioa s1 = new Saioa(3, t, f1);
 		
 		// ToString
-		assertEquals(s1.toString(), "Saioa [id_saioa=" + s1.getId_saioa() + ", ordua=" + s1.getOrdua().get(Calendar.HOUR)+":"+s1.getOrdua().get(Calendar.MINUTE)+", data="+s1.getOrdua().get(Calendar.DAY_OF_MONTH)+"-"+s1.getOrdua().get(Calendar.MONTH)+"-"+s1.getOrdua().get(Calendar.YEAR)+ ", filma=" + s1.getFilma() +"]");
+		assertEquals(s1.toString(), "Saioa [id_saioa=" + s1.getId_saioa() + ", ordua=" + (s1.getOrdua().get(Calendar.HOUR)+12)+":"+s1.getOrdua().get(Calendar.MINUTE)+", data="+s1.getOrdua().get(Calendar.DAY_OF_MONTH)+"-"+s1.getOrdua().get(Calendar.MONTH)+"-"+s1.getOrdua().get(Calendar.YEAR)+ ", filma=" + s1.getFilma() +"]");
 	}
 	
 	@Test

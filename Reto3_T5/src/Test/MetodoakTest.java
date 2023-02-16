@@ -2,9 +2,15 @@ package Test;
 
 import static org.junit.Assert.*;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Calendar;
 
 import org.junit.Test;
 
@@ -13,6 +19,7 @@ import com.mysql.jdbc.Statement;
 
 import Controlador.Metodoak;
 import Model.Bezero;
+import Model.Erosketa;
 import Model.Zinema;
 
 public class MetodoakTest {
@@ -41,57 +48,36 @@ public class MetodoakTest {
 		assertEquals("aingeru1", bezeroak_array[0].getId_bezero());
 		assertEquals("Aingeru", bezeroak_array[0].getIzenBez());
 		assertEquals("Siranaula", bezeroak_array[0].getAbizen());
-		assertEquals("emakume", bezeroak_array[0].getSexua());
+		assertEquals("Gizona", bezeroak_array[0].getSexua());
 		assertEquals(54, bezeroak_array[0].getAdina());
 		assertEquals("12345678R", bezeroak_array[0].getNan());
 		assertEquals("1234", bezeroak_array[0].getPasahitza());
 	}
 	
-	// No hay datos
-	@Test
-	public void SarrerakKargatuTest() {
-//		Metodoak metodoak = new Metodoak();
-//		Sarrera[] sarrerak_array = metodoak.SarrerakKargatu();
-//		
-//		assertEquals(1, sarrerak_array[0].getId_sarrera());
-//		assertEquals(1, sarrerak_array[0].getSaioa().getId_saioa());
-//		assertEquals(1, sarrerak_array[0].getSaioa().getOrdua().get(Calendar.HOUR));
-//		assertEquals(1, sarrerak_array[0].getSaioa().getOrdua().get(Calendar.MINUTE));
-//		assertEquals(1, sarrerak_array[0].getSaioa().getFilma().getId_filma());
-//		assertEquals(1, sarrerak_array[0].getSaioa().getFilma().getIzenburu());
-//		assertEquals(1, sarrerak_array[0].getSaioa().getFilma().getGenero());
-//		assertEquals(1, sarrerak_array[0].getSaioa().getFilma().getIraupena());
-//		assertEquals(1, sarrerak_array[0].getSaioa().getFilma().getPrezioa(), 0.01);
-//		assertEquals(1, sarrerak_array[0].getSaioa().getAretoa().getId_areto());
-//		assertEquals(1, sarrerak_array[0].getSaioa().getAretoa().getIzenAret());
-	}
-	
-	// No hay datos
 	@Test
 	public void ErosketakKargatuTest() {
-//		Metodoak metodoak = new Metodoak();
-//		Erosketa[] erosketak_array = metodoak.ErosketakKargatu();
-//		
-//		assertEquals(1, erosketak_array[0].getId_erosketa());
-//		assertEquals(1, erosketak_array[0].getBezero().getId_bezero());
-//		assertEquals(1, erosketak_array[0].getBezero().getIzenBez());
-//		assertEquals(1, erosketak_array[0].getBezero().getAbizen());
-//		assertEquals(1, erosketak_array[0].getBezero().getAdina());
-//		assertEquals(1, erosketak_array[0].getBezero().getSexua());
-//		assertEquals(1, erosketak_array[0].getBezero().getPasahitza());
-//		assertEquals(1, erosketak_array[0].getDeskontua(), 0.01);
-//		assertEquals(1, erosketak_array[0].getTotala(), 0.01);
-//		assertEquals(1, erosketak_array[0].getSarrera()[0].getId_sarrera());
-//		assertEquals(1, erosketak_array[0].getSarrera()[0].getSaioa().getId_saioa());
-//		assertEquals(1, erosketak_array[0].getSarrera()[0].getSaioa().getOrdua().get(Calendar.HOUR));
-//		assertEquals(1, erosketak_array[0].getSarrera()[0].getSaioa().getOrdua().get(Calendar.MINUTE));
-//		assertEquals(1, erosketak_array[0].getSarrera()[0].getSaioa().getFilma().getId_filma());
-//		assertEquals(1, erosketak_array[0].getSarrera()[0].getSaioa().getFilma().getIzenburu());
-//		assertEquals(1, erosketak_array[0].getSarrera()[0].getSaioa().getFilma().getGenero());
-//		assertEquals(1, erosketak_array[0].getSarrera()[0].getSaioa().getFilma().getIraupena());
-//		assertEquals(1, erosketak_array[0].getSarrera()[0].getSaioa().getFilma().getPrezioa(), 0.01);
-//		assertEquals(1, erosketak_array[0].getSarrera()[0].getSaioa().getAretoa().getId_areto());
-//		assertEquals(1, erosketak_array[0].getSarrera()[0].getSaioa().getAretoa().getIzenAret());
+		Metodoak metodoak = new Metodoak();
+		Erosketa[] erosketak_array = metodoak.ErosketakKargatu();
+		
+		assertEquals(1, erosketak_array[0].getId_erosketa());
+		assertEquals("ibai0", erosketak_array[0].getBezero().getId_bezero());
+		assertEquals("Ibai", erosketak_array[0].getBezero().getIzenBez());
+		assertEquals("Alvarez", erosketak_array[0].getBezero().getAbizen());
+		assertEquals(22, erosketak_array[0].getBezero().getAdina());
+		assertEquals("Gizona", erosketak_array[0].getBezero().getSexua());
+		assertEquals("12345678D", erosketak_array[0].getBezero().getNan());
+		assertEquals("1234", erosketak_array[0].getBezero().getPasahitza());
+		assertEquals(0, erosketak_array[0].getDeskontua(), 0.01);
+		assertEquals(4.5, erosketak_array[0].getTotala(), 0.01);
+		assertEquals(1, erosketak_array[0].getSarrera()[0].getId_sarrera());
+		assertEquals(1, erosketak_array[0].getSarrera()[0].getSaioa().getId_saioa());
+		assertEquals(2, erosketak_array[0].getSarrera()[0].getSaioa().getOrdua().get(Calendar.HOUR));
+		assertEquals(0, erosketak_array[0].getSarrera()[0].getSaioa().getOrdua().get(Calendar.MINUTE));
+		assertEquals(1, erosketak_array[0].getSarrera()[0].getSaioa().getFilma().getId_filma());
+		assertEquals("Handia", erosketak_array[0].getSarrera()[0].getSaioa().getFilma().getIzenburu());
+		assertEquals("Drama", erosketak_array[0].getSarrera()[0].getSaioa().getFilma().getGenero());
+		assertEquals(116, erosketak_array[0].getSarrera()[0].getSaioa().getFilma().getIraupena());
+		assertEquals(4.5, erosketak_array[0].getSarrera()[0].getSaioa().getFilma().getPrezioa(), 0.01);
 	}
 	
 	@Test
@@ -249,8 +235,8 @@ public class MetodoakTest {
 	public void RegistroaEginTest(){
 		Metodoak metodoak = new Metodoak();
 		Bezero[] bezeroak_array = new Bezero[0];
+		metodoak.RegistroaEgin(bezeroak_array,"juan3","Juan","Martinez",32,"Gizona","12345678J","1234");
 		bezeroak_array = metodoak.BezeroakKargatu();
-		metodoak.RegistroaEgin(bezeroak_array,"juan3","Juan","Martinez",32,"gizon","12345678J","1234");
 		String id_bez = bezeroak_array[2].getId_bezero();
 		String id_bezeroa = "";
 		String izenbez = "";
@@ -295,5 +281,169 @@ public class MetodoakTest {
 			System.out.println("ErrorCode: "+ ex.getErrorCode());
 		}
 	}
+	
+	@Test
+	public void ErosketaSortuTest(){
+		Metodoak metodoak = new Metodoak();
+		String[][] laburpena = new String [0][7];
+		Zinema[] zinemak_array = metodoak.ZinemakKargatu();
+		laburpena = metodoak.SaioaGorde(laburpena,zinemak_array, 1, "Handia","Areto 3", "6-2-2023", "1. 14:0", "4.5", 445);
+		Bezero[] bezeroak_array = metodoak.BezeroakKargatu();
+		Erosketa erosketa = new Erosketa();
+		erosketa = metodoak.ErosketaSortu(laburpena, "aingeru1", bezeroak_array);
+			
+		String[] des_prov = erosketa.getDeskontua().toString().split("\\.");
+			
+		assertEquals("aingeru1", erosketa.getBezero().getId_bezero());
+		assertEquals("4.5", erosketa.getTotala().toString());
+		assertEquals("0", des_prov[0]);
 
+	}
+	
+	@Test
+	public void ErosketaGordeTest(){
+		Metodoak metodoak = new Metodoak();
+		String[][] laburpena = new String [0][7];
+		Zinema[] zinemak_array = metodoak.ZinemakKargatu();
+		laburpena = metodoak.SaioaGorde(laburpena,zinemak_array, 1, "Handia","Areto 3", "6-2-2023", "1. 14:0", "4.5", 445);
+		Bezero[] bezeroak_array = metodoak.BezeroakKargatu();
+		Erosketa erosketa = new Erosketa();
+		erosketa = metodoak.ErosketaSortu(laburpena, "aingeru1", bezeroak_array);
+		metodoak.ErosketaGorde(erosketa,"aingeru1");
+		
+		String id_bez = "aingeru1";
+		String deskontua = "";
+		String totala = "";
+		String id_bezeroa = "";
+		
+		Connection conn;					
+		try {
+			String url = "jdbc:mysql://localhost:3306/db_zinema";
+			conn = (Connection) DriverManager.getConnection (url, "root","");
+			Statement comando = (Statement) conn.createStatement();	
+			ResultSet request = comando.executeQuery("Select deskontua, totala, id_bezeroa from erosketa where id_bezeroa = '"+ id_bez +"' order by id_erosketa desc limit 1;");
+			
+			while(request.next()) {
+				deskontua = request.getString(1);
+				totala = request.getString(2);
+				id_bezeroa = request.getString(3);
+			}
+			
+			String[] des_prov = erosketa.getDeskontua().toString().split("\\.");
+			
+			assertEquals(id_bezeroa, erosketa.getBezero().getId_bezero());
+			assertEquals(totala, erosketa.getTotala().toString());
+			assertEquals(deskontua, des_prov[0]);
+			conn.close();
+		}catch(SQLException ex) {
+			System.out.println("SQLException: "+ ex.getMessage());
+			System.out.println("SQLState: "+ ex.getSQLState());
+			System.out.println("ErrorCode: "+ ex.getErrorCode());
+		}
+	}
+	
+	@Test
+	public void ErosketenSarrerakSortuTest(){
+		Metodoak metodoak = new Metodoak();
+		String[][] laburpena_array = new String [0][7];
+		Bezero[] bezeroak_array = metodoak.BezeroakKargatu();
+		Erosketa erosketa = new Erosketa();
+		Zinema[] zinemak_array = metodoak.ZinemakKargatu();
+		Erosketa[] erosketak_array = new Erosketa[0];
+		
+		laburpena_array = metodoak.SaioaGorde(laburpena_array, zinemak_array, 1, "Handia","Areto 3", "6-2-2023", "1. 14:0", "4.5", 445);
+		erosketa = metodoak.ErosketaSortu(laburpena_array, "aingeru1", bezeroak_array);
+		metodoak.ErosketaGorde(erosketa, "aingeru1");
+		erosketak_array = metodoak.ErosketakKargatu();
+		erosketak_array = metodoak.ErosketenSarrerakSortu(erosketak_array, erosketa, laburpena_array, zinemak_array, 1);
+		
+		assertEquals(1, erosketak_array[0].getId_erosketa());
+		assertEquals("ibai0", erosketak_array[0].getBezero().getId_bezero());
+		assertEquals("Ibai", erosketak_array[0].getBezero().getIzenBez());
+		assertEquals("Alvarez", erosketak_array[0].getBezero().getAbizen());
+		assertEquals(22, erosketak_array[0].getBezero().getAdina());
+		assertEquals("Gizona", erosketak_array[0].getBezero().getSexua());
+		assertEquals("12345678D", erosketak_array[0].getBezero().getNan());
+		assertEquals("1234", erosketak_array[0].getBezero().getPasahitza());
+		assertEquals(0, erosketak_array[0].getDeskontua(), 0.01);
+		assertEquals(4.5, erosketak_array[0].getTotala(), 0.01);
+		assertEquals(1, erosketak_array[0].getSarrera()[0].getId_sarrera());
+		assertEquals(1, erosketak_array[0].getSarrera()[0].getSaioa().getId_saioa());
+		assertEquals(2, erosketak_array[0].getSarrera()[0].getSaioa().getOrdua().get(Calendar.HOUR));
+		assertEquals(0, erosketak_array[0].getSarrera()[0].getSaioa().getOrdua().get(Calendar.MINUTE));
+		assertEquals(1, erosketak_array[0].getSarrera()[0].getSaioa().getFilma().getId_filma());
+		assertEquals("Handia", erosketak_array[0].getSarrera()[0].getSaioa().getFilma().getIzenburu());
+		assertEquals("Drama", erosketak_array[0].getSarrera()[0].getSaioa().getFilma().getGenero());
+		assertEquals(116, erosketak_array[0].getSarrera()[0].getSaioa().getFilma().getIraupena());
+		assertEquals(4.5, erosketak_array[0].getSarrera()[0].getSaioa().getFilma().getPrezioa(), 0.01);
+	}
+	
+	@Test
+	public void SarrerakGordeTest(){
+		Metodoak metodoak = new Metodoak();
+		String[][] laburpena_array = new String [0][7];
+		Bezero[] bezeroak_array = metodoak.BezeroakKargatu();
+		Erosketa erosketa = new Erosketa();
+		Zinema[] zinemak_array = metodoak.ZinemakKargatu();
+		Erosketa[] erosketak_array = new Erosketa[0];
+		
+		laburpena_array = metodoak.SaioaGorde(laburpena_array, zinemak_array, 1, "Handia","Areto 3", "6-2-2023", "1. 14:0", "4.5", 445);
+		erosketa = metodoak.ErosketaSortu(laburpena_array, "aingeru1", bezeroak_array);
+		metodoak.ErosketaGorde(erosketa, "aingeru1");
+		erosketak_array = metodoak.ErosketakKargatu();
+		erosketak_array = metodoak.ErosketenSarrerakSortu(erosketak_array, erosketa, laburpena_array, zinemak_array, 1);
+		metodoak.SarrerakGorde(erosketak_array);
+		erosketak_array = metodoak.ErosketakKargatu();
+		
+		int id_erosketa = erosketak_array[erosketak_array.length-1].getId_erosketa();
+		int id_sarrera = 0;
+		int id_saioa = 0;
+		
+		Connection conn;					
+		try {
+			String url = "jdbc:mysql://localhost:3306/db_zinema";
+			conn = (Connection) DriverManager.getConnection (url, "root","");
+			Statement comando = (Statement) conn.createStatement();	
+			ResultSet request = comando.executeQuery("Select id_sarrera, id_saioa from sarrera where id_erosketa = " +id_erosketa+ ";");
+			
+			while(request.next()) {
+				id_sarrera = Integer.parseInt(request.getString(1));
+				id_saioa = Integer.parseInt(request.getString(2));
+			}
+			assertEquals(id_sarrera, erosketak_array[erosketak_array.length-1].getSarrera()[0].getId_sarrera());
+			assertEquals(id_saioa, erosketak_array[erosketak_array.length-1].getSarrera()[0].getSaioa().getId_saioa());
+			conn.close();
+		}catch(SQLException ex) {
+			System.out.println("SQLException: "+ ex.getMessage());
+			System.out.println("SQLState: "+ ex.getSQLState());
+			System.out.println("ErrorCode: "+ ex.getErrorCode());
+		}
+	}
+	
+	@Test
+	public void TiketaGordeTest(){
+		Metodoak metodoak = new Metodoak();
+		Zinema[] zinemak_array = metodoak.ZinemakKargatu();
+		Erosketa[] erosketak_array = new Erosketa[0];
+		Erosketa[] eros_test = new Erosketa[1];
+		
+		erosketak_array = metodoak.ErosketakKargatu();
+		eros_test[0] = erosketak_array[0];
+		metodoak.TiketaGorde(eros_test,zinemak_array);
+		
+		BufferedReader fichero;
+		File file = new File("Sarrerak.txt");
+		try {
+		fichero = new BufferedReader(new FileReader(file));
+		
+		assertEquals("Zinema: Cinesa Zubiarte, Aretoa :Areto 1 ,Id bezero : ibai0, Saioa: Sarrera [id_sarrera=1, saioa=Saioa [id_saioa=1, ordua=14:0, data=1-2-2023, filma=Filma [id_filma=1, izenburu=Handia, genero=Drama, iraupena=116, prezioa=4.5]]]", fichero.readLine());
+		
+		fichero.close();
+		
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	}
 }

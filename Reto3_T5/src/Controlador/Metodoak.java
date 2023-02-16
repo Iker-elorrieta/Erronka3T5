@@ -1,6 +1,5 @@
 package Controlador;
 
-import java.awt.Image;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -10,9 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.Calendar;
-import java.util.TimeZone;
 
-import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 import com.mysql.jdbc.Connection;
@@ -27,8 +24,8 @@ import Model.Sarrera;
 import Model.Zinema;
 
 public class Metodoak {
-
 	final String url = "jdbc:mysql://localhost:3306/db_zinema";
+	
 	/**
 	 * Datu basean dauden zinema guztiak kargatzen ditu array batean.
 	 * @return Zinema guztien array bat
@@ -88,7 +85,7 @@ public class Metodoak {
 								String ordua = request3.getString(3);
 								String[] ordua_array = ordua.split(":");
 								Calendar cal = Calendar.getInstance();
-								cal.set( Calendar.AM_PM, Calendar.AM );
+								cal.set(Calendar.AM_PM, Calendar.AM);
 								cal.set(Calendar.HOUR,Integer.parseInt(ordua_array[0]));
 								cal.set(Calendar.MINUTE,Integer.parseInt(ordua_array[1]));
 								
@@ -201,68 +198,6 @@ public class Metodoak {
 	}
 	
 	/**
-	 * Datu basean dauden sarrera guztiak kargatzen ditu array batean.
-	 * @return Sarrera guztien array bat
-	 */
-	public Sarrera[] SarrerakKargatu() {
-		 Sarrera[] sarrerak = new Sarrera[0];
-		 
-		 Connection conn;					
-			try {
-				conn = (Connection) DriverManager.getConnection (url, "root","");
-				Statement comando = (Statement) conn.createStatement();	
-				ResultSet request = comando.executeQuery("Select id_sarrera, s.Id_saioa, Ordua, Data, f.Id_filma,Izenburua, Generoa, iraupena, prezioa, a.Id_aretoa,IzenAret from saioa s JOIN filma f ON s.id_filma=f.id_filma JOIN aretoa a ON s.id_aretoa=a.id_aretoa JOIN sarrera sa ON sa.id_saioa=s.id_saioa;");
-				
-				while(request.next()) {
-					Sarrera sarrera = new Sarrera();					
-					sarrera.setId_sarrera(Integer.parseInt(request.getString(1)));
-					
-					Saioa saio = new Saioa();				
-					saio.setId_saioa(Integer.parseInt(request.getString(2)));
-					
-					//Ordua 
-					String ordua = request.getString(3);
-					String[] ordua_array = ordua.split(":");
-					
-					Calendar cal = Calendar.getInstance();
-					cal.setTimeZone(TimeZone.getTimeZone("UTC" + 1));
-					cal.set(Calendar.HOUR,Integer.parseInt(ordua_array[0]));
-					cal.set(Calendar.MINUTE,Integer.parseInt(ordua_array[1]));
-					
-					//Data
-					String data = request.getString(4);
-					String[] data_array = data.split("-");
-					cal.set(Calendar.YEAR,Integer.parseInt(data_array[0]));
-					cal.set(Calendar.MONTH,Integer.parseInt(data_array[1]));
-					cal.set(Calendar.DAY_OF_MONTH,Integer.parseInt(data_array[2]));
-					saio.setOrdua(cal);
-					
-					//Filma
-					Filma filma = new Filma(Integer.parseInt(request.getString(5)),request.getString(6),request.getString(7),Integer.parseInt(request.getString(8)),Float.parseFloat(request.getString(9)));
-					saio.setFilma(filma);
-				
-						
-					sarrera.setSaioa(saio);
-					
-					//Filmens array-a berridazten du
-					Sarrera[] sarrerak_prov = new Sarrera[sarrerak.length+1];
-					for(int i =0;i<sarrerak.length;i++){
-						sarrerak_prov[i]=sarrerak[i];
-					}
-					sarrerak_prov[sarrerak.length] = sarrera;
-					sarrerak = sarrerak_prov;
-				}
-				conn.close();
-			}catch(SQLException ex) {
-				System.out.println("SQLException: "+ ex.getMessage());
-				System.out.println("SQLState: "+ ex.getSQLState());
-				System.out.println("ErrorCode: "+ ex.getErrorCode());
-			}
-		 
-		 return sarrerak;
-	}
-	
-	/**
 	 * Datu basean dauden erosketa guztiak kargatzen ditu array batean.
 	 * @return Erosketa guztien array bat
 	 */
@@ -271,7 +206,6 @@ public class Metodoak {
 
 		 Connection conn;					
 			try {
-				String url = "jdbc:mysql://localhost:3306/db_zinema";
 				conn = (Connection) DriverManager.getConnection (url, "root","");
 				Statement comando = (Statement) conn.createStatement();	
 				ResultSet request = comando.executeQuery("Select id_erosketa,e.id_bezeroa, izebez, abizbez, sexua, adina, nan, pasahitza, deskontua, totala from erosketa e,bezeroa b WHERE e.id_bezeroa=b.id_bezeroa order by id_erosketa;");
@@ -393,11 +327,6 @@ public class Metodoak {
 		}
 		return botoi_zinemak;
 	}
-
-	public ImageIcon ZinemaArgazkia(String[][] botoi_zinemak, int kont) {
-		ImageIcon logo_cine = new ImageIcon(new ImageIcon(botoi_zinemak[kont][1]).getImage().getScaledInstance(150,150,Image.SCALE_DEFAULT));
-		return logo_cine;
-	}
 	
 	/**
 	 * Aukeratutako zinemaren filmak array bidimentzional batean gordetzen ditu
@@ -442,6 +371,13 @@ public class Metodoak {
 		return filmak_array;
 	}
 	
+	/**
+	 * Aukeratutako filmaren id-a bilatu eta bueltatzen du.
+	 * @param izenburua Filmaren izenburua
+	 * @param zinemak Zinema guztien array-a
+	 * @param id_zinema Aukeratutako zinemaren id-a.
+	 * @return Aukeratutako filmaren id-a.
+	 */
 	public int IdFilma(String izenburua, Zinema[] zinemak,int id_zinema) {
 		int id_filma=0;
 		boolean aurkituta=false;
@@ -458,6 +394,13 @@ public class Metodoak {
 		return id_filma;
 	}
 	
+	/**
+	 * Aukeratutako filmaren saiorik badaude aukeratutako egunean balidaten du.
+	 * @param zinemak Zinemen array-a.
+	 * @param data Aukeratutako data.
+	 * @param id_filma Aukeratutako filmaren id-a.
+	 * @return <b>True</b> filmaren saiorik badago, eta <b>False</b> ez badago saiorik.
+	 */
 	public boolean FilmarenDataBalidatu(Zinema[] zinemak, String data, int id_filma) {
 		boolean aurkituta= false;
 				
@@ -478,6 +421,14 @@ public class Metodoak {
 		return aurkituta;
 	}
 	
+	/**
+	 * Aukeratutako filma, eta aukeratutako egunean dauden saioen orduak bere id-rekin.
+	 * @param id_filma Aukeratutako filmaren id-a.
+	 * @param data Aukeratutako data.
+	 * @param zinemak Zinema guztien array-ak.
+	 * @param id_zinema Aukeratutako zinemaren id-a.
+	 * @return Array bidimentsionala, non lehenengo zutabea orduak dira eta bigarrena saioaren id-a.
+	 */
 	public String[][] SaioOrduakId(int id_filma, String data, Zinema[] zinemak, int id_zinema) {
 		String[][] orduak= new String[0][2];
 		
@@ -516,6 +467,11 @@ public class Metodoak {
 		return orduak;
 	}
 	
+	/**
+	 * Saioen orduak array batean gordetzen ditu.
+	 * @param ordu_id Saioen orduak eta id-ak dituen array bidimentzionala.
+	 * @return Saioen orduak array batean.
+	 */
 	public String[] SaioOrduak(String[][] ordu_id) {
 		String[] orduak = new String[0];
 		
@@ -531,6 +487,14 @@ public class Metodoak {
 		return orduak;
 	}
 	
+	/**
+	 * Aukeratutako saioaren aretoa bilatu eta bueltatzen du.
+	 * @param array_ordu_id Saioen orduak eta id-ak dituen array bidimentzionala.
+	 * @param index Aukeratutako index-a.
+	 * @param zinemak Zinema guztien array-a.
+	 * @param id_zinema Aukeratutako zinemaren array-a.
+	 * @return Aukeratutako saioaren aretoaren izena.
+	 */
 	public String SaioAretoak(String[][] array_ordu_id, int index, Zinema[] zinemak, int id_zinema) {
 		String aretoa = "";		
 		String id_saioa=array_ordu_id[index][1];
@@ -547,6 +511,13 @@ public class Metodoak {
 		return aretoa;
 	}
 	
+	/**
+	 * Aukeratutako filmaren prezioa lortu.
+	 * @param izenburua Filmaren izenburua.
+	 * @param zinemak Zinema guztien array-a.
+	 * @param id_zinema Aukeratutako zinemaren id-a.
+	 * @return Aukeratutako filmaren prezioa.
+	 */
 	public float FilmPrezioa(String izenburua, Zinema[] zinemak, int id_zinema) {
 		float prezioa=0;
 		boolean aurkituta= false;	
@@ -563,6 +534,19 @@ public class Metodoak {
 		return prezioa;
 	}
 	
+	/**
+	 * Aukeratutako saioa gordetzen du array bidimentzional batean.
+	 * @param saioak_laburpen Gordetako saioen array-a.
+	 * @param zinemak Zinema guztiak dituen array-a.
+	 * @param id_zinema Aukeratutako zinemaren id-a.
+	 * @param izenburua Filmaren izenburua.
+	 * @param aretoa Aretoaren izena.
+	 * @param data Data.
+	 * @param ordua Ordua.
+	 * @param prezioa Filmaren prezioa.
+	 * @param id_saioa Saioaren id-a.
+	 * @return Array bidimentzionala saio berri batekin gordeta.
+	 */
 	public String[][] SaioaGorde(String[][] saioak_laburpen,Zinema[] zinemak, int id_zinema, String izenburua, String aretoa,String data, String ordua, String prezioa, int id_saioa){
 		String[] ordua_string = ordua.split(" ");
 		String zinema= "";
@@ -588,6 +572,11 @@ public class Metodoak {
 		return saioak_laburpen;
 	}
 	
+	/**
+	 * Erosketaren prezio totala deskonturik gabe.
+	 * @param saioak Saio guztien array-a.
+	 * @return Filmen prezioaren batuketa.
+	 */
 	public String PrezioTotalaKalkulatu(String[][] saioak) {
 		float totala=0;
 		String[] prob = new String[0];
@@ -601,6 +590,11 @@ public class Metodoak {
 		return formato1.format(totala);
 	}
 	
+	/**
+	 * Erosketaren deskontua kalkulatu.
+	 * @param saio_laburpen Saioen arraya.
+	 * @return <b>0</b> film bat badago, <b>20</b> film 2 badaude edo <b>30</b> hiru film edo gehiago badaude.
+	 */
 	public int DeskotuKalkulatu(String[][] saio_laburpen) {
 		int deskontu = 0;
 		
@@ -612,6 +606,11 @@ public class Metodoak {
 		return deskontu;
 	}
 
+	/**
+	 * Erosketaren prezio totala deskontuarekin.
+	 * @param saio_laburpen Saioen array-a.
+	 * @return Erosketaren prezioa deskontuarekin.
+	 */
 	public String PrezioTotalaKalkulatuDeskontuarekin(String[][] saio_laburpen) {
 		float prezio_totala= 0;
 
@@ -625,6 +624,13 @@ public class Metodoak {
 		return formato1.format(prezio_totala);
 	}
 	
+	/**
+	 * Sartutako erabiltzailearen logina balidatzen du.
+	 * @param erabiltzaile Sartutako erabiltzailea.
+	 * @param pasahitza Sartutako pasahitza.
+	 * @param bezeroak Bezero guztien array-a.
+	 * @return <b>True</b> logina balidoa bada edo <b>False</b> logina okerra bada.
+	 */
 	public  boolean LoginBalidatu(String erabiltzaile, String pasahitza, Bezero[] bezeroak) {
 		boolean balidatu= false;
 		
@@ -636,6 +642,18 @@ public class Metodoak {
 		return balidatu;
 	}
 	
+	/**
+	 * Sartutako erabilzaile berria balidatu eta erregistratzen du.
+	 * @param bezeroak Bezero guztien array-a.
+	 * @param id Bezeroaren id-a.
+	 * @param izen Bezeroaren izena.
+	 * @param abizen Bezeroaren abizena.
+	 * @param adina Bezeroaren adina.
+	 * @param sexua Bezeroaren sexua.
+	 * @param nan Bezeroaren nan-a.
+	 * @param pass Bezeroaren pasahitza.
+	 * @return <b>True</b> erregistroa zuzena izan bada edo <b>False</b> erregistroa okerra izan bada.
+	 */
 	public  boolean RegistroaEgin(Bezero[] bezeroak, String id, String izen, String abizen, int adina, String sexua, String nan, String pass) {
 		boolean erregistratuta = false;
 		boolean existitu=false;
@@ -648,7 +666,6 @@ public class Metodoak {
 		if(!existitu) {
 			Connection conn;					
 			try {
-				String url = "jdbc:mysql://localhost:3306/db_zinema";
 				conn = (Connection) DriverManager.getConnection (url, "root","");
 				Statement comando = (Statement) conn.createStatement();						
 										
@@ -664,6 +681,13 @@ public class Metodoak {
 		return erregistratuta;
 	}
 
+	/**
+	 * Erosketa objetu bat sortzen du.
+	 * @param laburpen_array Erosketaren laburpenaren array-a.
+	 * @param bezeroa Bezeroaren id-a.
+	 * @param bezeroak Bezero guztien array-a.
+	 * @return Erosketa objetua sarrerarik gabe.
+	 */
 	public Erosketa ErosketaSortu(String[][] laburpen_array, String bezeroa, Bezero[] bezeroak) {
 		Erosketa erosketa = new Erosketa();
 		boolean aurkituta= false; 
@@ -683,11 +707,15 @@ public class Metodoak {
 		return erosketa;
 	}
 	
+	/**
+	 * Erosketa datubasera pasatzen du.
+	 * @param erosketa	Erosketa objetua.
+	 * @param bezero_id Bezeroaren id-a.
+	 */
 	public void ErosketaGorde(Erosketa erosketa, String bezero_id) {
 		
 		Connection conn;					
 		try {
-			String url = "jdbc:mysql://localhost:3306/db_zinema";
 			conn = (Connection) DriverManager.getConnection (url, "root","");
 			Statement comando = (Statement) conn.createStatement();		
 		
@@ -700,6 +728,15 @@ public class Metodoak {
 		}		
 	}
 	
+	/**
+	 * Sortutako erosketaren sarrerak sortzen eta gordetzen ditu.
+	 * @param erosketak Erosketa guztien array-a.
+	 * @param erosketa Erosketa objetua.
+	 * @param laburpen_array Erosketaren laburpenaren array-a.
+	 * @param zinemak Zinema guztien array-a.
+	 * @param id_zinema Zinemaren id-a.
+	 * @return Erosketa guztien array-a azkeneko erosketaren sarrerekin.
+	 */
 	public Erosketa[] ErosketenSarrerakSortu(Erosketa[] erosketak,Erosketa erosketa, String[][] laburpen_array,Zinema[] zinemak,int id_zinema) {
 		Sarrera[] sarrerak= new Sarrera[0];
 		
@@ -744,12 +781,15 @@ public class Metodoak {
 		return erosketak;
 	}
 	
+	/**
+	 * Sarrerak datu basera pasatzen du.
+	 * @param erosketak Erosketa guztien array-a.
+	 */
 	public void SarrerakGorde(Erosketa[] erosketak) {
 		int i=0;
 		
 		Connection conn;					
 		try {
-			String url = "jdbc:mysql://localhost:3306/db_zinema";
 			conn = (Connection) DriverManager.getConnection (url, "root","");
 			Statement comando = (Statement) conn.createStatement();		
 			while(i<erosketak[erosketak.length-1].getSarrera().length) {
@@ -765,6 +805,11 @@ public class Metodoak {
 		
 	}
 	
+	/**
+	 * Azkenengo erosketaren tiketa sortzen du.
+	 * @param erosketak Erosketa guztien array-a.
+	 * @param zinemak Zinema guztien array-a.
+	 */
 	public void TiketaGorde(Erosketa[] erosketak, Zinema[] zinemak) {
 		String zinema = "";
 		String aretoa = "";
