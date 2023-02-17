@@ -361,7 +361,7 @@ public class Hasiera extends JFrame {
 					zinemak.setVisible(false);
 					laburpena.setVisible(true);
 				}else {
-					JOptionPane.showMessageDialog(null, "Ez daude filmak gordeta.","Alerta", JOptionPane.INFORMATION_MESSAGE);
+					dispose();
 				}
 			}
 		});
@@ -371,9 +371,10 @@ public class Hasiera extends JFrame {
 		JButton btn_ongietorri = new JButton("");
 		btn_ongietorri.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(botoi_zinemak.length>3) {
-					setBounds(100, 100, 676, 550);
-					btn_amaitu.setBounds(288, 450, 89, 23);
+				if(botoi_zinemak.length/3.0>1) {
+					int h= (int) Math.ceil(botoi_zinemak.length/3.0);
+					setBounds(100, 100, 676, 422+((h-1)*150));
+					btn_amaitu.setBounds(288,((h-1)*150)+ 313, 89, 23);
 				}
 				ongi_etorri.setVisible(false);
 				zinemak.setVisible(true);
@@ -390,9 +391,10 @@ public class Hasiera extends JFrame {
 		JButton btn_atzera_1 = new JButton("");
 		btn_atzera_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(botoi_zinemak.length>3) {
-					setBounds(100, 100, 676, 550);
-					btn_amaitu.setBounds(288, 450, 89, 23);
+				if(botoi_zinemak.length/3.0>1) {
+					int h= (int) Math.ceil(botoi_zinemak.length/3.0);
+					setBounds(100, 100, 676, 422+((h-1)*150));
+					btn_amaitu.setBounds(288,((h-1)*150)+ 313, 89, 23);
 				}else {
 					setBounds(100, 100, 676, 422);
 					btn_amaitu.setBounds(288, 313, 89, 23);
@@ -549,9 +551,10 @@ public class Hasiera extends JFrame {
 		JButton btn_atzera_4 = new JButton("");
 		btn_atzera_4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(botoi_zinemak.length>3) {
-					setBounds(100, 100, 676, 550);
-					btn_amaitu.setBounds(288, 450, 89, 23);
+				if(botoi_zinemak.length/3.0>1) {
+					int h= (int) Math.ceil(botoi_zinemak.length/3.0);
+					setBounds(100, 100, 676, 422+((h-1)*150));
+					btn_amaitu.setBounds(288,((h-1)*150)+ 313, 89, 23);
 				}
 				laburpena.setVisible(false);
 				zinemak.setVisible(true);
@@ -603,6 +606,11 @@ public class Hasiera extends JFrame {
 						textField_registroAdin.setText("");
 						textField_registroNan.setText("");
 						laburpen_array = new String[0][7];
+						if(botoi_zinemak.length/3.0>1) {
+							int h= (int) Math.ceil(botoi_zinemak.length/3.0);
+							setBounds(100, 100, 676, 422+((h-1)*150));
+							btn_amaitu.setBounds(288,((h-1)*150)+ 313, 89, 23);
+						}
 						login.setVisible(false);
 						ongi_etorri.setVisible(true);							
 					}else {
@@ -653,7 +661,13 @@ public class Hasiera extends JFrame {
 							textField_registroAdin.setText("");
 							textField_registroNan.setText("");
 							laburpen_array = new String[0][7];
-							login.setVisible(false);
+							
+							if(botoi_zinemak.length/3.0>1) {
+								int h= (int) Math.ceil(botoi_zinemak.length/3.0);
+								setBounds(100, 100, 676, 422+((h-1)*150));
+								btn_amaitu.setBounds(288,((h-1)*150)+ 313, 89, 23);
+							}
+							erregistratu.setVisible(false);
 							ongi_etorri.setVisible(true);	
 						}else {
 							dispose();
@@ -692,9 +706,10 @@ public class Hasiera extends JFrame {
 				textField_registroNan.setText("");
 				textField_registroPas.setText("");
 				laburpen_array = new String[0][7];
-				if(botoi_zinemak.length>3) {
-					setBounds(100, 100, 676, 550);
-					btn_amaitu.setBounds(288, 450, 89, 23);
+				if(botoi_zinemak.length/3.0>1) {
+					int h= (int) Math.ceil(botoi_zinemak.length/3.0);
+					setBounds(100, 100, 676, 422+((h-1)*150));
+					btn_amaitu.setBounds(288,((h-1)*150)+ 313, 89, 23);
 				}
 				login.setVisible(false);
 				zinemak.setVisible(true);
@@ -720,9 +735,10 @@ public class Hasiera extends JFrame {
 				textField_registroPas.setText("");
 				textField_registroPas.setText("");
 				laburpen_array = new String[0][7];
-				if(botoi_zinemak.length>3) {
-					setBounds(100, 100, 676, 550);
-					btn_amaitu.setBounds(288, 450, 89, 23);
+				if(botoi_zinemak.length/3.0>1) {
+					int h= (int) Math.ceil(botoi_zinemak.length/3.0);
+					setBounds(100, 100, 676, 422+((h-1)*150));
+					btn_amaitu.setBounds(288,((h-1)*150)+ 313, 89, 23);
 				}
 				erregistratu.setVisible(false);
 				zinemak.setVisible(true);

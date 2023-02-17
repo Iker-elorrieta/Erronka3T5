@@ -246,6 +246,7 @@ public class Metodoak {
 							String[] ordua_array = ordua.split(":");
 							
 							Calendar cal = Calendar.getInstance();
+							cal.set(Calendar.AM_PM, Calendar.AM);
 							cal.set(Calendar.HOUR,Integer.parseInt(ordua_array[0]));
 							cal.set(Calendar.MINUTE,Integer.parseInt(ordua_array[1]));
 							
