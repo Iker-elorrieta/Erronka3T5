@@ -436,7 +436,7 @@ public class MetodoakTest {
 		try {
 		fichero = new BufferedReader(new FileReader(file));
 		
-		assertEquals("Zinema: Cinesa Zubiarte, Aretoa :Areto 1 ,Id bezero : ibai0, Saioa: Sarrera [id_sarrera=1, saioa=Saioa [id_saioa=1, ordua=14:0, data=1-2-2023, filma=Filma [id_filma=1, izenburu=Handia, genero=Drama, iraupena=116, prezioa=4.5]]]", fichero.readLine());
+		assertEquals("Zinema: Cinesa Zubiarte, Aretoa :Areto 1 ,Id bezero : ibai0, Ordua=14:0, data=1-2-2023, Izenburua=Handia, genero=Drama, iraupena=116, prezioa=4.5", fichero.readLine());
 		
 		fichero.close();
 		

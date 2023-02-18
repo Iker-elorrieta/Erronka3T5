@@ -34,8 +34,7 @@ public class Sarrera {
 	// ToString
 	@Override
 	public String toString() {
-		return "Sarrera [id_sarrera=" + id_sarrera + ", saioa="
-				+ saioa + "]";
+		return ""+saioa ;
 	}
 	
 	// Equals

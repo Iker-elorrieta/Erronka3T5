@@ -1,1 +1,3 @@
-Zinema: Cinesa Zubiarte, Aretoa :Areto 1 ,Id bezero : ibai0, Saioa: Sarrera [id_sarrera=1, saioa=Saioa [id_saioa=1, ordua=14:0, data=1-2-2023, filma=Filma [id_filma=1, izenburu=Handia, genero=Drama, iraupena=116, prezioa=4.5]]]
+Zinema: Cinesa Zubiarte, Aretoa :Areto 1 ,Id bezero : ibai0, Ordua=20:0, data=16-2-2023, Izenburua=La novia de Frankenstein, genero=Zientzia, iraupena=75, prezioa=5.75
+Zinema: Golem Alhondiga, Aretoa :Areto 2 ,Id bezero : ibai0, Ordua=23:0, data=8-2-2023, Izenburua=2001: Odisea en el espacio, genero=Zientzia, iraupena=142, prezioa=5.75
+Zinema: Cinesa Max Ocio, Aretoa :Areto 3 ,Id bezero : ibai0, Ordua=20:0, data=9-2-2023, Izenburua=Million Dollar Baby, genero=Drama, iraupena=133, prezioa=4.5

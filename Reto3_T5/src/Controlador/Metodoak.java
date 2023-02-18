@@ -25,6 +25,41 @@ import Model.Zinema;
 
 public class Metodoak {
 	final String url = "jdbc:mysql://localhost:3306/db_zinema";
+	final String erabiltzaile = "root";
+	final String pass="";
+	//Zinema
+	final String id_zine= "Id_zinema";
+	final String izenZin = "IzenZin";
+	final String kokalekua = "Kokalekua";
+	final String bounds = "Bounds";
+	final String route = "Route";
+	//Erosketa
+	final String id_erosketa = "id_erosketa";
+	final String deskontua = "deskontua";
+	final String totala = "totala";
+	//Bezeroa
+	final String izebez = "izebez";
+	final String abizbez = "abizbez";
+	final String sexua = "sexua";
+	final String adina= "adina";
+	final String nan= "nan";
+	final String pasahitza="pasahitza";
+	final String id_bezeroa ="id_bezeroa";
+	//Saioa
+	final String id_saioa="id_saioa";
+	final String ordua = "ordua";
+	final String data="data";
+	//Filma
+	final String id_filma="id_filma";
+	final String izenburua="izenburua";
+	final String generoa = "generoa";
+	final String iraupena = "iraupena";
+	final String prezioa ="prezioa";	
+	//Aretoa
+	final String id_areto = "id_aretoa";
+	final String izenAret = "izenAret";
+	//Sarrera
+	final String id_sarrera = "id_sarrera";
 	
 	/**
 	 * Datu basean dauden zinema guztiak kargatzen ditu array batean.
@@ -38,9 +73,9 @@ public class Metodoak {
 		
 		Connection conn;					
 		try {
-			conn = (Connection) DriverManager.getConnection (url, "root","");
+			conn = (Connection) DriverManager.getConnection (url, erabiltzaile,pass);
 			Statement comando = (Statement) conn.createStatement();	
-			ResultSet request = comando.executeQuery("Select Id_zinema,IzenZin, Kokalekua, Bounds, Route from zinema;");
+			ResultSet request = comando.executeQuery("Select "+id_zine+","+izenZin+","+kokalekua+","+bounds+","+route+" from zinema;");
 
 			int id_zinema = 1;
 			//Zinema bakoitzaren informazioa gorde
@@ -54,10 +89,10 @@ public class Metodoak {
 				zinema.setRoute(request.getString(5));
 				
 				Connection conn2;
-				try {	
-					conn2 = (Connection) DriverManager.getConnection (url, "root","");
+					
+					conn2 = (Connection) DriverManager.getConnection (url, erabiltzaile,pass);
 					Statement comando2 = (Statement) conn2.createStatement();	
-					ResultSet request2 = comando2.executeQuery("Select Id_aretoa, IzenAret from aretoa a join zinema z ON a.Id_zinema=z.Id_zinema WHERE a.id_zinema="+id_zinema+";");		
+					ResultSet request2 = comando2.executeQuery("Select "+id_areto+","+izenAret+" from aretoa a join zinema z ON a."+id_zine+"= z."+id_zine+" WHERE a."+id_zine+"="+id_zinema+";");		
 					aretoak= new Aretoa[0];
 					
 					//Zinema bakoitzean dauden aretoen informazioa gorde
@@ -69,10 +104,10 @@ public class Metodoak {
 						
 						//Zinema bakoitzena dauden aretoen Saioak kargatzen ditu
 						Connection conn3;
-						try {	
-							conn3 = (Connection) DriverManager.getConnection (url, "root","");
+							
+							conn3 = (Connection) DriverManager.getConnection (url, erabiltzaile,pass);
 							Statement comando3 = (Statement) conn3.createStatement();	
-							ResultSet request3 = comando3.executeQuery("Select Id_aretoa, Id_saioa, Ordua, Data, f.Id_filma,Izenburua, Generoa, iraupena, prezioa from saioa s join filma f using(id_filma) join aretoa using (id_aretoa) where id_aretoa="+id_aretoa+" order by data,ordua;");		
+							ResultSet request3 = comando3.executeQuery("Select "+id_areto+","+id_saioa+","+ordua+","+data+",f."+id_filma+","+izenburua+","+generoa+","+iraupena+","+prezioa+" from saioa s join filma f using("+id_filma+") join aretoa using ("+id_areto+") where "+id_areto+"="+id_aretoa+" order by "+data+","+ordua+";");		
 							saioak= new Saioa[0];
 							
 							//Zinema bakoitzena dauden aretoen Saioak gordetzen ditu
@@ -111,12 +146,7 @@ public class Metodoak {
 								
 							}
 							conn3.close();
-						}catch(SQLException ex) {
-							System.out.println("SQLException: "+ ex.getMessage());
-							System.out.println("SQLState: "+ ex.getSQLState());
-							System.out.println("ErrorCode: "+ ex.getErrorCode());
-						}
-						
+												
 						areto.setSaioak(saioak);
 						
 						//Aretoen array-a berridazten du
@@ -129,11 +159,7 @@ public class Metodoak {
 						id_aretoa++;
 					}
 					conn2.close();
-				}catch(SQLException ex) {
-						System.out.println("SQLException: "+ ex.getMessage());
-						System.out.println("SQLState: "+ ex.getSQLState());
-						System.out.println("ErrorCode: "+ ex.getErrorCode());
-				}			
+					
 				zinema.setAreto(aretoak);
 				
 				//Zinemen array-a berridazten du
@@ -163,9 +189,9 @@ public class Metodoak {
 		
 		Connection conn;					
 		try {
-			conn = (Connection) DriverManager.getConnection (url, "root","");
+			conn = (Connection) DriverManager.getConnection (url, erabiltzaile,pass);
 			Statement comando = (Statement) conn.createStatement();	
-			ResultSet request = comando.executeQuery("Select id_bezeroa, izebez, abizbez, sexua, adina, nan, pasahitza from bezeroa;");
+			ResultSet request = comando.executeQuery("Select "+id_bezeroa+","+izebez+","+abizbez+","+sexua+","+adina+","+nan+","+pasahitza+" from bezeroa;");
 			
 			while(request.next()) {
 				Bezero bezero = new Bezero();
@@ -206,9 +232,9 @@ public class Metodoak {
 
 		 Connection conn;					
 			try {
-				conn = (Connection) DriverManager.getConnection (url, "root","");
+				conn = (Connection) DriverManager.getConnection (url, erabiltzaile,pass);
 				Statement comando = (Statement) conn.createStatement();	
-				ResultSet request = comando.executeQuery("Select id_erosketa,e.id_bezeroa, izebez, abizbez, sexua, adina, nan, pasahitza, deskontua, totala from erosketa e,bezeroa b WHERE e.id_bezeroa=b.id_bezeroa order by id_erosketa;");
+				ResultSet request = comando.executeQuery("Select "+id_erosketa+",e."+id_bezeroa+"," +izebez+","+abizbez+","+sexua+","+adina+","+nan+","+pasahitza+","+deskontua+","+totala+" from erosketa e,bezeroa b WHERE e."+id_bezeroa+"=b."+id_bezeroa+" order by "+id_erosketa+";");
 				
 				while(request.next()) {
 					Erosketa erosketa = new Erosketa();
@@ -231,9 +257,9 @@ public class Metodoak {
 					Sarrera[] sarrerak = new Sarrera[0];
 					Connection conn2;					
 					try {
-						conn2 = (Connection) DriverManager.getConnection (url, "root","");
+						conn2 = (Connection) DriverManager.getConnection (url, erabiltzaile,pass);
 						Statement comando2 = (Statement) conn2.createStatement();	
-						ResultSet request2 = comando2.executeQuery("Select id_sarrera, s.Id_saioa, Ordua, Data, f.Id_filma,Izenburua, Generoa, iraupena, prezioa, a.Id_aretoa,IzenAret from saioa s JOIN filma f ON s.id_filma=f.id_filma JOIN aretoa a ON s.id_aretoa=a.id_aretoa JOIN sarrera sa ON sa.id_saioa=s.id_saioa JOIN erosketa e ON e.id_erosketa=sa.id_erosketa WHERE e.id_erosketa='"+Integer.parseInt(request.getString(1))+"';");
+						ResultSet request2 = comando2.executeQuery("Select "+id_sarrera+",s."+id_saioa+","+ordua+","+data+",f."+id_filma+","+izenburua+","+generoa+","+iraupena+","+prezioa+",a."+id_areto+","+izenAret+" from saioa s JOIN filma f ON s."+id_filma+"= f."+id_filma+" JOIN aretoa a ON s."+id_areto+"= a."+id_areto+" JOIN sarrera sa ON sa."+id_saioa+"=s."+id_saioa+" JOIN erosketa e ON e."+id_erosketa+"= sa."+id_erosketa+" WHERE e."+id_erosketa+"='"+Integer.parseInt(request.getString(1))+"';");
 						
 						while(request2.next()) {
 							Sarrera sarrera = new Sarrera();					
@@ -447,7 +473,7 @@ public class Metodoak {
 							orduak_prov[l][h]=orduak[l][h];
 						}
 					}
-					orduak_prov[orduak.length][0] = (zinemak[id_zinema-1].getAretoa()[j].getSaioak()[k].getOrdua().get(Calendar.HOUR)+12)+":"+zinemak[id_zinema].getAretoa()[j].getSaioak()[k].getOrdua().get(Calendar.MINUTE);
+					orduak_prov[orduak.length][0] = (zinemak[id_zinema-1].getAretoa()[j].getSaioak()[k].getOrdua().get(Calendar.HOUR)+12)+":"+zinemak[id_zinema-1].getAretoa()[j].getSaioak()[k].getOrdua().get(Calendar.MINUTE);
 					orduak_prov[orduak.length][1] = String.valueOf(zinemak[id_zinema-1].getAretoa()[j].getSaioak()[k].getId_saioa());
 					orduak = orduak_prov;
 				}
@@ -655,7 +681,7 @@ public class Metodoak {
 	 * @param pass Bezeroaren pasahitza.
 	 * @return <b>True</b> erregistroa zuzena izan bada edo <b>False</b> erregistroa okerra izan bada.
 	 */
-	public  boolean RegistroaEgin(Bezero[] bezeroak, String id, String izen, String abizen, int adina, String sexua, String nan, String pass) {
+	public  boolean RegistroaEgin(Bezero[] bezeroak, String id, String izen, String abizen, int adina, String sexua, String nan, String passa) {
 		boolean erregistratuta = false;
 		boolean existitu=false;
 		
@@ -667,10 +693,10 @@ public class Metodoak {
 		if(!existitu) {
 			Connection conn;					
 			try {
-				conn = (Connection) DriverManager.getConnection (url, "root","");
+				conn = (Connection) DriverManager.getConnection (url, erabiltzaile,pass);
 				Statement comando = (Statement) conn.createStatement();						
 										
-				comando.executeUpdate( "INSERT INTO bezeroa VALUES ('"+id+"','"+izen+"','"+abizen+"',"+adina+",'"+sexua+"','"+nan+"','"+pass+"');");
+				comando.executeUpdate( "INSERT INTO bezeroa VALUES ('"+id+"','"+izen+"','"+abizen+"',"+adina+",'"+sexua+"','"+nan+"','"+passa+"');");
 				erregistratuta=true;
 				conn.close();
 			}catch(SQLException ex) {
@@ -717,10 +743,10 @@ public class Metodoak {
 		
 		Connection conn;					
 		try {
-			conn = (Connection) DriverManager.getConnection (url, "root","");
+			conn = (Connection) DriverManager.getConnection (url, erabiltzaile,pass);
 			Statement comando = (Statement) conn.createStatement();		
 		
-			comando.executeUpdate( "INSERT INTO erosketa (Deskontua,Totala,Id_bezeroa) VALUES ("+erosketa.getDeskontua()+","+erosketa.getTotala()+",'"+bezero_id+"');");
+			comando.executeUpdate( "INSERT INTO erosketa ("+deskontua+","+totala+","+id_bezeroa+") VALUES ("+erosketa.getDeskontua()+","+erosketa.getTotala()+",'"+bezero_id+"');");
 			conn.close();
 		}catch(SQLException ex) {
 				System.out.println("SQLException: "+ ex.getMessage());
@@ -791,10 +817,10 @@ public class Metodoak {
 		
 		Connection conn;					
 		try {
-			conn = (Connection) DriverManager.getConnection (url, "root","");
+			conn = (Connection) DriverManager.getConnection (url, erabiltzaile,pass);
 			Statement comando = (Statement) conn.createStatement();		
 			while(i<erosketak[erosketak.length-1].getSarrera().length) {
-				comando.executeUpdate("INSERT INTO sarrera (id_saioa,id_erosketa) VALUES ("+erosketak[erosketak.length-1].getSarrera()[i].getSaioa().getId_saioa()+","+erosketak[erosketak.length-1].getId_erosketa()+");");
+				comando.executeUpdate("INSERT INTO sarrera ("+id_saioa+","+id_erosketa+") VALUES ("+erosketak[erosketak.length-1].getSarrera()[i].getSaioa().getId_saioa()+","+erosketak[erosketak.length-1].getId_erosketa()+");");
 				i++;
 			}
 			conn.close();
@@ -815,7 +841,6 @@ public class Metodoak {
 		String zinema = "";
 		String aretoa = "";
 		File file = new File("Sarrerak.txt");
-		
 		BufferedWriter fichero;
 		
 			try {
@@ -827,7 +852,7 @@ public class Metodoak {
 				for(int h=0;h<zinemak.length && !aurkituta;h++) {
 					for(int k=0;k<zinemak[h].getAretoa().length && !aurkituta;k++) {
 						for(int j=0;j<zinemak[h].getAretoa()[k].getSaioak().length && !aurkituta;j++) {
-							if(zinemak[h].getAretoa()[k].getSaioak()[j].getId_saioa() == erosketak[erosketak.length-1].getSarrera()[i].getId_sarrera()){
+							if(zinemak[h].getAretoa()[k].getSaioak()[j].getId_saioa() == erosketak[erosketak.length-1].getSarrera()[i].getSaioa().getId_saioa()){
 								zinema = zinemak[h].getIzenZin();
 								aretoa = zinemak[h].getAretoa()[k].getIzenAret();
 								aurkituta = true;
@@ -836,7 +861,7 @@ public class Metodoak {
 					}	
 				}
 				
-				fichero.write("Zinema: "+zinema+", Aretoa :"+aretoa+" ,Id bezero : "+erosketak[erosketak.length-1].getBezero().getId_bezero()+", Saioa: "+erosketak[erosketak.length-1].getSarrera()[i].toString()+"\n");
+				fichero.write("Zinema: "+zinema+", Aretoa :"+aretoa+" ,Id bezero : "+erosketak[erosketak.length-1].getBezero().getId_bezero()+", "+erosketak[erosketak.length-1].getSarrera()[i].toString()+"\n");
 			}
 			fichero.close();
 			JOptionPane.showMessageDialog(null,
@@ -845,7 +870,6 @@ public class Metodoak {
 					JOptionPane.INFORMATION_MESSAGE);
 			
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}			
 	}
