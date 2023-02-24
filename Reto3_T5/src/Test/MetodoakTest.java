@@ -20,6 +20,7 @@ import com.mysql.jdbc.Statement;
 import Controlador.Metodoak;
 import Model.Bezero;
 import Model.Erosketa;
+import Model.Saioa;
 import Model.Zinema;
 
 public class MetodoakTest {
@@ -105,6 +106,16 @@ public class MetodoakTest {
 	}
 	
 	@Test
+	public void FilmBatenDatakTest(){
+		Metodoak metodoak = new Metodoak();
+		Zinema[] zinemak_array = metodoak.ZinemakKargatu();
+		Zinema zinema = zinemak_array[0];
+		String[] datak = metodoak.FilmBatenDatak(zinemak_array,"Handia",zinema);
+		
+		assertEquals("2023-2-3", datak[1]);
+	}
+	
+	@Test
 	public void IdFilmaTest(){
 		Metodoak metodoak = new Metodoak();
 		Zinema[] zinemak_array = metodoak.ZinemakKargatu();
@@ -160,68 +171,95 @@ public class MetodoakTest {
 	}
 	
 	@Test
-	public void SaioaGordeTest(){
+	public void SaioakGordeTest(){
 		Metodoak metodoak = new Metodoak();
-		String[][] laburpena = new String [0][7];
 		Zinema[] zinemak_array = metodoak.ZinemakKargatu();
-		laburpena = metodoak.SaioaGorde(laburpena,zinemak_array, 1, "Handia","Areto 3", "6-2-2023", "1. 14:0", "4.5",445);
-		assertEquals("Cinesa Zubiarte", laburpena[0][0]);
-		assertEquals("Handia", laburpena[0][1]);
-		assertEquals("6-2-2023", laburpena[0][2]);
-		assertEquals("14:0", laburpena[0][3]);
-		assertEquals("Areto 3", laburpena[0][4]);
-		assertEquals("4.5", laburpena[0][5]);
-		assertEquals("445", laburpena[0][6]);
+		Zinema zinema = zinemak_array[0];
+		Saioa[] saioak_array = new Saioa[0];
+		saioak_array = metodoak.SaioakGorde(saioak_array, zinema, zinemak_array, 1);
+		
+		assertEquals(1, saioak_array[0].getId_saioa());
+		assertEquals(2, saioak_array[0].getOrdua().get(Calendar.HOUR));
+		assertEquals(0, saioak_array[0].getOrdua().get(Calendar.MINUTE));
+		assertEquals(1, saioak_array[0].getFilma().getId_filma());
+		assertEquals("Handia", saioak_array[0].getFilma().getIzenburu());
+		assertEquals("Drama", saioak_array[0].getFilma().getGenero());
+		assertEquals(116, saioak_array[0].getFilma().getIraupena());
+		assertEquals(4.5, saioak_array[0].getFilma().getPrezioa(), 0.01);
+	}
+	
+	@Test
+	public void SaioakErakutsiTest(){
+		Metodoak metodoak = new Metodoak();
+		Zinema[] zinemak_array = metodoak.ZinemakKargatu();
+		Zinema zinema = zinemak_array[0];
+		Saioa[] saioak_array = new Saioa[0];
+		saioak_array = metodoak.SaioakGorde(saioak_array, zinema, zinemak_array, 1);
+		String[][] laburpen_array = new String[0][7];
+		laburpen_array = metodoak.SaioakErakutsi(saioak_array,zinemak_array);
+		
+		assertEquals("Cinesa Zubiarte",laburpen_array[0][0]);
+		assertEquals("Handia",laburpen_array[0][1]);
+		assertEquals("2023-2-1",laburpen_array[0][2]);
+		assertEquals("14:00",laburpen_array[0][3]);
+		assertEquals("Areto 1",laburpen_array[0][4]);
+		assertEquals("4.5€",laburpen_array[0][5]);
+		assertEquals("1",laburpen_array[0][6]);
 	}
 	
 	@Test
 	public void PrezioTotalaKalkulatuTest(){
 		Metodoak metodoak = new Metodoak();
-		String[][] laburpena = new String [0][7];
 		Zinema[] zinemak_array = metodoak.ZinemakKargatu();
-		laburpena = metodoak.SaioaGorde(laburpena,zinemak_array, 1, "Handia","Areto 3", "6-2-2023", "1. 14:0", "4.5", 445);
-		assertEquals("4,50", metodoak.PrezioTotalaKalkulatu(laburpena));
+		Zinema zinema = zinemak_array[0];
+		Saioa[] saioak_array = new Saioa[0];
+		saioak_array = metodoak.SaioakGorde(saioak_array, zinema, zinemak_array, 1);
+		assertEquals("4,50", metodoak.PrezioTotalaKalkulatu(saioak_array));
 	}
 	
 	@Test
 	public void DeskotuKalkulatu0Test(){
 		Metodoak metodoak = new Metodoak();
-		String[][] laburpena = new String [0][7];
 		Zinema[] zinemak_array = metodoak.ZinemakKargatu();
-		laburpena = metodoak.SaioaGorde(laburpena,zinemak_array, 1, "Handia","Areto 3", "6-2-2023", "1. 14:0", "4.5", 445);
-		assertEquals(0, metodoak.DeskotuKalkulatu(laburpena));
+		Zinema zinema = zinemak_array[0];
+		Saioa[] saioak_array = new Saioa[0];
+		saioak_array = metodoak.SaioakGorde(saioak_array, zinema, zinemak_array, 445);
+		assertEquals(0, metodoak.DeskotuKalkulatu(saioak_array));
 	}
 	
 	@Test
 	public void DeskotuKalkulatu20Test(){
 		Metodoak metodoak = new Metodoak();
-		String[][] laburpena = new String [0][7];
 		Zinema[] zinemak_array = metodoak.ZinemakKargatu();
-		laburpena = metodoak.SaioaGorde(laburpena,zinemak_array, 1, "Handia","Areto 3", "6-2-2023", "1. 14:0", "4.5", 445);
-		laburpena = metodoak.SaioaGorde(laburpena,zinemak_array, 1, "La novia de Frankenstein","Areto 1", "6-2-2023", "3. 20:0", "5.75", 21);
-		assertEquals(20, metodoak.DeskotuKalkulatu(laburpena));
+		Zinema zinema = zinemak_array[0];
+		Saioa[] saioak_array = new Saioa[0];
+		saioak_array = metodoak.SaioakGorde(saioak_array, zinema, zinemak_array, 445);
+		saioak_array = metodoak.SaioakGorde(saioak_array, zinema, zinemak_array, 21);
+		assertEquals(20, metodoak.DeskotuKalkulatu(saioak_array));
 	}
 	
 	@Test
 	public void DeskotuKalkulatu30Test(){
 		Metodoak metodoak = new Metodoak();
-		String[][] laburpena = new String [0][5];
 		Zinema[] zinemak_array = metodoak.ZinemakKargatu();
-		laburpena = metodoak.SaioaGorde(laburpena,zinemak_array, 1, "Handia","Areto 3", "6-2-2023", "1. 14:0", "4.5", 445);
-		laburpena = metodoak.SaioaGorde(laburpena,zinemak_array, 1, "La novia de Frankenstein","Areto 1", "6-2-2023", "3. 20:0", "5.75", 21);
-		laburpena = metodoak.SaioaGorde(laburpena,zinemak_array, 1, "El gran Lebowsky","Areto 2", "28-3-2023", "4. 23:0", "6.25", 207);
-		assertEquals(30, metodoak.DeskotuKalkulatu(laburpena));
+		Zinema zinema = zinemak_array[0];
+		Saioa[] saioak_array = new Saioa[0];
+		saioak_array = metodoak.SaioakGorde(saioak_array, zinema, zinemak_array, 445);
+		saioak_array = metodoak.SaioakGorde(saioak_array, zinema, zinemak_array, 21);
+		saioak_array = metodoak.SaioakGorde(saioak_array, zinema, zinemak_array, 207);
+		assertEquals(30, metodoak.DeskotuKalkulatu(saioak_array));
 	}
 	
 	@Test
 	public void PrezioTotalaKalkulatuDeskontuarekinTest(){
 		Metodoak metodoak = new Metodoak();
-		String[][] laburpena = new String [0][5];
 		Zinema[] zinemak_array = metodoak.ZinemakKargatu();
-		laburpena = metodoak.SaioaGorde(laburpena,zinemak_array, 1, "Handia","Areto 3", "6-2-2023", "1. 14:0", "4.5", 445);
-		laburpena = metodoak.SaioaGorde(laburpena,zinemak_array, 1, "La novia de Frankenstein","Areto 1", "6-2-2023", "3. 20:0", "5.75", 21);
-		laburpena = metodoak.SaioaGorde(laburpena,zinemak_array, 1, "El gran Lebowsky","Areto 2", "28-3-2023", "4. 23:0", "6.25", 207);
-		assertEquals("11,55", metodoak.PrezioTotalaKalkulatuDeskontuarekin(laburpena));
+		Zinema zinema = zinemak_array[0];
+		Saioa[] saioak_array = new Saioa[0];
+		saioak_array = metodoak.SaioakGorde(saioak_array, zinema, zinemak_array, 445);
+		saioak_array = metodoak.SaioakGorde(saioak_array, zinema, zinemak_array, 21);
+		saioak_array = metodoak.SaioakGorde(saioak_array, zinema, zinemak_array, 207);
+		assertEquals("11,55", metodoak.PrezioTotalaKalkulatuDeskontuarekin(saioak_array));
 	}
 	
 	@Test
@@ -229,6 +267,11 @@ public class MetodoakTest {
 		Metodoak metodoak = new Metodoak();
 		Bezero[] bezeroak_array = metodoak.BezeroakKargatu();
 		assertTrue(metodoak.LoginBalidatu("ibai0","1234", bezeroak_array));
+	}
+	
+	@Test
+	public void NanBalidatuTest(){
+		assertTrue(Metodoak.NanBalidatu("78950146R"));
 	}
 	
 	@Test
@@ -285,12 +328,13 @@ public class MetodoakTest {
 	@Test
 	public void ErosketaSortuTest(){
 		Metodoak metodoak = new Metodoak();
-		String[][] laburpena = new String [0][7];
 		Zinema[] zinemak_array = metodoak.ZinemakKargatu();
-		laburpena = metodoak.SaioaGorde(laburpena,zinemak_array, 1, "Handia","Areto 3", "6-2-2023", "1. 14:0", "4.5", 445);
+		Zinema zinema = zinemak_array[0];
+		Saioa[] saioak_array = new Saioa[0];
+		saioak_array = metodoak.SaioakGorde(saioak_array, zinema, zinemak_array, 445);
 		Bezero[] bezeroak_array = metodoak.BezeroakKargatu();
 		Erosketa erosketa = new Erosketa();
-		erosketa = metodoak.ErosketaSortu(laburpena, "aingeru1", bezeroak_array);
+		erosketa = metodoak.ErosketaSortu("aingeru1", bezeroak_array, saioak_array);
 			
 		String[] des_prov = erosketa.getDeskontua().toString().split("\\.");
 			
@@ -303,12 +347,13 @@ public class MetodoakTest {
 	@Test
 	public void ErosketaGordeTest(){
 		Metodoak metodoak = new Metodoak();
-		String[][] laburpena = new String [0][7];
 		Zinema[] zinemak_array = metodoak.ZinemakKargatu();
-		laburpena = metodoak.SaioaGorde(laburpena,zinemak_array, 1, "Handia","Areto 3", "6-2-2023", "1. 14:0", "4.5", 445);
+		Zinema zinema = zinemak_array[0];
+		Saioa[] saioak_array = new Saioa[0];
+		saioak_array = metodoak.SaioakGorde(saioak_array, zinema, zinemak_array, 445);
 		Bezero[] bezeroak_array = metodoak.BezeroakKargatu();
 		Erosketa erosketa = new Erosketa();
-		erosketa = metodoak.ErosketaSortu(laburpena, "aingeru1", bezeroak_array);
+		erosketa = metodoak.ErosketaSortu("aingeru1", bezeroak_array, saioak_array);
 		metodoak.ErosketaGorde(erosketa,"aingeru1");
 		
 		String id_bez = "aingeru1";
@@ -345,17 +390,17 @@ public class MetodoakTest {
 	@Test
 	public void ErosketenSarrerakSortuTest(){
 		Metodoak metodoak = new Metodoak();
-		String[][] laburpena_array = new String [0][7];
+		Zinema[] zinemak_array = metodoak.ZinemakKargatu();
+		Zinema zinema = zinemak_array[0];
+		Saioa[] saioak_array = new Saioa[0];
+		saioak_array = metodoak.SaioakGorde(saioak_array, zinema, zinemak_array, 445);
 		Bezero[] bezeroak_array = metodoak.BezeroakKargatu();
 		Erosketa erosketa = new Erosketa();
-		Zinema[] zinemak_array = metodoak.ZinemakKargatu();
+		erosketa = metodoak.ErosketaSortu("aingeru1", bezeroak_array, saioak_array);
+		metodoak.ErosketaGorde(erosketa,"aingeru1");
 		Erosketa[] erosketak_array = new Erosketa[0];
-		
-		laburpena_array = metodoak.SaioaGorde(laburpena_array, zinemak_array, 1, "Handia","Areto 3", "6-2-2023", "1. 14:0", "4.5", 445);
-		erosketa = metodoak.ErosketaSortu(laburpena_array, "aingeru1", bezeroak_array);
-		metodoak.ErosketaGorde(erosketa, "aingeru1");
 		erosketak_array = metodoak.ErosketakKargatu();
-		erosketak_array = metodoak.ErosketenSarrerakSortu(erosketak_array, erosketa, laburpena_array, zinemak_array, 1);
+		erosketak_array = metodoak.ErosketenSarrerakSortu(erosketak_array, erosketa,saioak_array);
 		
 		assertEquals(1, erosketak_array[0].getId_erosketa());
 		assertEquals("ibai0", erosketak_array[0].getBezero().getId_bezero());
@@ -381,17 +426,17 @@ public class MetodoakTest {
 	@Test
 	public void SarrerakGordeTest(){
 		Metodoak metodoak = new Metodoak();
-		String[][] laburpena_array = new String [0][7];
+		Zinema[] zinemak_array = metodoak.ZinemakKargatu();
+		Zinema zinema = zinemak_array[0];
+		Saioa[] saioak_array = new Saioa[0];
+		saioak_array = metodoak.SaioakGorde(saioak_array, zinema, zinemak_array, 445);
 		Bezero[] bezeroak_array = metodoak.BezeroakKargatu();
 		Erosketa erosketa = new Erosketa();
-		Zinema[] zinemak_array = metodoak.ZinemakKargatu();
+		erosketa = metodoak.ErosketaSortu("aingeru1", bezeroak_array, saioak_array);
+		metodoak.ErosketaGorde(erosketa,"aingeru1");
 		Erosketa[] erosketak_array = new Erosketa[0];
-		
-		laburpena_array = metodoak.SaioaGorde(laburpena_array, zinemak_array, 1, "Handia","Areto 3", "6-2-2023", "1. 14:0", "4.5", 445);
-		erosketa = metodoak.ErosketaSortu(laburpena_array, "aingeru1", bezeroak_array);
-		metodoak.ErosketaGorde(erosketa, "aingeru1");
 		erosketak_array = metodoak.ErosketakKargatu();
-		erosketak_array = metodoak.ErosketenSarrerakSortu(erosketak_array, erosketa, laburpena_array, zinemak_array, 1);
+		erosketak_array = metodoak.ErosketenSarrerakSortu(erosketak_array, erosketa,saioak_array);
 		metodoak.SarrerakGorde(erosketak_array);
 		erosketak_array = metodoak.ErosketakKargatu();
 		
@@ -429,14 +474,18 @@ public class MetodoakTest {
 		
 		erosketak_array = metodoak.ErosketakKargatu();
 		eros_test[0] = erosketak_array[0];
-		metodoak.TiketaGorde(eros_test,zinemak_array);
 		
+		metodoak.TiketaGorde(eros_test,zinemak_array,"4.5","4.5",0);
+		
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.AM_PM, Calendar.AM);
+		String cal_s = cal.get(Calendar.YEAR)+"_"+cal.get(Calendar.MONTH)+"_"+cal.get(Calendar.DAY_OF_MONTH)+"_"+cal.get(Calendar.HOUR)+"_"+cal.get(Calendar.MINUTE);
 		BufferedReader fichero;
-		File file = new File("Sarrerak.txt");
+		File file = new File(cal_s+".txt");
 		try {
 		fichero = new BufferedReader(new FileReader(file));
 		
-		assertEquals("Zinema: Cinesa Zubiarte, Aretoa :Areto 1 ,Id bezero : ibai0, Ordua=14:0, data=1-2-2023, Izenburua=Handia, genero=Drama, iraupena=116, prezioa=4.5", fichero.readLine());
+		assertEquals("Zinema: Cinesa Zubiarte, Aretoa :Areto 1, Ordua=14:0, data=1-2-2023, Izenburua=Handia, genero=Drama, iraupena=116, prezioa=4.5", fichero.readLine());
 		
 		fichero.close();
 		

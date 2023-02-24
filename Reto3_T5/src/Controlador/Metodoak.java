@@ -357,10 +357,7 @@ public class Metodoak {
 	
 	/**
 	 * Aukeratutako zinemaren filmak array bidimentzional batean gordetzen ditu
-	 * @param filmak Datu baseko filmak dituen arraya
 	 * @param zinemak Datu baseko zinemak dituen arraya
-	 * @param aretoak Datu baseko aretoak dituen arraya
-	 * @param saioak Datu baseko saioak dituen arraya
 	 * @param aukera Aukeratutako zinema
 	 * @return Aukeratutako zinemaren filmak array bidimentzional batean
 	 */
@@ -396,6 +393,46 @@ public class Metodoak {
 		}
 		
 		return filmak_array;
+	}
+	
+	/**
+	 * Film baten datak bueltatzen ditu array batean.
+	 * @param zinemak Zinema guztiak dituen array-a.
+	 * @param izenburua Filmaren izenburua.
+	 * @param zinema Zinema objetua.
+	 * @return Filmaren datak array batean.
+	 */
+	public String[] FilmBatenDatak(Zinema[] zinemak, String izenburua,Zinema zinema) {
+		String[] datak = new String[0];	
+		boolean badago = false;
+		
+		for(int i=0;i<zinemak.length;i++) {
+			if(zinemak[i].equals(zinema)) {
+				for(int h=0;h<zinema.getAretoa().length;h++) {
+					for(int j=0;j<zinema.getAretoa()[h].getSaioak().length;j++) {
+						if(zinema.getAretoa()[h].getSaioak()[j].getFilma().getIzenburu().equals(izenburua)) {
+							badago=false;
+							for(int w=0;w<datak.length && !badago;w++) {
+								String data = zinema.getAretoa()[h].getSaioak()[j].getOrdua().get(Calendar.YEAR)+"-"+zinema.getAretoa()[h].getSaioak()[j].getOrdua().get(Calendar.MONTH)+"-"+zinema.getAretoa()[h].getSaioak()[j].getOrdua().get(Calendar.DAY_OF_MONTH);
+								if(datak[w].equals(data)) {
+									badago=true;
+								}
+							}
+							if(!badago) {
+								String[] datak_prob = new String[datak.length+1];
+								for(int l=0;l<datak.length;l++) {
+									datak_prob[l] = datak[l];
+								}
+								datak_prob[datak.length]=zinema.getAretoa()[h].getSaioak()[j].getOrdua().get(Calendar.YEAR)+"-"+zinema.getAretoa()[h].getSaioak()[j].getOrdua().get(Calendar.MONTH)+"-"+zinema.getAretoa()[h].getSaioak()[j].getOrdua().get(Calendar.DAY_OF_MONTH);
+								datak = datak_prob;
+							}
+						}
+					}
+				}
+			}			
+		}
+		
+		return datak;
 	}
 	
 	/**
@@ -561,42 +598,62 @@ public class Metodoak {
 		return prezioa;
 	}
 	
-	/**
-	 * Aukeratutako saioa gordetzen du array bidimentzional batean.
-	 * @param saioak_laburpen Gordetako saioen array-a.
-	 * @param zinemak Zinema guztiak dituen array-a.
-	 * @param id_zinema Aukeratutako zinemaren id-a.
-	 * @param izenburua Filmaren izenburua.
-	 * @param aretoa Aretoaren izena.
-	 * @param data Data.
-	 * @param ordua Ordua.
-	 * @param prezioa Filmaren prezioa.
-	 * @param id_saioa Saioaren id-a.
-	 * @return Array bidimentzionala saio berri batekin gordeta.
-	 */
-	public String[][] SaioaGorde(String[][] saioak_laburpen,Zinema[] zinemak, int id_zinema, String izenburua, String aretoa,String data, String ordua, String prezioa, int id_saioa){
-		String[] ordua_string = ordua.split(" ");
-		String zinema= "";
+	public Saioa[] SaioakGorde(Saioa[] saioak, Zinema zinema,Zinema[] zinemak,int id_saioa) {
+		boolean aurkituta = false;
+		
 		for(int i=0;i<zinemak.length;i++) {
-			if(zinemak[i].getId_zinema()==id_zinema) {
-				zinema=zinemak[i].getIzenZin();
+			if(zinemak[i].equals(zinema)) {		
+				for(int k=0;k<zinema.getAretoa().length && !aurkituta;k++) {
+					for(int j=0;j<zinema.getAretoa()[k].getSaioak().length && !aurkituta;j++) {
+						if(zinema.getAretoa()[k].getSaioak()[j].getId_saioa()== id_saioa) {
+							Saioa[] saioak_prob = new Saioa[saioak.length+1];
+							for(int l=0;l<saioak.length;l++) {
+								saioak_prob[l]= saioak[l];
+							}						
+							saioak_prob[saioak.length]=zinema.getAretoa()[k].getSaioak()[j];
+							saioak = saioak_prob;
+							aurkituta = true;
+						}				
+					}
+				}
+			}
+		}
+		return saioak;
+	}
+	
+	public String[][] SaioakErakutsi(Saioa[] saioak, Zinema[] zinemak){
+		String[][] laburpen_array = new String[0][7];
+		boolean aurkituta = false;
+		
+		for(int l=0;l<saioak.length;l++) {
+			aurkituta=false;
+			for(int i=0;i<zinemak.length && !aurkituta;i++) {			
+				for(int j=0;j<zinemak[i].getAretoa().length && !aurkituta;j++) {
+					for(int h=0;h<zinemak[i].getAretoa()[j].getSaioak().length;h++) {
+						if(zinemak[i].getAretoa()[j].getSaioak()[h].getId_saioa()==(saioak[l].getId_saioa())) {
+							String[][] array_prob= new String[laburpen_array.length+1][7];
+							for(int k=0;k<laburpen_array.length;k++) {
+								for(int n=0;n<laburpen_array[k].length;n++) {
+									array_prob[k][n]= laburpen_array[k][n];
+								}
+							}
+							array_prob[laburpen_array.length][0]= zinemak[i].getIzenZin();
+							array_prob[laburpen_array.length][1]= saioak[l].getFilma().getIzenburu();
+							array_prob[laburpen_array.length][2]= saioak[l].getOrdua().get(Calendar.YEAR)+"-"+saioak[l].getOrdua().get(Calendar.MONTH)+"-"+saioak[l].getOrdua().get(Calendar.DAY_OF_MONTH);
+							String ordua = String.format("%02d:%02d", (saioak[l].getOrdua().get(Calendar.HOUR)+12), saioak[l].getOrdua().get(Calendar.MINUTE));
+							array_prob[laburpen_array.length][3]= ordua;
+							array_prob[laburpen_array.length][4]= zinemak[i].getAretoa()[j].getIzenAret();
+							array_prob[laburpen_array.length][5]= saioak[l].getFilma().getPrezioa()+"€";
+							array_prob[laburpen_array.length][6]= String.valueOf(saioak[l].getId_saioa());
+							laburpen_array = array_prob;
+							aurkituta=true;							
+						}
+					}
+				}
 			}
 		}
 		
-		//Filmens array-a berridazten du
-		String[][] saioak_prov = new String[saioak_laburpen.length+1][7];
-		for(int i =0;i<saioak_laburpen.length;i++){
-			saioak_prov[i]=saioak_laburpen[i];
-		}
-		saioak_prov[saioak_laburpen.length][0] = zinema;
-		saioak_prov[saioak_laburpen.length][1] = izenburua;
-		saioak_prov[saioak_laburpen.length][2] = data;
-		saioak_prov[saioak_laburpen.length][3] = ordua_string[1];
-		saioak_prov[saioak_laburpen.length][4] = aretoa;
-		saioak_prov[saioak_laburpen.length][5] = prezioa;
-		saioak_prov[saioak_laburpen.length][6] = String.valueOf(id_saioa);
-		saioak_laburpen = saioak_prov;		
-		return saioak_laburpen;
+		return laburpen_array;
 	}
 	
 	/**
@@ -604,15 +661,13 @@ public class Metodoak {
 	 * @param saioak Saio guztien array-a.
 	 * @return Filmen prezioaren batuketa.
 	 */
-	public String PrezioTotalaKalkulatu(String[][] saioak) {
+	public String PrezioTotalaKalkulatu(Saioa[] saioak) {
 		float totala=0;
-		String[] prob = new String[0];
 		
 		DecimalFormat formato1 = new DecimalFormat("#.00");
 		
 		for(int i=0;i<saioak.length;i++) {
-			prob=saioak[i][5].split("€");
-			totala+= Float.parseFloat(prob[0]);
+			totala+= saioak[i].getFilma().getPrezioa();
 		}
 		return formato1.format(totala);
 	}
@@ -622,12 +677,12 @@ public class Metodoak {
 	 * @param saio_laburpen Saioen arraya.
 	 * @return <b>0</b> film bat badago, <b>20</b> film 2 badaude edo <b>30</b> hiru film edo gehiago badaude.
 	 */
-	public int DeskotuKalkulatu(String[][] saio_laburpen) {
+	public int DeskotuKalkulatu(Saioa[] saioak) {
 		int deskontu = 0;
 		
-		if(saio_laburpen.length==2) {
+		if(saioak.length==2) {
 			deskontu=20;
-		}else if(saio_laburpen.length>=3) {
+		}else if(saioak.length>=3) {
 			deskontu=30;
 		}		
 		return deskontu;
@@ -638,16 +693,15 @@ public class Metodoak {
 	 * @param saio_laburpen Saioen array-a.
 	 * @return Erosketaren prezioa deskontuarekin.
 	 */
-	public String PrezioTotalaKalkulatuDeskontuarekin(String[][] saio_laburpen) {
+	public String PrezioTotalaKalkulatuDeskontuarekin(Saioa[] saioak) {
 		float prezio_totala= 0;
 
 		DecimalFormat formato1 = new DecimalFormat("#.00");
 		
-		for(int i=0;i<saio_laburpen.length;i++) {
-			String[] prezio = saio_laburpen[i][5].split("€");
-			prezio_totala+=Float.parseFloat(prezio[0]);
+		for(int i=0;i<saioak.length;i++) {
+			prezio_totala+=saioak[i].getFilma().getPrezioa();
 		}		
-		prezio_totala = (prezio_totala*(100-DeskotuKalkulatu(saio_laburpen)))/100;
+		prezio_totala = (prezio_totala*(100-DeskotuKalkulatu(saioak)))/100;
 		return formato1.format(prezio_totala);
 	}
 	
@@ -667,6 +721,25 @@ public class Metodoak {
 			}
 		}
 		return balidatu;
+	}
+	
+	/**
+	 * Erabiltzaile baten NAN-a balidatzen du.
+	 * @param nan Erabiltzaileak sartutako NAN-a.
+	 * @return <b>True</b> nan-a balidoa bada eta <b>False</b> nan-a ez bada balidoa.s
+	 */
+	public static boolean NanBalidatu(String nan) {
+		boolean balidoa= false;
+		
+		String[] hizkiak = {"T", "R", "W","A","G","M","Y","F","P","D","X","B","N","J","Z","S","Q","V","H","L","C","K","E"};
+		if(nan.length()==9){
+			String[] holder = nan.split(String.valueOf(nan.charAt(8)));
+		    int hondarra = Integer.parseInt(holder[0])%23;
+		    if(hizkiak[hondarra].equals(String.valueOf(nan.charAt(8)).toUpperCase())){
+		    	balidoa = true;
+		    }
+		}		
+		return balidoa;
 	}
 	
 	/**
@@ -715,12 +788,12 @@ public class Metodoak {
 	 * @param bezeroak Bezero guztien array-a.
 	 * @return Erosketa objetua sarrerarik gabe.
 	 */
-	public Erosketa ErosketaSortu(String[][] laburpen_array, String bezeroa, Bezero[] bezeroak) {
+	public Erosketa ErosketaSortu(String bezeroa, Bezero[] bezeroak,Saioa[] saioak) {
 		Erosketa erosketa = new Erosketa();
 		boolean aurkituta= false; 
 		
-		erosketa.setDeskontua(DeskotuKalkulatu(laburpen_array));		
-		String[] array_prob = PrezioTotalaKalkulatuDeskontuarekin(laburpen_array).split(",");
+		erosketa.setDeskontua(DeskotuKalkulatu(saioak));		
+		String[] array_prob = PrezioTotalaKalkulatuDeskontuarekin(saioak).split(",");
 		String totala_s = array_prob[0]+"."+array_prob[1];	
 		int i=0;
 		while(!aurkituta) {
@@ -764,37 +837,13 @@ public class Metodoak {
 	 * @param id_zinema Zinemaren id-a.
 	 * @return Erosketa guztien array-a azkeneko erosketaren sarrerekin.
 	 */
-	public Erosketa[] ErosketenSarrerakSortu(Erosketa[] erosketak,Erosketa erosketa, String[][] laburpen_array,Zinema[] zinemak,int id_zinema) {
+	public Erosketa[] ErosketenSarrerakSortu(Erosketa[] erosketak,Erosketa erosketa,Saioa[] saioak) {
 		Sarrera[] sarrerak= new Sarrera[0];
 		
-		for(int i=0;i<laburpen_array.length;i++) {
+		for(int i=0;i<saioak.length;i++) {
 			Sarrera sarrera = new Sarrera();
-			Saioa saioa = new Saioa();
+			Saioa saioa = saioak[i];			
 			
-			saioa.setId_saioa(Integer.parseInt(laburpen_array[i][6]));			
-			boolean aurkituta=false;
-			for(int k=0;k<zinemak[id_zinema-1].getAretoa().length && !aurkituta;k++) {
-				for(int l=0;l<zinemak[id_zinema-1].getAretoa()[k].getSaioak().length && !aurkituta;l++) {
-					if(zinemak[id_zinema-1].getAretoa()[k].getSaioak()[l].getId_saioa()==Integer.parseInt(laburpen_array[i][6])) {
-						Filma filma = new Filma(zinemak[id_zinema-1].getAretoa()[k].getSaioak()[l].getFilma().getId_filma(),zinemak[id_zinema-1].getAretoa()[k].getSaioak()[l].getFilma().getIzenburu(),zinemak[id_zinema-1].getAretoa()[k].getSaioak()[l].getFilma().getGenero(),zinemak[id_zinema-1].getAretoa()[k].getSaioak()[l].getFilma().getIraupena(),zinemak[id_zinema-1].getAretoa()[k].getSaioak()[l].getFilma().getPrezioa());
-						saioa.setFilma(filma);
-						
-						Calendar cal = Calendar.getInstance();
-						int eguna = zinemak[id_zinema-1].getAretoa()[k].getSaioak()[l].getOrdua().get(Calendar.DAY_OF_MONTH);
-						int hila = zinemak[id_zinema-1].getAretoa()[k].getSaioak()[l].getOrdua().get(Calendar.MONTH);
-						int urtea = zinemak[id_zinema-1].getAretoa()[k].getSaioak()[l].getOrdua().get(Calendar.YEAR);						
-						
-						cal.set(Calendar.HOUR,zinemak[id_zinema-1].getAretoa()[k].getSaioak()[l].getOrdua().get(Calendar.HOUR));
-						cal.set(Calendar.MINUTE,zinemak[id_zinema-1].getAretoa()[k].getSaioak()[l].getOrdua().get(Calendar.MINUTE));
-						
-						cal.set(Calendar.YEAR,urtea);						
-						cal.set(Calendar.MONTH,hila);
-						cal.set(Calendar.DAY_OF_MONTH,eguna);
-						saioa.setOrdua(cal);		
-						aurkituta=true;
-					}
-				}
-			}
 			sarrera.setSaioa(saioa);
 			Sarrera[] sarrerak_prob= new Sarrera[sarrerak.length+1];
 			for(int j=0;j<sarrerak.length;j++) {
@@ -837,14 +886,16 @@ public class Metodoak {
 	 * @param erosketak Erosketa guztien array-a.
 	 * @param zinemak Zinema guztien array-a.
 	 */
-	public void TiketaGorde(Erosketa[] erosketak, Zinema[] zinemak) {
+	public void TiketaGorde(Erosketa[] erosketak, Zinema[] zinemak, String prezio_laburpen, String prezio_totala, int deskontua) {
 		String zinema = "";
 		String aretoa = "";
-		File file = new File("Sarrerak.txt");
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.AM_PM, Calendar.AM);
+		String cal_s = cal.get(Calendar.YEAR)+"_"+cal.get(Calendar.MONTH)+"_"+cal.get(Calendar.DAY_OF_MONTH)+"_"+cal.get(Calendar.HOUR)+"_"+cal.get(Calendar.MINUTE);
+		File file = new File(cal_s+".txt");
 		BufferedWriter fichero;
 		
 			try {
-				file.delete();
 				fichero = new BufferedWriter(new FileWriter(file));
 			for(int i =0;i<erosketak[erosketak.length-1].getSarrera().length;i++)
 			{
@@ -861,11 +912,12 @@ public class Metodoak {
 					}	
 				}
 				
-				fichero.write("Zinema: "+zinema+", Aretoa :"+aretoa+" ,Id bezero : "+erosketak[erosketak.length-1].getBezero().getId_bezero()+", "+erosketak[erosketak.length-1].getSarrera()[i].toString()+"\n");
+				fichero.write("Zinema: "+zinema+", Aretoa :"+aretoa+", "+erosketak[erosketak.length-1].getSarrera()[i].toString()+"\n");
 			}
+			fichero.write("Prezio totala: "+prezio_laburpen+"€, Prezioa "+deskontua+"%-ko deskontuarekin: "+prezio_totala+"€\n");
 			fichero.close();
 			JOptionPane.showMessageDialog(null,
-					"Tiketa sortu da Sarrerak.txt fitxategian.",
+					"Tiketa sortu da "+cal_s+".txt fitxategian.",
 					"Gordeta!",
 					JOptionPane.INFORMATION_MESSAGE);
 			
