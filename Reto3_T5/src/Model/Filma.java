@@ -41,8 +41,8 @@ public class Filma {
 	// ToString
 	@Override
 	public String toString() {
-		return "Filma [id_filma=" + id_filma + ", izenburu=" + izenburu + ", genero=" + genero + ", iraupena="
-				+ iraupena + ", prezioa=" + prezioa + "]";
+		return "Izenburua=" + izenburu + ", genero=" + genero + ", iraupena="
+				+ iraupena + ", prezioa=" + prezioa;
 	}
 	
 	// Equals

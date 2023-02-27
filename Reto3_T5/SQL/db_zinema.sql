@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 14-02-2023 a las 13:58:31
+-- Tiempo de generación: 16-02-2023 a las 09:39:14
 -- Versión del servidor: 10.4.27-MariaDB
--- Versión de PHP: 8.2.0
+-- Versión de PHP: 8.0.25
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -59,7 +59,7 @@ CREATE TABLE `bezeroa` (
   `IzeBez` varchar(30) NOT NULL,
   `AbizBez` varchar(30) NOT NULL,
   `Adina` int(11) NOT NULL,
-  `Sexua` enum('gizon','emakume') DEFAULT NULL,
+  `Sexua` enum('Gizona','Emakumea') DEFAULT NULL,
   `NAN` varchar(9) DEFAULT NULL,
   `Pasahitza` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -69,8 +69,8 @@ CREATE TABLE `bezeroa` (
 --
 
 INSERT INTO `bezeroa` (`Id_bezeroa`, `IzeBez`, `AbizBez`, `Adina`, `Sexua`, `NAN`, `Pasahitza`) VALUES
-('aingeru1', 'Aingeru', 'Siranaula', 54, 'emakume', '12345678R', '1234'),
-('ibai0', 'Ibai', 'Alvarez', 22, 'gizon', '12345678D', '1234');
+('aingeru1', 'Aingeru', 'Siranaula', 54, 'Gizona', '12345678R', '1234'),
+('ibai0', 'Ibai', 'Alvarez', 22, 'Gizona', '12345678D', '1234');
 
 -- --------------------------------------------------------
 
@@ -84,6 +84,13 @@ CREATE TABLE `erosketa` (
   `Totala` float DEFAULT NULL,
   `Id_bezeroa` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `erosketa`
+--
+
+INSERT INTO `erosketa` (`Id_erosketa`, `Deskontua`, `Totala`, `Id_bezeroa`) VALUES
+(1, 0, 4.5, 'ibai0');
 
 -- --------------------------------------------------------
 
@@ -1842,6 +1849,13 @@ CREATE TABLE `sarrera` (
   `Id_erosketa` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `sarrera`
+--
+
+INSERT INTO `sarrera` (`Id_sarrera`, `Id_saioa`, `Id_erosketa`) VALUES
+(1, 1, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -1932,7 +1946,7 @@ ALTER TABLE `aretoa`
 -- AUTO_INCREMENT de la tabla `erosketa`
 --
 ALTER TABLE `erosketa`
-  MODIFY `Id_erosketa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `Id_erosketa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `saioa`
@@ -1944,7 +1958,7 @@ ALTER TABLE `saioa`
 -- AUTO_INCREMENT de la tabla `sarrera`
 --
 ALTER TABLE `sarrera`
-  MODIFY `Id_sarrera` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `Id_sarrera` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `zinema`

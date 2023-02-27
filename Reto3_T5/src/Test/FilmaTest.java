@@ -26,8 +26,8 @@ public class FilmaTest {
 		Filma f1 = new Filma(3, "Scary movie", "Komedia", 90, 2.2f);
 		
 		// ToString
-		assertEquals(f1.toString(), "Filma [id_filma=" + f1.getId_filma() + ", izenburu=" + f1.getIzenburu() + ", genero=" + f1.getGenero() + ", iraupena="
-				+ f1.getIraupena() + ", prezioa=" + f1.getPrezioa() + "]");
+		assertEquals("Izenburua=" + f1.getIzenburu() + ", genero=" + f1.getGenero() + ", iraupena="
+				+ f1.getIraupena() + ", prezioa=" + f1.getPrezioa(),f1.toString());
 	}
 	
 	@Test

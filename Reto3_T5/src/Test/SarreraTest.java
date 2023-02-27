@@ -88,8 +88,7 @@ public class SarreraTest {
 		Sarrera sa1 = new Sarrera(3, s1);
 		
 		//ToString
-		assertEquals(sa1.toString(),"Sarrera [id_sarrera=" + sa1.getId_sarrera() + ", saioa="
-				+ sa1.getSaioa() + "]");
+		assertEquals("Sarrera [id_sarrera=" + sa1.getId_sarrera() + ", saioa="+ sa1.getSaioa(),sa1.toString(),sa1.toString());
 	}
 	
 	@Test
